@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --rr-primary: #DFA61B;
+  --rr-secondary: #DEBE1B;
+  --primary-border: #943D08;
+  --input-primary: #E0A41F;
+  --dark-purple: #2F2349;
+  --error: #C71726;
+  --black-100: #1D1B17;
+  --black-75: rgba(29, 27, 23, 0.75);
+  --black-50: rgba(29, 27, 23, 0.5);
+  --black-25: rgba(29, 27, 23, 0.25);
+  --black-10: rgba(29, 27, 23, 0.1);
+  --black-5: rgba(29, 27, 23, 0.05);
+}
+
+body {
+  font-family: Onest Variable,system-ui,sans-serif;
+  font-size: 18px;
+}
+
+.rr-input {
+  background-color: var(--input-primary);
+  border-color: var(--primary-border);
+  border-radius: 10px;
+}
+
+.rr-color {
+  color: var(--black-100);
+}
+
+.rr-btn {
+  background-color: var(--dark-purple);
+  color: white;
+  border-radius: 10px;
+}
