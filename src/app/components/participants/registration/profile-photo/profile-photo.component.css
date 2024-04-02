@@ -1,0 +1,33 @@
+.add-photo-title {
+  color: var(--dark-purple);
+}
+
+#add-photo-input {
+  display: none;
+}
+
+#addImageButton {
+  cursor: pointer;
+  display: inline-block;
+  background-color: var(--dark-purple);
+  color: white;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 8rem;
+}
+
+img {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+}
+
+#addImageButton span {
+  font-size: 2rem;
+}
+
+#addImageButton:active {
+  transform: scale(0.95);
+}

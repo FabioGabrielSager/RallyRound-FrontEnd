@@ -1,0 +1,12 @@
+<div class="container-fluid vh-100 d-flex row-gap-4 flex-column justify-content-center align-items-center">
+  <h1 id="add-photo-title"><strong>Añadir foto.</strong></h1>
+    <div id="addImageButton" (click)="addPhotoInput.click()">
+      @if (uploadedPhotoPreview == null) {
+        <span>+</span>
+      } @else {
+        <img [src]="uploadedPhotoPreview">
+      }
+    </div>
+  <input id="add-photo-input" #addPhotoInput (change)="capturePhoto($event)" type="file" required>
+  <button class="w-75 btn rr-btn" (click)="onClickNext()">Siguiente</button>
+</div>

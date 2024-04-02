@@ -14,9 +14,9 @@
 }
 
 body {
-  font-family: Onest Variable,system-ui,sans-serif;
+  font-family: Inter,Onest Variable,system-ui,sans-serif;
   font-size: 18px;
-  /*background-color: var(--rr-primary);*/
+  background-color: var(--rr-primary);
 }
 
 .rr-input {
@@ -24,6 +24,10 @@ body {
   border-color: var(--primary-border);
   border-radius: 10px;
   color: var(--black-100);
+}
+
+.rr-bg-secondary {
+  background-color: var(--rr-secondary);
 }
 
 .rr-input:focus {
