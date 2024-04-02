@@ -1,0 +1,175 @@
+<div id="main-container" class="vh-100 container-fluid d-flex justify-content-center">
+  <div id="form-container" class="align-self-center">
+    <h1 id="create-account-title"><strong>Crear cuenta.</strong></h1>
+    <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()"
+          style="max-height: 85vh; overflow-y: auto;">
+      <div class="col-12 col-sm-6">
+        <label for="name-input" class="rr-color form-label">Nombre</label>
+        <input type="text" class="form-control rr-input" formControlName="name" name="name" id="name-input"
+               aria-describedby="nombre" [class.is-invalid]="form.controls['name'].invalid
+               && (form.controls['name'].touched || form.controls['name'].dirty)">
+        @if (form.controls['name'].invalid
+        && (form.controls['name'].touched || form.controls['name'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['name'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12 col-sm-6">
+        <label for="name-input" class="rr-color form-label">Apellido</label>
+        <input type="text" class="form-control rr-input" formControlName="lastName" name="lastName" id="last-name-input"
+               aria-describedby="apellido" [class.is-invalid]="form.controls['lastName'].invalid
+               && (form.controls['lastName'].touched || form.controls['lastName'].dirty)">
+
+        @if (form.controls['lastName'].invalid
+        && (form.controls['lastName'].touched || form.controls['lastName'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['lastName'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12">
+        <div class="position-relative">
+          <label for="name-input" class="rr-color form-label">Localidad</label>
+          <textarea type="text" class="form-control rr-input" formControlName="locality" name="locality"
+                    id="locality-input" placeholder="Ej.: Provincia, departamento, localidad..."
+                    aria-describedby="localidad" [ngClass]="formattedNames.length > 0
+                    ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
+                    [class.is-invalid]="form.controls['locality'].invalid
+                    && (form.controls['locality'].touched || form.controls['locality'].dirty)"
+                    (focus)="onFocus(autosuggestionLocalities)" (blur)="onBlur(autosuggestionLocalities)"></textarea>
+
+          <div #autosuggestionLocalities class="search-results-container position-absolute"
+               [ngClass]="formattedNames.length > 0
+                  ? 'd-block' : 'd-none'">
+            @for (fn of formattedNames; track fn; let index = $index) {
+              <span class="search-result d-block ps-3 pe-3"
+                    [ngClass]="index != formattedNames.length-1
+                  ? 'search-result-border-bottom' : 'rounded-bottom-corners'"
+                    (click)="onClickSearchResult($event)">{{ fn }}</span>
+            }
+          </div>
+          @if (form.controls['locality'].invalid
+          && (form.controls['locality'].touched || form.controls['locality'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['locality'].hasError('required')
+              && form.controls['locality'].value == "") {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+            </div>
+          }
+          @if (form.controls['locality'].value !== "" && selectedPlace == undefined) {
+            <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
+          }
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="name-input" class="rr-color form-label">Fecha de nacimiento</label>
+        <input type="date" class="form-control rr-input" formControlName="birthdate" name="birthdate"
+               id="birthdate-input" aria-describedby="fecha de nacimiento"
+               [class.is-invalid]="form.controls['birthdate'].invalid
+               && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)">
+
+        @if (form.controls['birthdate'].invalid
+        && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['birthdate'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="name-input" class="rr-color form-label">Email</label>
+        <input type="email" class="form-control rr-input" formControlName="email" name="email" id="email-input"
+               aria-describedby="email"
+               [class.is-invalid]="form.controls['email'].invalid
+               && (form.controls['email'].touched || form.controls['email'].dirty)">
+
+        @if (form.controls['email'].invalid
+        && (form.controls['email'].touched || form.controls['email'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['email'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+            @if (form.controls['email'].hasError('email')) {
+              <span class="error-text">Debe ingresar una dirección de email válida.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="name-input" class="rr-color form-label">Contraseña</label>
+        <div class="input-group">
+          <input [type]="passwordIsHide ? 'password' : 'text'"
+                 class="form-control rr-input border-end-0" formControlName="password" name="password"
+                 id="password-input"
+                 aria-describedby="contraseña" [class.is-invalid]="form.controls['password'].invalid
+               && (form.controls['password'].touched || form.controls['password'].dirty)">
+          <button (click)="togglePasswordVisibility()"
+                  class="rr-hide-password-btn rr-border-primary-color border-start-0 pe-3"
+                  type="button" [class.border-danger]="form.controls['password'].invalid
+               && (form.controls['password'].touched || form.controls['password'].dirty)">
+            @if (passwordIsHide) {
+              <i class="bi bi-eye-fill"></i>
+            } @else {
+              <i class="bi bi-eye-slash-fill"></i>
+            }
+          </button>
+        </div>
+        @if (form.controls['password'].invalid
+        && (form.controls['password'].touched || form.controls['password'].dirty)) {
+          <div class="invalid-feedback d-block">
+            @if (form.controls['password'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+            @if (form.controls['password'].hasError('minlength')) {
+              <span class="error-text">La contraseña debe contener como minimo 5 caracteres.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="name-input" class="rr-color form-label">Confirmar contraseña</label>
+        <div class="input-group">
+          <input [type]="confirmPasswordIsHide ? 'password' : 'text'" class="form-control rr-input border-end-0"
+                 formControlName="confirmPassword" name="confirmPassword"
+                 id="confirm-password-input"
+                 aria-describedby="confirmar contraseña" [class.is-invalid]="form.controls['confirmPassword'].invalid
+               && (form.controls['confirmPassword'].touched || form.controls['confirmPassword'].dirty)">
+          <button (click)="toggleConfirmPasswordVisibility()"
+                  class="rr-hide-password-btn rr-border-primary-color border-start-0 pe-3" type="button"
+                  [class.border-danger]="form.controls['confirmPassword'].invalid
+               && (form.controls['confirmPassword'].touched || form.controls['confirmPassword'].dirty)">
+            @if (confirmPasswordIsHide) {
+              <i class="bi bi-eye-fill"></i>
+            } @else {
+              <i class="bi bi-eye-slash-fill"></i>
+            }
+          </button>
+        </div>
+        @if (form.controls['confirmPassword'].invalid
+        && (form.controls['confirmPassword'].touched || form.controls['confirmPassword'].dirty)) {
+          <div class="invalid-feedback d-block">
+            @if (form.controls['confirmPassword'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+          </div>
+        }
+
+        @if (form.hasError("passwordMatch")) {
+          <div>
+            <span class="error-text">Las contraseñas deben coincidir.</span>
+          </div>
+        }
+      </div>
+      <div class="col-12 mt-3">
+        <button class="w-100 btn rr-btn">Siguiente</button>
+      </div>
+    </form>
+  </div>
+</div>
