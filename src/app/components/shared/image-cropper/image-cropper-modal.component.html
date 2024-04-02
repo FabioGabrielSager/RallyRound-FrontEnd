@@ -1,0 +1,24 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <image-cropper
+      [imageFile]="imageFile"
+      [maintainAspectRatio]="true"
+      [resizeToHeight]="640"
+      [resizeToWidth]="640"
+      [cropperMinWidth]="640"
+      [cropperMinHeight]="640"
+      [cropperMaxWidth]="640"
+      [cropperMaxHeight]="640"
+      [autoCrop]="false"
+      (imageCropped)="onImageCropped($event)"
+    ></image-cropper>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Cerrar</button>
+    <button type="button" class="btn rr-btn" (click)="crop()">Guardar</button>
+  </div>
+</div>
+
