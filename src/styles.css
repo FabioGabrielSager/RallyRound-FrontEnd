@@ -37,8 +37,12 @@ body {
   box-shadow: 0 0 0 0.30rem rgba(148, 61, 8, 0.25);
 }
 
-.rr-color {
+.rr-text {
   color: var(--black-100);
+}
+
+.rr-dark-purple-text {
+  color: var(--dark-purple);
 }
 
 .rr-btn {

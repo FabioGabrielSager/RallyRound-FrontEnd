@@ -1,0 +1,48 @@
+<div id="form-container" class="container vh-100 d-flex flex-column justify-content-center rr-text">
+  <h1 class="rr-dark-purple-text"><strong>Tus actividades favoritas.</strong></h1>
+  <span class="form-text mb-3" style="font-style: italic">
+    Con el botón <i class="bi bi-list rr-text"></i> puedes arrastra las actividades
+    para ordenarlas desde las que más te gustas a las que menos.</span>
+  <!--  TODO: ADD LOGIC TO AUTOSUGGESTS REGISTERED ACTIVITIES -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <ng-container formArrayName="activities">
+      <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+        @for (act of activitiesFormArray.controls; track act; let i = $index) {
+          <div [formGroupName]="i" class="mb-2" cdkDrag>
+            <div class="d-flex align-items-center">
+              <div class="w-100">
+                <div class="input-group">
+                  <label class="align-self-center">{{i+1}}.</label>
+                  <input type="text" class="form-control rounded-start-3 rr-input border-end-0"
+                         placeholder="Ej.: Básquet, Música, Futbol, etc." [id]="i"
+                         aria-describedby="actividad" formControlName="activity">
+                  <button
+                    class="rr-drag-activity-btn rr-border-primary-color border-start-0 pe-3" type="button"
+                    cdkDragHandle>
+                    <i class="bi bi-list rr-text" style="font-size: 1.5rem"></i>
+                  </button>
+                </div>
+              </div>
+              @if(i != 0) {
+                <button
+                  class="bg-transparent border-0 d-inline-block" (click)="deleteActivity(i)" type="button">
+                  <i class="bi bi-x-circle text-danger" style="font-size: 1.8rem"></i>
+                </button>
+              }
+            </div>
+
+            @if(activitiesFormArray.controls[i].get('activity')?.hasError('required')
+            && (activitiesFormArray.controls[i].get('activity')?.touched
+              || activitiesFormArray.controls[i].get('activity')?.dirty)) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+          </div>
+        }
+      </div>
+    </ng-container>
+    <div class="text-end">
+      <button type="button" class="mt-4 btn rr-btn pe-5 ps-5" (click)="addActivity()">Añadir</button>
+    </div>
+    <button type="submit" class="mt-4 btn rr-btn w-100">Siguiente</button>
+  </form>
+</div>
