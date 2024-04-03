@@ -1,9 +1,8 @@
 <div id="form-container" class="container vh-100 d-flex flex-column justify-content-center rr-text">
   <h1 class="rr-dark-purple-text"><strong>Tus actividades favoritas.</strong></h1>
   <span class="form-text mb-3" style="font-style: italic">
-    Con el botón <i class="bi bi-list rr-text"></i> puedes arrastra las actividades
+    Con el botón <i class="bi bi-list rr-text"></i> puedes arrastrar las actividades
     para ordenarlas desde las que más te gustas a las que menos.</span>
-  <!--  TODO: ADD LOGIC TO AUTOSUGGESTS REGISTERED ACTIVITIES -->
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <ng-container formArrayName="activities">
       <div cdkDropList (cdkDropListDropped)="onDrop($event)">
@@ -11,16 +10,33 @@
           <div [formGroupName]="i" class="mb-2" cdkDrag>
             <div class="d-flex align-items-center">
               <div class="w-100">
-                <div class="input-group">
+                <div class="d-flex">
                   <label class="align-self-center">{{i+1}}.</label>
-                  <input type="text" class="form-control rounded-start-3 rr-input border-end-0"
-                         placeholder="Ej.: Básquet, Música, Futbol, etc." [id]="i"
-                         aria-describedby="actividad" formControlName="activity">
-                  <button
-                    class="rr-drag-activity-btn rr-border-primary-color border-start-0 pe-3" type="button"
-                    cdkDragHandle>
-                    <i class="bi bi-list rr-text" style="font-size: 1.5rem"></i>
-                  </button>
+                  <div class="w-100 position-relative">
+                    <div class="input-group">
+                      <input type="text" class="form-control rounded-start-3 rr-input border-end-0"
+                             placeholder="Ej.: Básquet, Música, Futbol, etc." [id]="i"
+                             aria-describedby="actividad" formControlName="activity"
+                      (focus)="onFocus(autosuggestionActivities)" (blur)="onBlur(autosuggestionActivities)">
+                      <button
+                        class="rr-drag-activity-btn rr-border-primary-color border-start-0 pe-3" type="button"
+                        cdkDragHandle>
+                        <i class="bi bi-list rr-text" style="font-size: 1.5rem"></i>
+                      </button>
+                    </div>
+
+                    <div #autosuggestionActivities class="search-results-container position-absolute"
+                         [ngClass]="activitiesNames.length > 0 && actualFocusedActivityControlIndex === i
+                  ? 'd-block' : 'd-none'">
+                      @for (a of activitiesNames; track a; let index = $index) {
+                        <span class="search-result d-block ps-3 pe-3"
+                              [ngClass]="index != activitiesNames.length-1
+                  ? 'search-result-border-bottom' : 'rounded-bottom-corners'"
+                              (click)="onClickSearchResult($event, i)">{{ a }}</span>
+                      }
+                    </div>
+                  </div>
+
                 </div>
               </div>
               @if(i != 0) {
@@ -43,6 +59,9 @@
     <div class="text-end">
       <button type="button" class="mt-4 btn rr-btn pe-5 ps-5" (click)="addActivity()">Añadir</button>
     </div>
+    @if (form.hasError('duplicateActivities')) {
+      <span class="error-text">No puede indicar dos veces la misma actividad.</span>
+    }
     <button type="submit" class="mt-4 btn rr-btn w-100">Siguiente</button>
   </form>
 </div>
