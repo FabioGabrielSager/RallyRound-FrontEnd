@@ -9,6 +9,7 @@ import {MatchedActivities} from "../../../../models/common/MatchedActivities";
 import {NgClass} from "@angular/common";
 import {repeatedActivitiesValidator} from "../../../../validators/repeatedActivitiesValidator";
 import {Router} from "@angular/router";
+import {ToastService} from "../../../../services/toast.service";
 
 @Component({
   selector: 'rr-favorite-activities',
@@ -27,6 +28,9 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
   actualFocusedActivityControlIndex: number | undefined = undefined;
   private lastAutosuggestedActivitySelected: string = "";
   private subs: Subscription = new Subscription();
+
+  private toastService: ToastService = inject(ToastService);
+
   private fb: FormBuilder = inject(FormBuilder);
   form: FormGroup = this.fb.group({
     activities: this.fb.array([
@@ -40,11 +44,8 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
   constructor(private activityService: RrActivityService) {
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
-
   ngOnInit(): void {
+    // Activities autosuggestion
     this.subs.add(
       combineLatest([this.activitiesFormArray.valueChanges,
         this.activitiesFormArray.valueChanges.pipe(startWith(null))]
@@ -62,6 +63,8 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
                       this.activitiesNames = value.activities;
                     },
                     error: err => {
+                      this.toastService.show("Hubo un error al recuperar actividades registradas.",
+                        "bg-danger");
                       console.error(err)
                     }
                   })
@@ -71,6 +74,10 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
         });
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   get activitiesFormArray() {
@@ -120,7 +127,11 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
           next: value => {
             this.router.navigate(["participant/account/confirmEmail/" + value.userId]);
           },
-          error: err => console.error(err)
+          error: err => {
+            this.toastService.show("Hubo un error al enviar la solicitud de registro, por favor intentelo más tarde.",
+              "bg-danger");
+            console.error(err);
+          }
         }
       )
     );

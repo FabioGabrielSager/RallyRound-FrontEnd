@@ -44,6 +44,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
               // TODO: Store the JWT token correctly
               console.log(value.token);
             },
+            // TODO: ADD A TOAST TO INFORM ABOUT THE ERROR
             error: err => console.error(err)
           }
         )

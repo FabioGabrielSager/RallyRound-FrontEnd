@@ -75,3 +75,7 @@ body {
   font-style: italic;
   font-size: 0.95rem;
 }
+
+.bg-danger {
+  background-color: var(--error);
+}

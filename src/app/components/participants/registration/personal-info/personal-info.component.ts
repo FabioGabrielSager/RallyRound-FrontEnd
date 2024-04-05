@@ -9,6 +9,7 @@ import {passwordMatchValidator} from "../../../../validators/passwordMatchValida
 import {ParticipantRegistrarionRequest} from "../../../../models/user/participantRegistrarionRequest";
 import {AuthService} from "../../../../services/auth.service";
 import {Router} from "@angular/router";
+import {ToastService} from "../../../../services/toast.service";
 
 @Component({
   selector: 'rr-personal-info',
@@ -22,6 +23,7 @@ import {Router} from "@angular/router";
 })
 export class PersonalInfoComponent implements OnInit, OnDestroy {
   private subs: Subscription = new Subscription();
+  private toastService: ToastService = inject(ToastService);
 
   // Location
   private mapApiService: MapApiService = inject(MapApiService);
@@ -84,10 +86,16 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
           }
         },
         error: err => {
+          this.toastService.show("Hubo un error al recuperar lugares, por favor intentelo más tarde.",
+            "bg-danger");
           console.log(err);
         }
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   private getFormattedName(p: Place): string {
@@ -149,10 +157,6 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
     this.authService.setParticipantRegistrationRequestData(request);
 
     this.router.navigate(["participant/account/photo"])
-  }
-
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
   }
 
   onFocus(autosuggestionLocalities: HTMLDivElement) {
