@@ -19,6 +19,7 @@
                              aria-describedby="actividad" formControlName="activity"
                       (focus)="onFocus(autosuggestionActivities)" (blur)="onBlur(autosuggestionActivities)">
                       <button
+                        tabindex="-1"
                         class="rr-drag-activity-btn rr-border-primary-color border-start-0 pe-3" type="button"
                         cdkDragHandle>
                         <i class="bi bi-list rr-text" style="font-size: 1.5rem"></i>
@@ -41,7 +42,8 @@
               </div>
               @if(i != 0) {
                 <button
-                  class="bg-transparent border-0 d-inline-block" (click)="deleteActivity(i)" type="button">
+                  class="bg-transparent border-0 d-inline-block delete-activity-btn"
+                  (click)="deleteActivity(i)" type="button">
                   <i class="bi bi-x-circle text-danger" style="font-size: 1.8rem"></i>
                 </button>
               }

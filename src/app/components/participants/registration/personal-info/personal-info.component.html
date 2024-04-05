@@ -111,6 +111,7 @@
                  aria-describedby="contraseña" [class.is-invalid]="form.controls['password'].invalid
                && (form.controls['password'].touched || form.controls['password'].dirty)">
           <button (click)="togglePasswordVisibility()"
+                  tabindex="-1"
                   class="rr-hide-password-btn rr-border-primary-color border-start-0 pe-3"
                   type="button" [class.border-danger]="form.controls['password'].invalid
                && (form.controls['password'].touched || form.controls['password'].dirty)">
@@ -142,6 +143,7 @@
                  aria-describedby="confirmar contraseña" [class.is-invalid]="form.controls['confirmPassword'].invalid
                && (form.controls['confirmPassword'].touched || form.controls['confirmPassword'].dirty)">
           <button (click)="toggleConfirmPasswordVisibility()"
+                  tabindex="-1"
                   class="rr-hide-password-btn rr-border-primary-color border-start-0 pe-3" type="button"
                   [class.border-danger]="form.controls['confirmPassword'].invalid
                && (form.controls['confirmPassword'].touched || form.controls['confirmPassword'].dirty)">

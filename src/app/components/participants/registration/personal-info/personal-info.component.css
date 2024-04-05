@@ -53,3 +53,9 @@
   border: solid 1px var(--primary-border);
   border-radius: 10px;
 }
+
+.rr-hide-password-btn {
+  background-color: transparent;
+  border: solid 1px var(--primary-border);
+  border-radius: 10px;
+}
