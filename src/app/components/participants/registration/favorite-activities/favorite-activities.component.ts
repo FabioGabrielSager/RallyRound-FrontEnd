@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {Component, Inject, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CdkDragDrop, DragDropModule, moveItemInArray} from "@angular/cdk/drag-drop";
 import {UserFavoriteActivity} from "../../../../models/user/userFavoriteActivity";
@@ -8,6 +8,7 @@ import {catchError, combineLatest, debounceTime, filter, of, startWith, Subscrip
 import {MatchedActivities} from "../../../../models/common/MatchedActivities";
 import {NgClass} from "@angular/common";
 import {repeatedActivitiesValidator} from "../../../../validators/repeatedActivitiesValidator";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'rr-favorite-activities',
@@ -20,7 +21,7 @@ import {repeatedActivitiesValidator} from "../../../../validators/repeatedActivi
   templateUrl: './favorite-activities.component.html',
   styleUrl: './favorite-activities.component.css'
 })
-export class FavoriteActivitiesComponent implements OnInit {
+export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
   private authService: AuthService = inject(AuthService);
   activitiesNames: string[] = [];
   actualFocusedActivityControlIndex: number | undefined = undefined;
@@ -32,9 +33,15 @@ export class FavoriteActivitiesComponent implements OnInit {
       this.fb.group({
         activity: ["", [Validators.required]]
       })])
-  }, {validators: repeatedActivitiesValidator})
+  }, {validators: repeatedActivitiesValidator});
+
+  private router: Router = inject(Router);
 
   constructor(private activityService: RrActivityService) {
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -107,6 +114,16 @@ export class FavoriteActivitiesComponent implements OnInit {
     }
 
     this.authService.setParticipantRegistrationRequestActivities(userFavoritesActivities);
+    this.subs.add(
+      this.authService.sendRegistrationRequest().subscribe(
+        {
+          next: value => {
+            this.router.navigate(["participant/account/confirmEmail/" + value.userId]);
+          },
+          error: err => console.error(err)
+        }
+      )
+    );
   }
 
   onClickSearchResult($event: any, i: number) {

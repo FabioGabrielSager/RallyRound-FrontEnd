@@ -141,15 +141,14 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
 
     request.name = this.form.controls['name'].value;
     request.lastName = this.form.controls['lastName'].value;
-    request.place = this.form.controls['locality'].value;
+    request.place = this.selectedPlace;
     request.birthdate = this.form.controls['birthdate'].value;
     request.email = this.form.controls['email'].value;
     request.password = this.form.controls['password'].value;
 
     this.authService.setParticipantRegistrationRequestData(request);
 
-    // TODO: DETERMINATE ROUTING
-    this.router.navigate([""])
+    this.router.navigate(["participant/account/photo"])
   }
 
   ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnDestroy} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {DomSanitizer} from "@angular/platform-browser";
 import {NgClass} from "@angular/common";
@@ -9,6 +9,7 @@ import {
   CropperModalResult,
   ImageCropperModalComponent
 } from "../../../shared/image-cropper/image-cropper-modal.component";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'rr-profile-photo',
@@ -20,30 +21,36 @@ import {
   templateUrl: './profile-photo.component.html',
   styleUrl: './profile-photo.component.css'
 })
-export class ProfilePhotoComponent {
+export class ProfilePhotoComponent implements OnDestroy {
   uploadedPhotoPreview: any;
   private uploadedPhoto: File | null = null;
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
   private modalService: NgbModal = inject(NgbModal);
-
+  private subs: Subscription = new Subscription();
   private sanitizer: DomSanitizer = inject(DomSanitizer);
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
 
   capturePhoto(event: any) {
      let modalRef: NgbModalRef = this.modalService.open(ImageCropperModalComponent,
        {centered: true, size: "xl"});
      modalRef.componentInstance.imageFile = event.target.files[0];
-     modalRef.componentInstance.croppedResult.subscribe(
-       (value: CropperModalResult) => {
-         let sanitizedImageUrl = this.sanitizer.bypassSecurityTrustUrl(value.imageUrl);
-         this.uploadedPhotoPreview = sanitizedImageUrl;
-         this.imageUrlToFile(value.imageUrl, "profilePhoto").then(
-           file => this.uploadedPhoto = file
-         ).catch(
-           // TODO: ADD A TOAST TO INFORM ABOUT THE ERROR
-           error => console.error(error)
-         );
-       }
+     this.subs.add(
+       modalRef.componentInstance.croppedResult.subscribe(
+         (value: CropperModalResult) => {
+           let sanitizedImageUrl = this.sanitizer.bypassSecurityTrustUrl(value.imageUrl);
+           this.uploadedPhotoPreview = sanitizedImageUrl;
+           this.imageUrlToFile(value.imageUrl, "profilePhoto").then(
+             file => this.uploadedPhoto = file
+           ).catch(
+             // TODO: ADD A TOAST TO INFORM ABOUT THE ERROR
+             error => console.error(error)
+           );
+         }
+       )
      );
   }
 
@@ -61,7 +68,6 @@ export class ProfilePhotoComponent {
       this.authService.setParticipantRegistrationRequestPhoto(this.uploadedPhoto);
     }
 
-    // TODO: DEFINE ROTING
-    this.router.navigate([""]);
+    this.router.navigate(["participant/account/activities"]);
   }
 }
