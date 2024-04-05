@@ -4,7 +4,7 @@
     <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()"
           style="max-height: 85vh; overflow-y: auto;">
       <div class="col-12 col-sm-6">
-        <label for="name-input" class="rr-text form-label">Nombre</label>
+        <label for="name-input" class="rr-black-text form-label">Nombre</label>
         <input type="text" class="form-control rr-input" formControlName="name" name="name" id="name-input"
                aria-describedby="nombre" [class.is-invalid]="form.controls['name'].invalid
                && (form.controls['name'].touched || form.controls['name'].dirty)">
@@ -18,7 +18,7 @@
         }
       </div>
       <div class="col-12 col-sm-6">
-        <label for="name-input" class="rr-text form-label">Apellido</label>
+        <label for="name-input" class="rr-black-text form-label">Apellido</label>
         <input type="text" class="form-control rr-input" formControlName="lastName" name="lastName" id="last-name-input"
                aria-describedby="apellido" [class.is-invalid]="form.controls['lastName'].invalid
                && (form.controls['lastName'].touched || form.controls['lastName'].dirty)">
@@ -34,25 +34,18 @@
       </div>
       <div class="col-12">
         <div class="position-relative">
-          <label for="name-input" class="rr-text form-label">Localidad</label>
+          <label for="name-input" class="rr-black-text form-label">Localidad</label>
           <textarea type="text" class="form-control rr-input" formControlName="locality" name="locality"
                     id="locality-input" placeholder="Ej.: Provincia, departamento, localidad..."
                     aria-describedby="localidad" [ngClass]="formattedNames.length > 0
                     ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
                     [class.is-invalid]="form.controls['locality'].invalid
                     && (form.controls['locality'].touched || form.controls['locality'].dirty)"
-                    (focus)="onFocus(autosuggestionLocalities)" (blur)="onBlur(autosuggestionLocalities)"></textarea>
+                    (blur)="onBlur()"></textarea>
 
-          <div #autosuggestionLocalities class="search-results-container position-absolute"
-               [ngClass]="formattedNames.length > 0
-                  ? 'd-block' : 'd-none'">
-            @for (fn of formattedNames; track fn; let index = $index) {
-              <span class="search-result d-block ps-3 pe-3"
-                     [ngClass]="index != formattedNames.length-1
-                  ? 'search-result-border-bottom' : 'rounded-bottom-corners'"
-                    (click)="onClickSearchResult($event)">{{ fn }}</span>
-            }
-          </div>
+          <rr-search-results-list (onSelectedResult)="onClickSearchResult($event)"
+                                  [resultsList]="formattedNames"/>
+
           @if (form.controls['locality'].invalid
           && (form.controls['locality'].touched || form.controls['locality'].dirty)) {
             <div class="invalid-feedback">
@@ -68,7 +61,7 @@
         </div>
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-text form-label">Fecha de nacimiento</label>
+        <label for="name-input" class="rr-black-text form-label">Fecha de nacimiento</label>
         <input type="date" class="form-control rr-input" formControlName="birthdate" name="birthdate"
                id="birthdate-input" aria-describedby="fecha de nacimiento"
                [class.is-invalid]="form.controls['birthdate'].invalid
@@ -84,7 +77,7 @@
         }
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-text form-label">Email</label>
+        <label for="name-input" class="rr-black-text form-label">Email</label>
         <input type="email" class="form-control rr-input" formControlName="email" name="email" id="email-input"
                aria-describedby="email"
                [class.is-invalid]="form.controls['email'].invalid
@@ -103,7 +96,7 @@
         }
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-text form-label">Contraseña</label>
+        <label for="name-input" class="rr-black-text form-label">Contraseña</label>
         <div class="input-group">
           <input [type]="passwordIsHide ? 'password' : 'text'"
                  class="form-control rr-input border-end-0" formControlName="password" name="password"
@@ -135,7 +128,7 @@
         }
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-text form-label">Confirmar contraseña</label>
+        <label for="name-input" class="rr-black-text form-label">Confirmar contraseña</label>
         <div class="input-group">
           <input [type]="confirmPasswordIsHide ? 'password' : 'text'" class="form-control rr-input border-end-0"
                  formControlName="confirmPassword" name="confirmPassword"

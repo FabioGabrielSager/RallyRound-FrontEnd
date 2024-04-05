@@ -1,7 +1,7 @@
-<div id="form-container" class="container vh-100 d-flex flex-column justify-content-center rr-text">
+<div id="form-container" class="container vh-100 d-flex flex-column justify-content-center rr-black-text">
   <h1 class="rr-dark-purple-text"><strong>Tus actividades favoritas.</strong></h1>
   <span class="form-text mb-3" style="font-style: italic">
-    Con el botón <i class="bi bi-list rr-text"></i> puedes arrastrar las actividades
+    Con el botón <i class="bi bi-list rr-black-text"></i> puedes arrastrar las actividades
     para ordenarlas desde las que más te gustas a las que menos.</span>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <ng-container formArrayName="activities">
@@ -11,36 +11,31 @@
             <div class="d-flex align-items-center">
               <div class="w-100">
                 <div class="d-flex">
-                  <label class="align-self-center">{{i+1}}.</label>
+                  <label class="align-self-center">{{ i + 1 }}.</label>
                   <div class="w-100 position-relative">
                     <div class="input-group">
-                      <input type="text" class="form-control rounded-start-3 rr-input border-end-0"
+                      <input type="text" class="form-control rr-input border-end-0"
                              placeholder="Ej.: Básquet, Música, Futbol, etc." [id]="i"
-                             aria-describedby="actividad" formControlName="activity"
-                      (focus)="onFocus(autosuggestionActivities)" (blur)="onBlur(autosuggestionActivities)">
+                             [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners'
+                             : 'rounded-bottom-corners'"
+                             aria-describedby="actividad" formControlName="activity" (blur)="onBlur()">
                       <button
                         tabindex="-1"
-                        class="rr-drag-activity-btn rr-border-primary-color border-start-0 pe-3" type="button"
+                        [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'"
+                        class="rr-drag-btn rr-border-primary-color border-start-0 pe-3" type="button"
                         cdkDragHandle>
-                        <i class="bi bi-list rr-text" style="font-size: 1.5rem"></i>
+                        <i class="bi bi-list rr-black-text" style="font-size: 1.5rem"></i>
                       </button>
                     </div>
 
-                    <div #autosuggestionActivities class="search-results-container position-absolute"
-                         [ngClass]="activitiesNames.length > 0 && actualFocusedActivityControlIndex === i
-                  ? 'd-block' : 'd-none'">
-                      @for (a of activitiesNames; track a; let index = $index) {
-                        <span class="search-result d-block ps-3 pe-3"
-                              [ngClass]="index != activitiesNames.length-1
-                  ? 'search-result-border-bottom' : 'rounded-bottom-corners'"
-                              (click)="onClickSearchResult($event, i)">{{ a }}</span>
-                      }
-                    </div>
+                    @if (actualFocusedActivityControlIndex === i) {
+                      <rr-search-results-list (onSelectedResult)="onClickSearchResult($event, i)"
+                                              [resultsList]="activitiesNames"/>
+                    }
                   </div>
-
                 </div>
               </div>
-              @if(i != 0) {
+              @if (i != 0) {
                 <button
                   class="bg-transparent border-0 d-inline-block delete-activity-btn"
                   (click)="deleteActivity(i)" type="button">
@@ -49,7 +44,7 @@
               }
             </div>
 
-            @if(activitiesFormArray.controls[i].get('activity')?.hasError('required')
+            @if (activitiesFormArray.controls[i].get('activity')?.hasError('required')
             && (activitiesFormArray.controls[i].get('activity')?.touched
               || activitiesFormArray.controls[i].get('activity')?.dirty)) {
               <span class="error-text">Este campo es requerido.</span>

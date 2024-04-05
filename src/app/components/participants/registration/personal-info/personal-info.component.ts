@@ -10,13 +10,15 @@ import {ParticipantRegistrarionRequest} from "../../../../models/user/participan
 import {AuthService} from "../../../../services/auth.service";
 import {Router} from "@angular/router";
 import {ToastService} from "../../../../services/toast.service";
+import {SearchResultsListComponent} from "../../../shared/search-results-list/search-results-list.component";
 
 @Component({
   selector: 'rr-personal-info',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    SearchResultsListComponent
   ],
   templateUrl: './personal-info.component.html',
   styleUrl: './personal-info.component.css'
@@ -29,8 +31,8 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
   private mapApiService: MapApiService = inject(MapApiService);
   private aLocationWasSelected: boolean = false;
   selectedPlace: Place | undefined = undefined;
-  formattedNames: String[] = [];
-  private formattedNamePlaces: Map<String, Place> = new Map<string, Place>([]);
+  formattedNames: string[] = [];
+  private formattedNamePlaces: Map<string, Place> = new Map<string, Place>([]);
 
   // Password
   passwordIsHide: boolean = true;
@@ -159,13 +161,8 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
     this.router.navigate(["participant/account/photo"])
   }
 
-  onFocus(autosuggestionLocalities: HTMLDivElement) {
-    autosuggestionLocalities.classList.add('d-block')
-  }
-
-  onBlur(autosuggestionLocalities: HTMLDivElement) {
+  onBlur() {
     setTimeout(() => {
-      autosuggestionLocalities.classList.add('d-none');
       this.formattedNames = [];
       this.formattedNamePlaces.clear();
     }, 200);

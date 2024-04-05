@@ -10,6 +10,7 @@ import {NgClass} from "@angular/common";
 import {repeatedActivitiesValidator} from "../../../../validators/repeatedActivitiesValidator";
 import {Router} from "@angular/router";
 import {ToastService} from "../../../../services/toast.service";
+import {SearchResultsListComponent} from "../../../shared/search-results-list/search-results-list.component";
 
 @Component({
   selector: 'rr-favorite-activities',
@@ -17,7 +18,8 @@ import {ToastService} from "../../../../services/toast.service";
   imports: [
     ReactiveFormsModule,
     DragDropModule,
-    NgClass
+    NgClass,
+    SearchResultsListComponent
   ],
   templateUrl: './favorite-activities.component.html',
   styleUrl: './favorite-activities.component.css'
@@ -143,13 +145,8 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
     this.activitiesNames = [];
   }
 
-  onFocus(autosuggestionLocalities: HTMLDivElement) {
-    autosuggestionLocalities.classList.add('d-block')
-  }
-
-  onBlur(autosuggestionLocalities: HTMLDivElement) {
+  onBlur() {
     setTimeout(() => {
-      autosuggestionLocalities.classList.add('d-none');
       this.activitiesNames = [];
     }, 200);
   }

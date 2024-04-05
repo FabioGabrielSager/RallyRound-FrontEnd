@@ -19,15 +19,30 @@ body {
   background-color: var(--rr-primary);
 }
 
+/* Texts */
+
+.rr-black-text {
+  color: var(--black-100);
+}
+
+.rr-dark-purple-text {
+  color: var(--dark-purple);
+}
+
+.error-text {
+  color: var(--error);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+
+/* Form controls */
+
 .rr-input {
   background-color: var(--input-primary);
   border-color: var(--primary-border);
   border-radius: 10px;
   color: var(--black-100);
-}
-
-.rr-bg-secondary {
-  background-color: var(--rr-secondary);
 }
 
 .rr-input:focus {
@@ -37,13 +52,7 @@ body {
   box-shadow: 0 0 0 0.30rem rgba(148, 61, 8, 0.25);
 }
 
-.rr-text {
-  color: var(--black-100);
-}
-
-.rr-dark-purple-text {
-  color: var(--dark-purple);
-}
+/* Buttons */
 
 .rr-btn {
   background-color: var(--dark-purple);
@@ -66,16 +75,36 @@ body {
   box-shadow: 0 0 0 0.25rem rgba(47, 35, 73, 0.25);
 }
 
+.rr-drag-btn {
+  background-color: transparent;
+  border: solid 1px var(--primary-border);
+  border-radius: 10px;
+}
+
+/* Borders */
+
 .rr-border-primary-color {
   border-color: var(--primary-border);
 }
 
-.error-text {
-  color: var(--error);
-  font-style: italic;
-  font-size: 0.95rem;
+.rounded-bottom-corners {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
+.no-rounded-bottom-corners {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+/* Backgrounds */
+.rr-bg-primary {
+  background-color: var(--rr-primary);
+}
+
+.rr-bg-secondary {
+  background-color: var(--rr-secondary);
+}
 .bg-danger {
   background-color: var(--error);
 }
