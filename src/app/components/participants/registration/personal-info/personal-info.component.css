@@ -1,9 +1,3 @@
 #form-container {
   width: 90%;
 }
-
-.rr-hide-password-btn {
-  background-color: transparent;
-  border: solid 1px var(--primary-border);
-  border-radius: 10px;
-}

@@ -7,7 +7,7 @@ import {BingMapsApiLocationResponse} from "../../../../models/location/BingMapsA
 import {NgClass} from "@angular/common";
 import {passwordMatchValidator} from "../../../../validators/passwordMatchValidator";
 import {ParticipantRegistrarionRequest} from "../../../../models/user/participantRegistrarionRequest";
-import {AuthService} from "../../../../services/auth.service";
+import {AuthService} from "../../../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {ToastService} from "../../../../services/toast.service";
 import {SearchResultsListComponent} from "../../../shared/search-results-list/search-results-list.component";

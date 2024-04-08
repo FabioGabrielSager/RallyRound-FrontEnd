@@ -1,6 +1,6 @@
-<div id="main-container" class="vh-100 container-fluid d-flex justify-content-center">
+<div class="vh-100 container d-flex justify-content-center">
   <div id="form-container" class="align-self-center">
-    <h1 id="create-account-title"><strong>Crear cuenta.</strong></h1>
+    <h1 id="create-account-title">Crear cuenta.</h1>
     <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()"
           style="max-height: 85vh; overflow-y: auto;">
       <div class="col-12 col-sm-6">
@@ -18,7 +18,7 @@
         }
       </div>
       <div class="col-12 col-sm-6">
-        <label for="name-input" class="rr-black-text form-label">Apellido</label>
+        <label for="last-name-input" class="rr-black-text form-label">Apellido</label>
         <input type="text" class="form-control rr-input" formControlName="lastName" name="lastName" id="last-name-input"
                aria-describedby="apellido" [class.is-invalid]="form.controls['lastName'].invalid
                && (form.controls['lastName'].touched || form.controls['lastName'].dirty)">
@@ -34,7 +34,7 @@
       </div>
       <div class="col-12">
         <div class="position-relative">
-          <label for="name-input" class="rr-black-text form-label">Localidad</label>
+          <label for="locality-input" class="rr-black-text form-label">Localidad</label>
           <textarea type="text" class="form-control rr-input" formControlName="locality" name="locality"
                     id="locality-input" placeholder="Ej.: Provincia, departamento, localidad..."
                     aria-describedby="localidad" [ngClass]="formattedNames.length > 0
@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-black-text form-label">Fecha de nacimiento</label>
+        <label for="birthdate-input" class="rr-black-text form-label">Fecha de nacimiento</label>
         <input type="date" class="form-control rr-input" formControlName="birthdate" name="birthdate"
                id="birthdate-input" aria-describedby="fecha de nacimiento"
                [class.is-invalid]="form.controls['birthdate'].invalid
@@ -77,7 +77,7 @@
         }
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-black-text form-label">Email</label>
+        <label for="email-input" class="rr-black-text form-label">Email</label>
         <input type="email" class="form-control rr-input" formControlName="email" name="email" id="email-input"
                aria-describedby="email"
                [class.is-invalid]="form.controls['email'].invalid
@@ -96,7 +96,7 @@
         }
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-black-text form-label">Contraseña</label>
+        <label for="password-input" class="rr-black-text form-label">Contraseña</label>
         <div class="input-group">
           <input [type]="passwordIsHide ? 'password' : 'text'"
                  class="form-control rr-input border-end-0" formControlName="password" name="password"
@@ -128,7 +128,7 @@
         }
       </div>
       <div class="col-12 col-md-6">
-        <label for="name-input" class="rr-black-text form-label">Confirmar contraseña</label>
+        <label for="confirm-password-input" class="rr-black-text form-label">Confirmar contraseña</label>
         <div class="input-group">
           <input [type]="confirmPasswordIsHide ? 'password' : 'text'" class="form-control rr-input border-end-0"
                  formControlName="confirmPassword" name="confirmPassword"
