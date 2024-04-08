@@ -1,12 +1,13 @@
 import {inject, Injectable} from '@angular/core';
-import {ParticipantRegistrarionRequest} from "../models/user/participantRegistrarionRequest";
-import {UserFavoriteActivity} from "../models/user/userFavoriteActivity";
+import {ParticipantRegistrarionRequest} from "../../models/user/participantRegistrarionRequest";
+import {UserFavoriteActivity} from "../../models/user/userFavoriteActivity";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../enviroment/enviroment";
-import {Observable} from "rxjs";
-import {ParticipantRegistrationResponse} from "../models/user/participantRegistrationResponse";
-import {AuthResponse} from "../models/user/AuthResponse";
-import {ConfirmParticipantRegistrationRequest} from "../models/user/confirmParticipantRegistrationRequest";
+import {environment} from "../../../enviroment/enviroment";
+import {map, Observable, tap} from "rxjs";
+import {ParticipantRegistrationResponse} from "../../models/user/participantRegistrationResponse";
+import {AuthResponse} from "../../models/user/AuthResponse";
+import {ConfirmParticipantRegistrationRequest} from "../../models/user/confirmParticipantRegistrationRequest";
+import {LoginRequest} from "../../models/user/loginRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +45,27 @@ export class AuthService {
     );
   }
 
-  sendRegistrationConfirmation(userId: string, verificationCode: number): Observable<AuthResponse> {
+  sendRegistrationConfirmation(userId: string, verificationCode: number): Observable<null> {
     let request: ConfirmParticipantRegistrationRequest =
       new ConfirmParticipantRegistrationRequest(verificationCode, userId);
-    return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/confirm/email", request)
+    return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/confirm/email", request).pipe(
+      tap(authResponse => sessionStorage.setItem("token", authResponse.token)),
+      map(_ => null)
+    );
+  }
+
+  refreshEmailVerificationToken(userId: string) {
+    return this.httpClient.put(this.baseUrl + "/participant/email/token/refresh", {}, {
+      params: {userId: userId}
+    }).pipe(
+      map(_ => null)
+    );
+  }
+
+  login(loginRequest: LoginRequest): Observable<null> {
+    return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/login", loginRequest).pipe(
+      tap(authResponse => sessionStorage.setItem("token", authResponse.token)),
+      map(_ => null)
+    );
   }
 }
