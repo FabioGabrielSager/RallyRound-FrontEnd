@@ -7,6 +7,8 @@ import {
 import {
   EmailConfirmationComponent
 } from "./components/participants/registration/email-confirmation/email-confirmation.component";
+import {LoginComponent} from "./components/shared/login/login.component";
+import {HomeComponent} from "./components/shared/home/home.component";
 
 export const routes: Routes = [
   {
@@ -20,5 +22,8 @@ export const routes: Routes = [
         ]
       }
     ]
-  }
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
