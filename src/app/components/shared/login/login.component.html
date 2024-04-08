@@ -1,0 +1,62 @@
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <div>
+    <h1 id="create-account-title"><strong>Iniciar sesión.</strong></h1>
+    <form [formGroup]="form" class="row" (ngSubmit)="onSubmit()">
+      <div class="col-12">
+        <label for="username-input" class="rr-black-text form-label">Email</label>
+        <input type="email" class="form-control rr-input" formControlName="username" name="username" id="username-input"
+               aria-describedby="username"
+               [class.is-invalid]="form.controls['username'].invalid
+               && (form.controls['username'].touched || form.controls['username'].dirty)">
+
+        @if (form.controls['username'].invalid
+        && (form.controls['username'].touched || form.controls['username'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['username'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+            @if (form.controls['username'].hasError('email')) {
+              <span class="error-text">Debe ingresar una dirección de email válida.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12">
+        <label for="password-input" class="rr-black-text form-label">Contraseña</label>
+        <div class="input-group">
+          <input [type]="passwordIsHide ? 'password' : 'text'"
+                 class="form-control rr-input border-end-0" formControlName="password" name="password"
+                 id="password-input"
+                 aria-describedby="contraseña" [class.is-invalid]="form.controls['password'].invalid
+               && (form.controls['password'].touched || form.controls['password'].dirty)">
+          <button (click)="togglePasswordVisibility()"
+                  tabindex="-1"
+                  class="rr-hide-password-btn rr-border-primary-color rounded-end-3 pe-3"
+                  type="button" [class.border-danger]="form.controls['password'].invalid
+               && (form.controls['password'].touched || form.controls['password'].dirty)">
+            @if (passwordIsHide) {
+              <i class="bi bi-eye-fill"></i>
+            } @else {
+              <i class="bi bi-eye-slash-fill"></i>
+            }
+          </button>
+          @if (form.controls['password'].invalid
+          && (form.controls['password'].touched || form.controls['password'].dirty)) {
+            <div class="invalid-feedback d-block">
+              @if (form.controls['password'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+              @if (form.controls['password'].hasError('minlength')) {
+                <span class="error-text">La contraseña debe contener como minimo 5 caracteres.</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <div class="col-12 mt-3 text-center">
+        <button class="w-100 btn rr-btn mb-1">Iniciar sesión</button>
+        <a class="link-primary" routerLink="/participant/account/registration">Aún no tengo cuenta</a>
+      </div>
+    </form>
+  </div>
+</div>
