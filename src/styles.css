@@ -20,7 +20,9 @@ body {
 }
 
 /* Texts */
-
+h1 {
+  font-weight: bold;
+}
 .rr-black-text {
   color: var(--black-100);
 }
@@ -41,7 +43,7 @@ body {
 .rr-input {
   background-color: var(--input-primary);
   border-color: var(--primary-border);
-  border-radius: 10px;
+  border-radius: 0.5rem;
   color: var(--black-100);
 }
 
@@ -57,28 +59,59 @@ body {
 .rr-btn {
   background-color: var(--dark-purple);
   color: white;
-  border-radius: 10px;
+  border-radius: 0.5rem;
 }
 
 .rr-btn:hover {
   background-color: var(--dark-purple);
   color: white;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   transform: scale(1.01);
 }
 
 .rr-btn:focus {
   background-color: var(--dark-purple);
   color: white;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   transform: scale(1.01);
   box-shadow: 0 0 0 0.25rem rgba(47, 35, 73, 0.25);
+}
+
+.rr-btn-secondary {
+  background-color: var(--rr-secondary);
+  color: var(--dark-purple);
+  border-color: var(--dark-purple);
+  border-radius: 0.5rem;
+}
+
+.rr-btn-secondary:hover {
+  background-color: var(--rr-secondary);
+  color: var(--dark-purple);
+  border-color: var(--dark-purple);
+  border-radius: 0.5rem;
+  transform: scale(1.01);
+}
+
+.rr-btn-secondary:focus {
+  background-color: var(--rr-secondary);
+  color: var(--dark-purple);
+  border-color: var(--dark-purple);
+  border-radius: 0.5rem;
+  transform: scale(1.01);
+  box-shadow: 0 0 0 0.25rem rgba(47, 35, 73, 0.25);
+}
+
+.rr-hide-password-btn {
+  background-color: transparent;
+  border: solid 1px var(--primary-border);
+  border-left: 0;
+  border-radius: 0.5rem;
 }
 
 .rr-drag-btn {
   background-color: transparent;
   border: solid 1px var(--primary-border);
-  border-radius: 10px;
+  border-radius: 0.5rem;
 }
 
 /* Borders */
@@ -93,8 +126,8 @@ body {
 }
 
 .no-rounded-bottom-corners {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 /* Backgrounds */
