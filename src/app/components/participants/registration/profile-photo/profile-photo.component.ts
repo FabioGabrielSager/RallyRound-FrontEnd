@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {DomSanitizer} from "@angular/platform-browser";
 import {NgClass} from "@angular/common";
-import {AuthService} from "../../../../services/auth.service";
+import {AuthService} from "../../../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {
@@ -10,6 +10,7 @@ import {
   ImageCropperModalComponent
 } from "../../../shared/image-cropper/image-cropper-modal.component";
 import {Subscription} from "rxjs";
+import {ToastService} from "../../../../services/toast.service";
 
 @Component({
   selector: 'rr-profile-photo',
@@ -29,6 +30,7 @@ export class ProfilePhotoComponent implements OnDestroy {
   private modalService: NgbModal = inject(NgbModal);
   private subs: Subscription = new Subscription();
   private sanitizer: DomSanitizer = inject(DomSanitizer);
+  private toastService: ToastService = inject(ToastService);
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
@@ -46,8 +48,10 @@ export class ProfilePhotoComponent implements OnDestroy {
            this.imageUrlToFile(value.imageUrl, "profilePhoto").then(
              file => this.uploadedPhoto = file
            ).catch(
-             // TODO: ADD A TOAST TO INFORM ABOUT THE ERROR
-             error => console.error(error)
+             error => {
+               this.toastService.show("Hubo un error al intentar cargar la foto.", "bg-danger");
+               console.error(error)
+             }
            );
          }
        )
