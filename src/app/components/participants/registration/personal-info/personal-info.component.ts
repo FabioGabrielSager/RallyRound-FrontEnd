@@ -4,13 +4,14 @@ import {catchError, debounceTime, filter, ObservableInput, of, Subscription, swi
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Place} from "../../../../models/location/place";
 import {BingMapsApiLocationResponse} from "../../../../models/location/BingMapsApiLocationResponse";
-import {NgClass} from "@angular/common";
+import {DatePipe, formatDate, NgClass} from "@angular/common";
 import {passwordMatchValidator} from "../../../../validators/passwordMatchValidator";
 import {ParticipantRegistrarionRequest} from "../../../../models/user/participantRegistrarionRequest";
 import {AuthService} from "../../../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {ToastService} from "../../../../services/toast.service";
 import {SearchResultsListComponent} from "../../../shared/search-results-list/search-results-list.component";
+import {minAgeValidator} from "../../../../validators/minAgeValidator";
 
 @Component({
   selector: 'rr-personal-info',
@@ -18,7 +19,8 @@ import {SearchResultsListComponent} from "../../../shared/search-results-list/se
   imports: [
     ReactiveFormsModule,
     NgClass,
-    SearchResultsListComponent
+    SearchResultsListComponent,
+    DatePipe
   ],
   templateUrl: './personal-info.component.html',
   styleUrl: './personal-info.component.css'
@@ -39,16 +41,9 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
   confirmPasswordIsHide: boolean = true;
 
   // FORM
+  birthdateControlInitialValue: Date = new Date();
   fb: FormBuilder = inject(FormBuilder);
-  form: FormGroup = this.fb.group({
-    name: ["", [Validators.required]],
-    lastName: ["", [Validators.required]],
-    locality: ["", [Validators.required]],
-    birthdate: ["", [Validators.required]],
-    email: ["", [Validators.required, Validators.email]],
-    password: ["", [Validators.required, Validators.minLength(5)]],
-    confirmPassword: ["", [Validators.required]]
-  }, {validators: passwordMatchValidator});
+  form: FormGroup = this.fb.group({})
 
   private authService: AuthService = inject(AuthService);
 
@@ -56,6 +51,21 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
   private router: Router = inject(Router);
 
   ngOnInit(): void {
+    // Form initialization
+    const today = new Date();
+    this.birthdateControlInitialValue = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+    this.form = this.fb.group({
+      name: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
+      locality: ["", [Validators.required]],
+      birthdate: [formatDate(this.birthdateControlInitialValue, 'yyyy-MM-dd', 'en'),
+        [Validators.required, minAgeValidator(18)]],
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(5)]],
+      confirmPassword: ["", [Validators.required]]
+    }, {validators: passwordMatchValidator});
+
     // Locations autosuggestion
     this.subs.add(
       this.form.controls['locality'].valueChanges.pipe(

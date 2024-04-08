@@ -73,6 +73,9 @@
             @if (form.controls['birthdate'].hasError('required')) {
               <span class="error-text">Este campo es requerido.</span>
             }
+            @if (form.controls['birthdate'].hasError('minimumAge')) {
+              <span class="error-text">Debe ser mayor de edad para registrarse.</span>
+            }
           </div>
         }
       </div>
