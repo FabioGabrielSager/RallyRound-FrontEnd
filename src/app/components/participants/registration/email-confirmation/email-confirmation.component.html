@@ -1,8 +1,11 @@
 <div class="container vh-100 d-flex flex-column justify-content-center rr-black-text">
-  <h1 class="rr-dark-purple-text"><strong>Confirmar email.</strong></h1>
+  <h1 class="rr-dark-purple-text">Confirmar email.</h1>
   <p>Te hemos enviado un código a tu correo
     electrónico, por favor introdúcelo aquí así
     podemos confirmar tu cuenta.
+  </p>
+  <p class="text-secondary" style="font-size: 0.95rem; font-style: italic">
+    Ten en cuenta que el código expira en 10 minutos.
   </p>
   <form class="row" #form="ngForm" (ngSubmit)="onSubmit(form)">
     <div class="col-12 col-md-6">
@@ -18,6 +21,7 @@
       @if (codeInput.hasError('maxlength') && (codeInput.touched || codeInput.dirty)) {
           <span class="error-text">El código no puede tener mas de 6 dígitos.</span>
       }
+      <a class="link-primary d-block" (click)="onResendToken()" style="font-size: 0.95rem">Reenviar código.</a>
     </div>
     <div class="col-12 col-md-6">
       <button type="submit" class="mt-4 btn rr-btn w-100">Confirmar</button>

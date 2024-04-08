@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormsModule, NgForm} from "@angular/forms";
 import {ActivatedRoute, Params} from "@angular/router";
 import {Subscription} from "rxjs";
-import {AuthService} from "../../../../services/auth.service";
+import {AuthService} from "../../../../services/auth/auth.service";
 
 @Component({
   selector: 'rr-email-confirmation',
@@ -30,6 +30,12 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
+  onResendToken() {
+    this.subs.add(
+      this.authService.refreshEmailVerificationToken(this.userId).subscribe()
+    );
+  }
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       form.control.get('codeInput')?.markAsTouched();
@@ -41,8 +47,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
         .subscribe(
           {
             next: value => {
-              // TODO: Store the JWT token correctly
-              console.log(value.token);
+              // TODO: Redirects to the user home.
             },
             // TODO: ADD A TOAST TO INFORM ABOUT THE ERROR
             error: err => console.error(err)
