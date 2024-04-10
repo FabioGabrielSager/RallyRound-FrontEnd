@@ -1,0 +1,70 @@
+<header class="position-sticky sticky-top"
+        [ngClass]="centerNavbar ? 'd-flex justify-content-center' : ''">
+  <nav class="navbar nav-menu navbar-expand-sm navbar-dark"
+       [style.background-color]="backgroundColor"
+       [ngClass]="floatingNavbar ? 'floating-navbar' : ''">
+    <div class="container-fluid d-flex"
+         [ngClass]="itemsJustification">
+      @if (showBrand) {
+        <a class="navbar-brand" style="font-weight: bold" routerLink="/">RallyRound</a>
+      }
+
+      @if (collapse) {
+        <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas"
+                (click)="onClickCollapsedNav(offcanvas)"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      }
+
+      <div [ngClass]="collapse ? 'd-none d-sm-block' : 'd-block'"
+           [class.w-100]="!showBrand"
+           tabindex="-1" id="navbarNav">
+        <ul class="navbar-nav flex-row pe-3 w-100" [ngClass]="itemsJustification">
+          @for (ni of navBarItems; track ni) {
+            <li class="nav-item ms-2">
+              <a class="nav-link"
+                 [href]="ni.href"
+                 [routerLink]="ni.routerLink"
+                 (click)="handleClick(ni.onClick)">
+                @if (ni.iconInLeftOfTitle) {
+                  <i [ngClass]="ni.bootstrapIconClasses"></i>
+                }
+                <span> {{ ni.title }} </span>
+                @if (!ni.iconInLeftOfTitle) {
+                  <i [ngClass]="ni.bootstrapIconClasses"></i>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <ng-template #offcanvas let-offcanvas class="offcanvas offcanvas-end">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close btn-close-white" (click)="offcanvas.dismiss('Cross click')"
+                aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav">
+          @for (ni of navBarItems; track ni) {
+            <li class="nav-item ms-2">
+              <a class="nav-link"
+                 [href]="ni.href"
+                 [routerLink]="ni.routerLink"
+                 (click)="handleClick(ni.onClick)">
+                @if (ni.iconInLeftOfTitle) {
+                  <i [ngClass]="ni.bootstrapIconClasses"></i>
+                }
+                <span> {{ ni.title }} </span>
+                @if (!ni.iconInLeftOfTitle) {
+                  <i [ngClass]="ni.bootstrapIconClasses"></i>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </ng-template>
+  </nav>
+</header>

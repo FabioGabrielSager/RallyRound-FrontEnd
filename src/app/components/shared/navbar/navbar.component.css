@@ -1,0 +1,38 @@
+.nav-menu {
+  background-color: transparent;
+}
+
+.navbar-brand {
+  color: var(--dark-purple);
+}
+
+.navbar-nav * {
+  color: #ffffff;
+}
+
+.nav-link {
+  border-radius: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.nav-link:hover {
+  transform: scale(1.025);
+  background-color: rgba(255, 255, 255, 0.10);
+}
+
+.nav-link:active {
+  transform: scale(1.025);
+  background-color: rgba(255, 255, 255, 0.10);
+}
+
+.floating-navbar {
+  background-color: var(--rr-secondary);
+  border-radius: 2rem;
+  margin-top: 0.50rem;
+  margin-left: 0.50rem;
+  margin-right: 0.50rem;
+  box-shadow: 0 0.1rem 0.15rem rgba(0, 0, 0, 0.05);
+}
