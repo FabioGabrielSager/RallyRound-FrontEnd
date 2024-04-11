@@ -1,3 +1,3 @@
 export interface ParticipantRegistrationResponse {
-  userId: string
+  userEmail: string
 }

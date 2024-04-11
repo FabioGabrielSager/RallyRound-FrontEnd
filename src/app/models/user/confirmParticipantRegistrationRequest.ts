@@ -1,9 +1,9 @@
 export class ConfirmParticipantRegistrationRequest {
   private code: number;
-  private userId: string;
+  private email: string;
 
   constructor(code: number, userId: string) {
     this.code = code;
-    this.userId = userId;
+    this.email = userId;
   }
 }

@@ -15,14 +15,14 @@ import {AuthService} from "../../../../services/auth/auth.service";
 })
 export class EmailConfirmationComponent implements OnInit, OnDestroy {
   verificationCode: number | undefined = undefined;
-  private userId: string = "";
+  private userEmail: string = "";
   private route: ActivatedRoute = inject(ActivatedRoute);
   private subs: Subscription = new Subscription();
   private authService: AuthService = inject(AuthService);
 
   ngOnInit(): void {
     this.route.params.subscribe(
-      (params: Params) => this.userId = params['userId']
+      (params: Params) => this.userEmail = params['userEmail']
     );
   }
 
@@ -32,7 +32,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
 
   onResendToken() {
     this.subs.add(
-      this.authService.refreshEmailVerificationToken(this.userId).subscribe()
+      this.authService.refreshEmailVerificationToken(this.userEmail).subscribe()
     );
   }
 
@@ -43,7 +43,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
     }
 
     this.subs.add(
-      this.authService.sendRegistrationConfirmation(this.userId, form.control.get('codeInput')?.value)
+      this.authService.sendRegistrationConfirmation(this.userEmail, form.control.get('codeInput')?.value)
         .subscribe(
           {
             next: value => {
