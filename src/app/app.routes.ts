@@ -18,7 +18,7 @@ export const routes: Routes = [
           {path: 'registration', component: PersonalInfoComponent},
           {path: 'photo', component: ProfilePhotoComponent},
           {path: 'activities', component: FavoriteActivitiesComponent},
-          {path: 'confirmEmail/:userId', component: EmailConfirmationComponent}
+          {path: 'confirmEmail', component: EmailConfirmationComponent}
         ]
       }
     ]
