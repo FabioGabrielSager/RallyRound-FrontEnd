@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {NavbarComponent} from "../navbar/navbar.component";
 
@@ -14,5 +14,5 @@ import {NavbarComponent} from "../navbar/navbar.component";
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-
+  isHomeRouterOutletActive: boolean = false;
 }

@@ -4,7 +4,12 @@
     <h1 class="rr-dark-purple-text text-center">
       ¡Conéctate, organiza y participa en eventos locales de forma fácil y divertida!
     </h1>
-    <button class="btn rr-btn w-100 pt-3 pb-3" routerLink="/participant/account/registration">Empezar Ahora</button>
-    <button class="btn rr-btn-secondary w-100 pt-3 pb-3 rr-bg-secondary" routerLink="/login">Ya tengo una cuenta</button>
+    <button class="btn rr-btn w-100 pt-3 pb-3"
+            [routerLink]="['/participant/register',
+              { outlets: { registration: ['personalInfo']}}]">
+
+      Empezar Ahora</button>
+    <button class="btn rr-btn-secondary w-100 pt-3 pb-3 rr-bg-secondary"
+            routerLink="/login">Ya tengo una cuenta</button>
   </div>
 </div>

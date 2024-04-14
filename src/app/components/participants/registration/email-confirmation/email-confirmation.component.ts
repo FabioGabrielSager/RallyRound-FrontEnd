@@ -1,6 +1,6 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormsModule, NgForm} from "@angular/forms";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../../../services/auth/auth.service";
 
@@ -19,6 +19,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private subs: Subscription = new Subscription();
   private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -46,8 +47,9 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
       this.authService.sendRegistrationConfirmation(this.userEmail, form.control.get('codeInput')?.value)
         .subscribe(
           {
-            next: value => {
-              // TODO: Redirects to the user home.
+            next: username => {
+              // Redirects to the user home.
+              this.router.navigate(["/participant/home/" + username]);
             },
             // TODO: ADD A TOAST TO INFORM ABOUT THE ERROR
             error: err => console.error(err)

@@ -5,7 +5,8 @@ import {LoginRequest} from "../../../models/user/loginRequest";
 import {AuthService} from "../../../services/auth/auth.service";
 import {Subscription} from "rxjs";
 import {ToastService} from "../../../services/toast.service";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
+import {NavbarComponent} from "../navbar/navbar.component";
 
 @Component({
   selector: 'rr-login',
@@ -13,7 +14,8 @@ import {RouterLink} from "@angular/router";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    NavbarComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -28,6 +30,7 @@ export class LoginComponent implements OnDestroy{
   private toastService: ToastService = inject(ToastService);
   private authService: AuthService = inject(AuthService);
   private loginSub: Subscription = new Subscription();
+  private router: Router = inject(Router);
 
   togglePasswordVisibility() {
     this.passwordIsHide = !this.passwordIsHide;
@@ -44,9 +47,9 @@ export class LoginComponent implements OnDestroy{
 
     this.loginSub = this.authService.login(loginRequest).subscribe(
       {
-        next: value => {
-          // TODO: Redirects to user home
-          console.log("USUARIO LOGUEADO");
+        next: username => {
+          // Redirects to user home
+          this.router.navigate(["/participant/home/" + username]);
         },
         error: err => {
           if(err.status === 403) {

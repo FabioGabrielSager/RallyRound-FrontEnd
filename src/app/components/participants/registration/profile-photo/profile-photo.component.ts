@@ -72,6 +72,6 @@ export class ProfilePhotoComponent implements OnDestroy {
       this.authService.setParticipantRegistrationRequestPhoto(this.uploadedPhoto);
     }
 
-    this.router.navigate(["participant/account/activities"]);
+    this.router.navigate(['/participant/register/', { outlets: {registration: ['activities']}}]);
   }
 }

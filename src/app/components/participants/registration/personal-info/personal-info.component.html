@@ -1,8 +1,7 @@
-<div class="vh-100 container d-flex justify-content-center">
+<div class="container d-flex justify-content-center mb-3">
   <div id="form-container" class="align-self-center">
-    <h1 id="create-account-title">Crear cuenta.</h1>
-    <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()"
-          style="max-height: 85vh; overflow-y: auto;">
+    <h3 id="create-account-title" class="rr-dark-purple-text text-bold">Información personal.</h3>
+    <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="col-12 col-sm-6">
         <label for="name-input" class="rr-black-text form-label">Nombre</label>
         <input type="text" class="form-control rr-input" formControlName="name" name="name" id="name-input"

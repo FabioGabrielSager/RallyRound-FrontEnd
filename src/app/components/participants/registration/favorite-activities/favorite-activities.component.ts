@@ -127,7 +127,14 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
       this.authService.sendRegistrationRequest().subscribe(
         {
           next: value => {
-            this.router.navigate(["participant/account/confirmEmail/", {userEmail: value.userEmail}]);
+            this.router.navigate(['/participant/register/',
+                {
+                  outlets: {
+                    registration: ['confirmEmail', {userEmail: value.userEmail}]
+                  }
+                }
+              ]
+            );
           },
           error: err => {
             this.toastService.show("Hubo un error al enviar la solicitud de registro, por favor inténtelo más tarde.",

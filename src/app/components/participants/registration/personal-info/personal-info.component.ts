@@ -168,7 +168,7 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
 
     this.authService.setParticipantRegistrationRequestData(request);
 
-    this.router.navigate(["participant/account/photo"])
+    this.router.navigate(['/participant/register/', { outlets: {registration: ['photo']}}]);
   }
 
   onBlur() {

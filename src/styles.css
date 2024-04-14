@@ -31,6 +31,10 @@ h1 {
   color: var(--dark-purple);
 }
 
+.text-bold {
+  font-weight: bold;
+}
+
 .error-text {
   color: var(--error);
   font-style: italic;
