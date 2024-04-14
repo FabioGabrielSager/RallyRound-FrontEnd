@@ -41,6 +41,10 @@ export class NavbarComponent implements OnInit {
   @Input() navBarItems: NavBarItem[] = [];
   @Input() itemsJustification: ItemsJustification = ItemsJustification.between;
   @Input() backgroundColor: string = "";
+  @Input() itemsColor: string = "";
+  @Input() itemsTitleFontSize: string = "";
+  @Input() itemsIconFontSize: string = "";
+  @Input() positionClasses: string = "fixed-top";
 
   ngOnInit(): void {
   }

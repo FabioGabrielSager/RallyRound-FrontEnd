@@ -1,4 +1,4 @@
-<header class="position-sticky sticky-top"
+<header [class]="positionClasses"
         [ngClass]="centerNavbar ? 'd-flex justify-content-center' : ''">
   <nav class="navbar nav-menu navbar-expand-sm navbar-dark"
        [style.background-color]="backgroundColor"
@@ -23,16 +23,21 @@
         <ul class="navbar-nav flex-row pe-3 w-100" [ngClass]="itemsJustification">
           @for (ni of navBarItems; track ni) {
             <li class="nav-item ms-2">
-              <a class="nav-link"
+              <a class="nav-link d-flex align-items-center"
                  [href]="ni.href"
                  [routerLink]="ni.routerLink"
                  (click)="handleClick(ni.onClick)">
                 @if (ni.iconInLeftOfTitle) {
-                  <i [ngClass]="ni.bootstrapIconClasses"></i>
+                  <i [style.color]="itemsColor" [style.font-size]="itemsIconFontSize"
+                     [ngClass]="ni.bootstrapIconClasses"></i>
                 }
-                <span> {{ ni.title }} </span>
+                <span [style.color]="itemsColor" [style.font-size]="itemsTitleFontSize"
+                      [ngClass]="ni.iconInLeftOfTitle ? 'ms-1' : 'me-1'">
+                  {{ ni.title }}
+                </span>
                 @if (!ni.iconInLeftOfTitle) {
-                  <i [ngClass]="ni.bootstrapIconClasses"></i>
+                  <i [style.color]="itemsColor" [style.font-size]="itemsIconFontSize"
+                     [ngClass]="ni.bootstrapIconClasses"></i>
                 }
               </a>
             </li>
