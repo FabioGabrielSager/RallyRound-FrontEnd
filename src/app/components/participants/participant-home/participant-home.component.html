@@ -1,0 +1,14 @@
+<rr-navbar [floatingNavbar]="true" [navBarItems]="navbarItems" itemsColor="var(--black-100)" itemsIconFontSize="1.5rem"
+           itemsTitleFontSize="1.1rem"/>
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+  <div>
+    <!-- TODO: Add the logged username here -->
+    <h1 class="rr-dark-purple-text text-center">Bienvenido de nuevo {{ username }}!</h1>
+    <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
+    <div class="row row-cols-1 gy-1 mt-2">
+      <div class="col"><button class="btn rr-btn w-100">Buscar evento</button></div>
+      <div class="col"><button class="btn rr-btn w-100">Crear evento</button></div>
+      <div class="col"><button class="btn rr-btn w-100">Ver mis eventos</button></div>
+    </div>
+  </div>
+</div>
