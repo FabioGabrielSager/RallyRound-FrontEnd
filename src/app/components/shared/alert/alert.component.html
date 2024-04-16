@@ -1,0 +1,25 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h5 class="modal-title text-bold rr-dark-purple-text" id="modal-basic-title">{{title}}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-center">
+    @if(isTemplate()) {
+      <ng-template [ngTemplateOutlet]="bodyTemplate"/>
+    } @else {
+      <span
+        [style.font-size]="bodyString?.fontSize ? bodyString?.fontSize : ''"
+        [style.color]="bodyString?.fontColor ? bodyString?.fontColor : ''"
+        [style.font-weight]="bodyString?.fontWeight ? bodyString?.fontWeight : ''"
+      >{{ bodyString?.text }}</span>
+    }
+  </div>
+  <div class="modal-footer">
+    @if(!isAConfirm) {
+      <button type="button" class="btn rr-btn" (click)="handleConfirmClick()">Aceptar</button>
+    } @else {
+      <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Cancelar</button>
+      <button type="button" class="btn rr-btn" (click)="handleConfirmClick()">Confirmar</button>
+    }
+  </div>
+</div>
