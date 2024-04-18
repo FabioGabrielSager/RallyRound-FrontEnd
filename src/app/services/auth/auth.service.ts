@@ -3,7 +3,7 @@ import {ParticipantRegistrarionRequest} from "../../models/user/participantRegis
 import {UserFavoriteActivity} from "../../models/user/userFavoriteActivity";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
-import {BehaviorSubject, map, Observable, tap} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, of, tap} from "rxjs";
 import {ParticipantRegistrationResponse} from "../../models/user/participantRegistrationResponse";
 import {AuthResponse} from "../../models/user/AuthResponse";
 import {ConfirmParticipantRegistrationRequest} from "../../models/user/confirmParticipantRegistrationRequest";
@@ -18,9 +18,11 @@ export class AuthService {
   private httpClient: HttpClient = inject(HttpClient);
   private baseUrl: string = environment.RR_API_BASE_URL + "/auth";
   currentUserLoginOn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  currentUserLoginOnToken: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor() {
     this.currentUserLoginOn=new BehaviorSubject<boolean>(sessionStorage.getItem("token")!=null);
+    this.currentUserLoginOnToken=new BehaviorSubject<string>(sessionStorage.getItem("token") || "");
   }
 
   setParticipantRegistrationRequestData(data: ParticipantRegistrarionRequest) {
@@ -47,27 +49,33 @@ export class AuthService {
     );
   }
 
-  sendRegistrationConfirmation(userEmail: string, verificationCode: number): Observable<null> {
+  sendRegistrationConfirmation(userEmail: string, verificationCode: number): Observable<String> {
     let request: ConfirmParticipantRegistrationRequest =
       new ConfirmParticipantRegistrationRequest(verificationCode, userEmail);
     return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/confirm/email", request).pipe(
-      tap(authResponse => sessionStorage.setItem("token", authResponse.token)),
-      map(_ => null)
+      tap(authResponse => {
+        sessionStorage.setItem("token", authResponse.token);
+        this.currentUserLoginOnToken.next(authResponse.token);
+        this.currentUserLoginOn.next(true);
+      }),
+      map(authResponse => authResponse.username)
     );
   }
 
   refreshEmailVerificationToken(userEmail: string) {
-    return this.httpClient.put(this.baseUrl + "/participant/refresh/registration/token/", {}, {
+    return this.httpClient.put<void>(this.baseUrl + "/participant/refresh/registration/token/", {}, {
       params: {userEmail: userEmail}
-    }).pipe(
-      map(_ => null)
-    );
+    });
   }
 
-  login(loginRequest: LoginRequest): Observable<null> {
+  login(loginRequest: LoginRequest): Observable<String> {
     return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/login", loginRequest).pipe(
-      tap(authResponse => sessionStorage.setItem("token", authResponse.token)),
-      map(_ => null)
+      tap(authResponse => {
+        sessionStorage.setItem("token", authResponse.token);
+        this.currentUserLoginOnToken.next(authResponse.token);
+        this.currentUserLoginOn.next(true);
+      }),
+      map(authResponse => authResponse.username)
     );
   }
 
