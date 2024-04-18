@@ -83,4 +83,14 @@ export class AuthService {
     sessionStorage.removeItem("token");
     this.currentUserLoginOn.next(false);
   }
+
+  validateUserToken(): Observable<boolean> {
+    return this.httpClient.get<boolean>(this.baseUrl + "/participant/validate/jwt")
+      .pipe(
+        catchError((err) => {
+          console.log(err)
+          return of(false)
+        })
+      );
+  }
 }
