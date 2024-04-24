@@ -13,6 +13,4 @@ import {NavbarComponent} from "../navbar/navbar.component";
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-  isHomeRouterOutletActive: boolean = false;
-}
+export class HomeComponent {}
