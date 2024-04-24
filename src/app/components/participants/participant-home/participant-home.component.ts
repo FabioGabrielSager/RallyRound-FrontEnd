@@ -1,9 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {NavbarComponent, NavBarItem} from "../../shared/navbar/navbar.component";
 import {AuthService} from "../../../services/auth/auth.service";
-import {ActivatedRoute, Params} from "@angular/router";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AlertComponent} from "../../shared/alert/alert.component";
+import {MPAuthService} from "../../../services/rallyroundapi/mercadopago/mpauth.service";
+import {Subscription} from "rxjs";
+import {ToastService} from "../../../services/toast.service";
 
 @Component({
   selector: 'rr-participant-home',
