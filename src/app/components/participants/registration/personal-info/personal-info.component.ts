@@ -1,9 +1,8 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {MapApiService} from "../../../../services/map-api.service";
+import {MapApiService} from "../../../../services/location/map-api.service";
 import {catchError, debounceTime, filter, ObservableInput, of, Subscription, switchMap} from "rxjs";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Place} from "../../../../models/location/place";
-import {BingMapsApiLocationResponse} from "../../../../models/location/BingMapsApiLocationResponse";
 import {DatePipe, formatDate, NgClass} from "@angular/common";
 import {passwordMatchValidator} from "../../../../validators/passwordMatchValidator";
 import {ParticipantRegistrarionRequest} from "../../../../models/user/participantRegistrarionRequest";
@@ -84,13 +83,12 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
           )
         })
       ).subscribe({
-        next: (value: null | BingMapsApiLocationResponse) => {
+        next: (value: null | Place[]) => {
           this.formattedNames = [];
           this.formattedNamePlaces.clear();
-          if (value != null && value.resourceSets != null && value.resourceSets[0].resources != null &&
-            value.resourceSets[0].resources[0] != null) {
+          if (value != null) {
             this.selectedPlace = undefined;
-            value.resourceSets[0].resources[0].value.forEach((p: Place) => {
+            value.forEach((p: Place) => {
               let formattedName: string = this.getFormattedName(p);
               this.formattedNames.push(formattedName);
               this.formattedNamePlaces.set(formattedName, p);
@@ -129,14 +127,11 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
       formattedName += `${p.address.neighborhood}, `;
     }
 
-    if (p.name) {
-      formattedName += p.name;
-    }
     if (formattedName.endsWith(", ")) {
       formattedName = formattedName.substring(0, formattedName.lastIndexOf(", "));
     }
 
-    return formattedName;
+    return p.name ? p.name : formattedName;
   }
 
   onClickSearchResult($event: any) {
