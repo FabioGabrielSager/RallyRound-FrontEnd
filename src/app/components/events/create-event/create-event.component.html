@@ -1,0 +1,225 @@
+<div class="container vh-100 d-flex flex-column justify-content-center align-items-center rr-black-text">
+  <h1 class="rr-dark-purple-text text-bold mt-3">Crear evento.</h1>
+  <form class="row row-gap-3 mt-3 w-100 overflow-y-auto mb-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="col-12">
+      <div class="input-group">
+        @if (!isActivityChanging) {
+          <span (click)="onChangeActivity()" class="activity-span me-2">{{ activity }}</span>
+        }
+        @if (isActivityChanging) {
+          <div class="position-relative">
+            <input type="text" class="form-control transparent-input"
+                   #activityInput
+                   [value]="activity"
+                   formControlName="activity" name="activity" id="activity-input"
+                   (blur)="onBlurActivityInput()"
+                   aria-describedby="actividad">
+            <rr-search-results-list [resultsList]="suggestedActivities"
+                                    (onSelectedResult)="onClickActivitySearchResult($event)"/>
+          </div>
+        }
+        <button type="button" class="bg-transparent border-0" (click)="onChangeActivity()">
+          <i class="bi bi-pencil" style="font-size: 1.2rem"></i>
+        </button>
+      </div>
+      @if ((form.controls['activity'].invalid || activity === 'Actividad') &&
+      (form.controls['activity'].touched || form.controls['activity'].touched)) {
+        @if (form.controls['activity'].hasError('required') || activity === 'Actividad') {
+          <span class="error-text">Este campo es requerido.</span>
+        }
+      }
+    </div>
+    <div class="col-12">
+      <div class="position-relative">
+        <textarea type="text" class="form-control rr-input" name="description"
+                  id="description-input" placeholder="Descripción" formControlName="description"
+                  aria-describedby="descripción" rows="2" spellcheck="true"
+                  [class.is-invalid]="form.controls['description'].invalid
+                && (form.controls['description'].touched || form.controls['description'].dirty)"></textarea>
+        <div style="position: absolute; bottom: 5px; right: 5px; font-size: 0.85rem">{{ descriptionLength }}/2000</div>
+      </div>
+      @if (form.controls['description'].invalid &&
+      (form.controls['description'].touched || form.controls['description'].touched)) {
+        @if (form.controls['description'].hasError('required')) {
+          <span class="error-text">Este campo es requerido.</span>
+        }
+      }
+    </div>
+    <div class="col-12">
+      <label for="address-input" class="rr-black-text form-label">Dirección</label>
+      <div class="position-relative">
+              <textarea type="text" class="form-control rr-input" name="address"
+                        id="address-input" placeholder="Ej.: Provincia, departamento, localidad..."
+                        formControlName="address" (blur)="onBlurAddressInput()"
+                        aria-describedby="dirección" [ngClass]="formattedNames.length > 0
+                        ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
+                        [class.is-invalid]="form.controls['address'].invalid
+                        && (form.controls['address'].touched || form.controls['address'].dirty)"></textarea>
+        <rr-search-results-list [resultsList]="formattedNames" (onSelectedResult)="onClickAddressSearchResult($event)"/>
+      </div>
+      @if (this.form.controls['address'].invalid && (this.form.controls['address'].touched
+        || this.form.controls['address'].dirty)) {
+        @if (form.controls['address'].hasError('required')) {
+          <span class="error-text">Este campo es requerido.</span>
+        }
+      }
+      @if (form.controls['address'].value !== "" && selectedAddress == undefined) {
+        <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
+      }
+    </div>
+    <div class="col-12">
+      @if (isStreetNumberCheckboxChecked) {
+        <input class="form-control rr-input w-25" type="number" formControlName="streetNumber" id="street-number"
+               placeholder="Número"
+               [class.is-invalid]="form.controls['streetNumber'].invalid
+                && (form.controls['streetNumber'].touched || form.controls['streetNumber'].dirty)">
+
+        @if (form.controls['streetNumber'].invalid &&
+        (form.controls['streetNumber'].touched || form.controls['streetNumber'].touched)) {
+          @if (form.controls['streetNumber'].hasError('required')) {
+            <span class="error-text">Este campo es requerido.</span>
+          }
+        }
+      }
+      <div class="form-check mt-2">
+        <input class="form-check-input rr-checkbox" type="checkbox" formControlName="streetNumberCheckBox"
+               id="street-number-check">
+        <label class="form-check-label" for="street-number-check" style="font-size: 0.9rem">
+          No encuentro mi número de calle
+        </label>
+      </div>
+    </div>
+    <div class="col-12">
+      <label for="date-input" class="rr-black-text form-label">Día</label>
+      <input type="date" class="form-control rr-input" formControlName="date" name="date"
+             id="date-input" aria-describedby="fecha de nacimiento"
+             [class.is-invalid]="form.controls['date'].invalid
+               && (form.controls['date'].touched || form.controls['date'].dirty)">
+
+      @if (form.controls['date'].invalid &&
+      (form.controls['date'].touched || form.controls['date'].touched)) {
+        @if (form.controls['date'].hasError('required')) {
+          <span class="error-text">Este campo es requerido.</span>
+        }
+      }
+    </div>
+    <div class="col-12">
+      <label for="duration-input" class="rr-black-text form-label">Duración</label>
+      <div class="input-group">
+        <input type="number" class="form-control rr-input w-25" formControlName="duration" name="duration"
+               id="duration-input" aria-describedby="fecha de nacimiento"
+               [class.is-invalid]="form.controls['duration'].invalid
+               && (form.controls['duration'].touched || form.controls['duration'].dirty)">
+        <select class="form-select rr-input" aria-label="Default select example" formControlName="durationUnit"
+                [class.border-danger]="form.controls['duration'].invalid
+               && (form.controls['duration'].touched || form.controls['duration'].dirty)">
+          <option selected value="HOUR">Hora/s</option>
+          <option value="MINUTE">Minutos</option>
+        </select>
+      </div>
+      @if (form.controls['duration'].invalid &&
+      (form.controls['duration'].touched || form.controls['duration'].touched)) {
+        @if (form.controls['duration'].hasError('required')) {
+          <span class="error-text">Este campo es requerido.</span>
+        }
+      }
+    </div>
+    <div class="col-12">
+      <div class="hours-container">
+        <div>
+          <label class="rr-black-text from-label">Posibles horarios de inicio</label>
+        </div>
+        <div class="d-flex align-items-center flex-wrap">
+          @for (h of hours; track h; let i = $index) {
+            <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-2"
+                 style="font-size: 0.85rem">
+              <i class="bi bi-x-circle me-2" style="font-size: 1rem" (click)="onRemoveHour(i)"></i>
+              <span>{{ h }}</span>
+            </div>
+          }
+          @if (!addingHour) {
+            <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2">
+              <span style="font-size: 1rem" (click)="toggleAddHourInput()">+</span>
+            </div>
+          } @else {
+            <input #hourInput class="form-control rr-input mt-2" type="time">
+            <div class="mt-2">
+              <button type="button" class="btn btn-danger me-2" (click)="toggleAddHourInput()">Cancelar</button>
+              <button type="button" class="btn rr-btn" (click)="onAddNewHour(hourInput)">Añadir</button>
+            </div>
+          }
+        </div>
+        @if (addHourButtonWasTouched && hours.length === 0 && !addingHour) {
+          @if (form.controls['duration'].hasError('required')) {
+            <span class="error-text">Debe añadir aunque sea un horario de inicio.</span>
+          }
+        }
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="participants-container">
+        <div>
+          <label class="rr-black-text from-label">Participantes</label>
+        </div>
+        <span>Cantidad: </span>
+        <input type="number" class="form-control rr-input w-25 d-inline-block"
+               formControlName="participants" [value]="participantsCount">
+
+        <div>
+          @if(form.controls['participants'].invalid && (form.controls['participants'].dirty ||
+            form.controls['participants'].touched)) {
+            @if(form.controls['participants'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+            @if(form.controls['participants'].hasError('min')) {
+              <span class="error-text">Cómo mínimo el evento debe tener cupo para un participante.</span>
+            }
+          }
+        </div>
+
+        <div class="d-flex align-items-center flex-wrap">
+          @if(participantsCount < 50) {
+            @for (_ of Array.from({length: participantsCount}); track _) {
+              <i class="bi bi-person me-1" style="font-size: 2rem"></i>
+            }
+          } @else {
+            @for (_ of Array.from({length: 49}); track _) {
+              <i class="bi bi-person me-1" style="font-size: 2rem"></i>
+            }
+            <span>...+{{participantsCount - 49}}</span>
+          }
+        </div>
+        <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-1"
+             (click)="onRemoveParticipant()">
+          <span style="font-size: 1rem">-</span>
+        </div>
+        <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2" (click)="onAddParticipant()">
+          <span style="font-size: 1rem">+</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label for="duration-input" class="rr-black-text form-label">Precio de inscripción</label>
+      <div class="input-group">
+        <span class="input-group-text bg-transparent border rr-border-primary-color">$</span>
+        <input type="number" class="form-control rr-input w-25" formControlName="inscriptionPrice"
+               name="inscriptionPrice"
+               id="inscription-price-input" aria-describedby="fecha de nacimiento"
+               [class.is-invalid]="form.controls['inscriptionPrice'].invalid
+               && (form.controls['inscriptionPrice'].touched || form.controls['inscriptionPrice'].dirty)">
+      </div>
+      @if (form.controls['inscriptionPrice'].invalid &&
+      (form.controls['inscriptionPrice'].touched || form.controls['inscriptionPrice'].touched)) {
+        @if (form.controls['inscriptionPrice'].hasError('required')) {
+          <span class="error-text">Este campo es requerido.</span>
+        }
+        @if (form.controls['inscriptionPrice'].hasError('min')) {
+          <span class="error-text">El valor debe ser mayor a 1.</span>
+        }
+      }
+    </div>
+    <div class="col-12">
+      <button class="w-100 btn rr-btn">Crear evento</button>
+    </div>
+  </form>
+</div>
