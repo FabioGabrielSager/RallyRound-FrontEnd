@@ -3,7 +3,7 @@ import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from
 import {CdkDragDrop, DragDropModule, moveItemInArray} from "@angular/cdk/drag-drop";
 import {UserFavoriteActivity} from "../../../../models/user/userFavoriteActivity";
 import {AuthService} from "../../../../services/auth/auth.service";
-import {RrActivityService} from "../../../../services/rr-activity.service";
+import {RrActivityService} from "../../../../services/rallyroundapi/rr-activity.service";
 import {catchError, combineLatest, debounceTime, filter, of, startWith, Subscription, switchMap} from "rxjs";
 import {MatchedActivities} from "../../../../models/common/MatchedActivities";
 import {NgClass} from "@angular/common";
