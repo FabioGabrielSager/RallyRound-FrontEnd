@@ -24,8 +24,8 @@
           @for (ni of navBarItems; track ni) {
             <li class="nav-item ms-2">
               <a class="nav-link d-flex align-items-center"
-                 [href]="ni.href"
-                 [routerLink]="ni.routerLink"
+                 [href]="ni.href ? ni.href : null"
+                 [routerLink]="ni.routerLink ? ni.routerLink : null"
                  (click)="handleClick(ni.onClick)">
                 @if (ni.iconInLeftOfTitle) {
                   <i [style.color]="itemsColor" [style.font-size]="itemsIconFontSize"
