@@ -8,7 +8,7 @@ export class BodyString {
   fontSize: string = '1rem';
   fontColor: string = '';
   fontWeight: string = '';
-  text: string = '';
+  textParagraphs: string[] = [];
 }
 
 @Component({

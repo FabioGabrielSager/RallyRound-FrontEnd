@@ -7,11 +7,13 @@
     @if(isTemplate()) {
       <ng-template [ngTemplateOutlet]="bodyTemplate"/>
     } @else {
-      <span
-        [style.font-size]="bodyString?.fontSize ? bodyString?.fontSize : ''"
-        [style.color]="bodyString?.fontColor ? bodyString?.fontColor : ''"
-        [style.font-weight]="bodyString?.fontWeight ? bodyString?.fontWeight : ''"
-      >{{ bodyString?.text }}</span>
+      @for(p of bodyString?.textParagraphs; track p) {
+        <p
+          [style.font-size]="bodyString?.fontSize ? bodyString?.fontSize : ''"
+          [style.color]="bodyString?.fontColor ? bodyString?.fontColor : ''"
+          [style.font-weight]="bodyString?.fontWeight ? bodyString?.fontWeight : ''"
+        >{{ p }}</p>
+      }
     }
   </div>
   <div class="modal-footer">
