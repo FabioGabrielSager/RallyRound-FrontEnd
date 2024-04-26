@@ -10,6 +10,7 @@ import {AddressEntity} from "../../../models/location/AddressEntity";
 import {ToastService} from "../../../services/toast.service";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {CreateEventRequest} from "../../../models/event/createEventRequest";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'rr-create-event',
@@ -25,6 +26,7 @@ import {CreateEventRequest} from "../../../models/event/createEventRequest";
 export class CreateEventComponent implements OnInit {
   private subs: Subscription = new Subscription();
 
+  private router: Router = inject(Router);
   private activityService: RrActivityService = inject(RrActivityService);
   private mapService: MapApiService = inject(MapApiService);
   private toastService: ToastService = inject(ToastService);
@@ -288,8 +290,14 @@ export class CreateEventComponent implements OnInit {
     };
 
     this.eventService.createEvent(createEventRequest).subscribe({
-      next: value =>  {this.toastService.show("Evento Creado!", "bg-success")},
-      error: err => {console.error(err)}
+      next: value =>  {
+        this.eventService.lastCreatedEvent = value;
+        this.router.navigate(['/events/', { outlets: { events: ['myevent', value.eventId]}}]);
+      },
+      error: err => {
+        this.toastService.show("Hubo un error al intentar crear el evento.", "bg-danger")
+        console.error(err)
+      }
     });
   }
 }

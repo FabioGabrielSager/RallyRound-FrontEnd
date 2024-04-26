@@ -15,6 +15,7 @@ import {RegistrationComponent} from "./components/participants/registration/regi
 import {CreateEventComponent} from "./components/events/create-event/create-event.component";
 import {EventOutletComponent} from "./components/events/event-outlet/event-outlet.component";
 import {MercadoPagoLinkedGuard} from "./guards/mercadopago/mercado-pago-linked.guard";
+import {MyCreatedEventComponent} from "./components/events/my-created-event/my-created-event.component";
 
 export const routes: Routes = [
   {
@@ -42,6 +43,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'create', component: CreateEventComponent, outlet: 'events', canActivate: [MercadoPagoLinkedGuard]},
+      {path: 'myevent/:id', component: MyCreatedEventComponent, outlet: 'events', canActivate: [MercadoPagoLinkedGuard]},
     ]
   },
   { path: 'login', component: LoginComponent },
