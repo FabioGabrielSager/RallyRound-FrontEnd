@@ -83,6 +83,32 @@ h1 {
   box-shadow: 0 0 0 0.30rem rgba(148, 61, 8, 0.25);
 }
 
+.rr-checkbox:checked {
+  background-color: var(--primary-border);
+  border-color: #ce7a53;
+  outline: 0;
+}
+
+.rr-radio {
+  background-color: var(--input-primary);
+  border-color: var(--primary-border);
+  border-radius: 0.5rem;
+  color: var(--black-100);
+}
+
+.rr-radio:focus {
+  background-color: transparent;
+  border-color: #ce7a53;
+  outline: 0;
+  box-shadow: 0 0 0 0.30rem rgba(148, 61, 8, 0.25);
+}
+
+.rr-radio:checked {
+  background-color: var(--primary-border);
+  border-color: #ce7a53;
+  outline: 0;
+}
+
 /* Buttons */
 
 .rr-btn {
