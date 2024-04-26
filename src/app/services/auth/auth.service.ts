@@ -1,13 +1,13 @@
 import {inject, Injectable} from '@angular/core';
-import {ParticipantRegistrarionRequest} from "../../models/user/participantRegistrarionRequest";
-import {UserFavoriteActivity} from "../../models/user/userFavoriteActivity";
+import {ParticipantRegistrarionRequest} from "../../models/user/auth/participantRegistrarionRequest";
+import {UserFavoriteActivity} from "../../models/user/participant/userFavoriteActivity";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {BehaviorSubject, catchError, map, Observable, of, tap} from "rxjs";
-import {ParticipantRegistrationResponse} from "../../models/user/participantRegistrationResponse";
-import {AuthResponse} from "../../models/user/AuthResponse";
-import {ConfirmParticipantRegistrationRequest} from "../../models/user/confirmParticipantRegistrationRequest";
-import {LoginRequest} from "../../models/user/loginRequest";
+import {ParticipantRegistrationResponse} from "../../models/user/auth/participantRegistrationResponse";
+import {AuthResponse} from "../../models/user/auth/AuthResponse";
+import {ConfirmParticipantRegistrationRequest} from "../../models/user/auth/confirmParticipantRegistrationRequest";
+import {LoginRequest} from "../../models/user/auth/loginRequest";
 
 @Injectable({
   providedIn: 'root'

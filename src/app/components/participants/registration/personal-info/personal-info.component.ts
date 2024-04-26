@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {Place} from "../../../../models/location/place";
 import {DatePipe, formatDate, NgClass} from "@angular/common";
 import {passwordMatchValidator} from "../../../../validators/passwordMatchValidator";
-import {ParticipantRegistrarionRequest} from "../../../../models/user/participantRegistrarionRequest";
+import {ParticipantRegistrarionRequest} from "../../../../models/user/auth/participantRegistrarionRequest";
 import {AuthService} from "../../../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {ToastService} from "../../../../services/toast.service";

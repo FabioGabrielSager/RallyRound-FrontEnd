@@ -1,7 +1,7 @@
 import {Component, inject, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {passwordMatchValidator} from "../../../validators/passwordMatchValidator";
-import {LoginRequest} from "../../../models/user/loginRequest";
+import {LoginRequest} from "../../../models/user/auth/loginRequest";
 import {AuthService} from "../../../services/auth/auth.service";
 import {Subscription} from "rxjs";
 import {ToastService} from "../../../services/toast.service";
