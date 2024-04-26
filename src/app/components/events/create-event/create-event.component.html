@@ -23,7 +23,7 @@
         </button>
       </div>
       @if ((form.controls['activity'].invalid || activity === 'Actividad') &&
-      (form.controls['activity'].touched || form.controls['activity'].touched)) {
+      (form.controls['activity'].touched || form.controls['activity'].dirty)) {
         @if (form.controls['activity'].hasError('required') || activity === 'Actividad') {
           <span class="error-text">Este campo es requerido.</span>
         }
@@ -39,7 +39,7 @@
         <div style="position: absolute; bottom: 5px; right: 5px; font-size: 0.85rem">{{ descriptionLength }}/2000</div>
       </div>
       @if (form.controls['description'].invalid &&
-      (form.controls['description'].touched || form.controls['description'].touched)) {
+      (form.controls['description'].touched || form.controls['description'].dirty)) {
         @if (form.controls['description'].hasError('required')) {
           <span class="error-text">Este campo es requerido.</span>
         }
@@ -75,7 +75,7 @@
                 && (form.controls['streetNumber'].touched || form.controls['streetNumber'].dirty)">
 
         @if (form.controls['streetNumber'].invalid &&
-        (form.controls['streetNumber'].touched || form.controls['streetNumber'].touched)) {
+        (form.controls['streetNumber'].touched || form.controls['streetNumber'].dirty)) {
           @if (form.controls['streetNumber'].hasError('required')) {
             <span class="error-text">Este campo es requerido.</span>
           }
@@ -97,7 +97,7 @@
                && (form.controls['date'].touched || form.controls['date'].dirty)">
 
       @if (form.controls['date'].invalid &&
-      (form.controls['date'].touched || form.controls['date'].touched)) {
+      (form.controls['date'].touched || form.controls['date'].dirty)) {
         @if (form.controls['date'].hasError('required')) {
           <span class="error-text">Este campo es requerido.</span>
         }
@@ -118,7 +118,7 @@
         </select>
       </div>
       @if (form.controls['duration'].invalid &&
-      (form.controls['duration'].touched || form.controls['duration'].touched)) {
+      (form.controls['duration'].touched || form.controls['duration'].dirty)) {
         @if (form.controls['duration'].hasError('required')) {
           <span class="error-text">Este campo es requerido.</span>
         }
@@ -129,14 +129,28 @@
         <div>
           <label class="rr-black-text from-label">Posibles horarios de inicio</label>
         </div>
-        <div class="d-flex align-items-center flex-wrap">
+        <div class="d-flex align-items-center flex-wrap row-gap-1">
           @for (h of hours; track h; let i = $index) {
-            <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-2"
+            <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-2
+            d-flex align-items-center"
                  style="font-size: 0.85rem">
-              <i class="bi bi-x-circle me-2" style="font-size: 1rem" (click)="onRemoveHour(i)"></i>
+              <i class="bi bi-x-circle me-2" style="font-size: 1.5rem" (click)="onRemoveHour(i)"></i>
               <span>{{ h }}</span>
+              @if (isEventCreatorParticipant && hours.length > 1) {
+                <input type="radio" formControlName="selectedHour" [value]="i" name="selectedHour"
+                       class="form-check-input rr-radio ms-2 mt-1 mb-1" style="width: 1.5rem; height: 1.5rem">
+              }
             </div>
           }
+
+          @if (form.controls['selectedHour'].invalid && (form.controls['selectedHour'].touched
+            || form.controls['selectedHour'].dirty)) {
+            @if (form.controls['selectedHour'].hasError('required')) {
+              <span class="error-text">Si usted también participa, debe selecciónar en que horario prefiere que
+                      se realice el evento.</span>
+            }
+          }
+
           @if (!addingHour) {
             <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2">
               <span style="font-size: 1rem" (click)="toggleAddHourInput()">+</span>
@@ -154,6 +168,23 @@
             <span class="error-text">Debe añadir aunque sea un horario de inicio.</span>
           }
         }
+      </div>
+    </div>
+    <div class="col-12">
+      <label class="rr-black-text form-label">¿Participas del evento o solo organizas?</label><br>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input rr-radio" type="radio" value="organizer" formControlName="participanOrganizer"
+               name="participanOrganizer" id="just-organize-option" checked>
+        <label class="form-check-label" for="just-organize-option">
+          Solo organizo
+        </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input rr-radio" type="radio" value="participant" formControlName="participanOrganizer"
+               name="participanOrganizer" id="participate-option">
+        <label class="form-check-label" for="participate-option">
+          Participo del evento
+        </label>
       </div>
     </div>
     <div class="col-12">
@@ -179,12 +210,20 @@
 
         <div class="d-flex align-items-center flex-wrap">
           @if(participantsCount < 50) {
-            @for (_ of Array.from({length: participantsCount}); track _) {
-              <i class="bi bi-person me-1" style="font-size: 2rem"></i>
+            @for (_ of Array.from({length: participantsCount}); track _; let f = $first) {
+              @if(isEventCreatorParticipant && f) {
+                <i class="bi bi-person-fill me-1" style="font-size: 2rem"></i>
+              } @else {
+                <i class="bi bi-person me-1" style="font-size: 2rem"></i>
+              }
             }
           } @else {
-            @for (_ of Array.from({length: 49}); track _) {
-              <i class="bi bi-person me-1" style="font-size: 2rem"></i>
+            @for (_ of Array.from({length: 49}); track _; let f = $first) {
+              @if(isEventCreatorParticipant && f) {
+                <i class="bi bi-person-fill me-1" style="font-size: 2rem"></i>
+              } @else {
+                <i class="bi bi-person me-1" style="font-size: 2rem"></i>
+              }
             }
             <span>...+{{participantsCount - 49}}</span>
           }

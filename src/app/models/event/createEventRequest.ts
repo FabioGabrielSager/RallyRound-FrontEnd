@@ -11,4 +11,7 @@ export class CreateEventRequest {
   inscriptionPrice: number = 0;
   date: string = "";
   address: AddressEntity = {} as AddressEntity;
+  participantsLimit: number = 0
+  eventCreatorIsParticipant: boolean = false;
+  eventCreatorSelectedStartHour: string | undefined = undefined;
 }

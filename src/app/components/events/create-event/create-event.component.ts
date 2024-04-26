@@ -53,6 +53,7 @@ export class CreateEventComponent implements OnInit {
 
   participantsCount: number = 1;
 
+  isEventCreatorParticipant: boolean = false;
 
   protected readonly Array = Array;
 
@@ -69,13 +70,36 @@ export class CreateEventComponent implements OnInit {
       duration: ['', Validators.required],
       durationUnit: ['HOUR', Validators.required],
       participants: ['1', [Validators.required, Validators.min(1)]],
-      inscriptionPrice: ['', [Validators.required, Validators.min(1)]]
+      inscriptionPrice: ['', [Validators.required, Validators.min(1)]],
+      participanOrganizer: ['organizer', Validators.required],
+      selectedHour: []
     });
 
     this.subs.add(
       this.form.controls['activity'].valueChanges.subscribe(
         value => {
           this.activity = value;
+        }
+      )
+    );
+
+    this.subs.add(
+      this.form.controls['participanOrganizer'].valueChanges.subscribe(
+        value => {
+          if(value != 'organizer') {
+            this.isEventCreatorParticipant = true;
+            this.form.controls['selectedHour'].addValidators([Validators.required]);
+            this.form.controls['selectedHour'].updateValueAndValidity();
+
+            if(this.hours.length == 1){
+              this.form.controls['selectedHour'].setValue(0);
+            }
+
+          } else {
+            this.isEventCreatorParticipant = false;
+            this.form.controls['selectedHour'].clearValidators();
+            this.form.controls['selectedHour'].updateValueAndValidity();
+          }
         }
       )
     );
@@ -159,7 +183,7 @@ export class CreateEventComponent implements OnInit {
         error: err => {
           this.toastService.show("Hubo un error al recuperar lugares, por favor inténtelo más tarde.",
             "bg-danger");
-          console.log(err);
+          console.error(err);
         }
       })
     );
@@ -214,6 +238,9 @@ export class CreateEventComponent implements OnInit {
     if(!this.hours.some(hour => hour === hourInput.value) && hourInput.value !== '') {
       this.hours.push(hourInput.value);
       hourInput.value = '';
+      if(this.hours.length != 1){
+        this.form.controls['selectedHour'].setValue(undefined);
+      }
     }
   }
 
@@ -252,7 +279,12 @@ export class CreateEventComponent implements OnInit {
       durationUnit: durationUnit.value,
       inscriptionPrice: inscriptionPrice.value,
       date: date.value,
-      address: this.selectedAddress
+      address: this.selectedAddress,
+      participantsLimit: this.participantsCount,
+      eventCreatorIsParticipant: this.isEventCreatorParticipant,
+      eventCreatorSelectedStartHour: this.isEventCreatorParticipant ?
+        this.hours[this.form.controls['selectedHour'].value]
+        : undefined
     };
 
     this.eventService.createEvent(createEventRequest).subscribe({
