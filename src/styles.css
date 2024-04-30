@@ -196,3 +196,24 @@ h1 {
 .bg-danger {
   background-color: var(--error);
 }
+
+/* Pagination */
+.page-link {
+  color: var(--dark-purple) !important;
+  background-color: var(--rr-secondary);
+  border: 1px solid var(--primary-border);
+}
+
+.page-link:hover {
+  color: var(--dark-purple) !important;
+  background-color: var(--rr-secondary);
+  border: 1px solid var(--primary-border);
+  box-shadow: 0 0 0 0.2rem rgba(148, 61, 8, 0.25);
+}
+
+.disabled > .page-link, .page-link.disabled {
+  color: var(--dark-purple) !important;
+  background-color: #a48f37 !important;
+  border: 1px solid #6a3d24;
+  pointer-events: none;
+}

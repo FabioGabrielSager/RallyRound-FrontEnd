@@ -5,9 +5,18 @@
     <h1 class="rr-dark-purple-text text-center">Bienvenido de nuevo {{ username }}!</h1>
     <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
     <div class="row row-cols-1 gy-1 mt-2">
-      <div class="col"><button class="btn rr-btn w-100">Buscar evento</button></div>
-      <div class="col"><button class="btn rr-btn w-100" (click)="onCreateEvent()">Crear evento</button></div>
-      <div class="col"><button class="btn rr-btn w-100">Ver mis eventos</button></div>
+      <div class="col">
+        <button class="btn rr-btn w-100"
+                [routerLink]="['/events/', { outlets: { events: ['search']}}]">
+          Buscar evento
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn rr-btn w-100" (click)="onCreateEvent()">Crear evento</button>
+      </div>
+      <div class="col">
+        <button class="btn rr-btn w-100">Ver mis eventos</button>
+      </div>
     </div>
   </div>
 </div>

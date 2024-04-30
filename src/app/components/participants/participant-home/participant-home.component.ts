@@ -1,7 +1,7 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {NavbarComponent, NavBarItem} from "../../shared/navbar/navbar.component";
 import {AuthService} from "../../../services/auth/auth.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, Params, Router, RouterLink} from "@angular/router";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AlertComponent} from "../../shared/alert/alert.component";
 import {MPAuthService} from "../../../services/rallyroundapi/mercadopago/mpauth.service";
@@ -12,7 +12,8 @@ import {ToastService} from "../../../services/toast.service";
   selector: 'rr-participant-home',
   standalone: true,
   imports: [
-    NavbarComponent
+    NavbarComponent,
+    RouterLink
   ],
   templateUrl: './participant-home.component.html',
   styleUrl: './participant-home.component.css'
