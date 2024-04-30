@@ -10,7 +10,6 @@ export class HourPipe implements PipeTransform {
     const stringParts = String(value).split(',');
     const hourSecondPart = stringParts[1] === '0' ? '00' : stringParts[1];
     let result: string =  stringParts[0] + ":" + hourSecondPart;
-    console.log(result);
     return result;
   }
 
