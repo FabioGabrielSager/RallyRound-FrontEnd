@@ -89,7 +89,8 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
           if (value != null) {
             this.selectedPlace = undefined;
             value.forEach((p: Place) => {
-              let formattedName: string = this.getFormattedName(p);
+              let place: Place = new Place(p.__type, p.address, p.name);
+              let formattedName: string = place.getFormattedName();
               this.formattedNames.push(formattedName);
               this.formattedNamePlaces.set(formattedName, p);
             });
@@ -106,32 +107,6 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-  }
-
-  private getFormattedName(p: Place): string {
-    let formattedName: string = "";
-
-    if (p.address.adminDistrict) {
-      formattedName += `${p.address.adminDistrict}, `;
-    }
-
-    if (p.address.adminDistrict2) {
-      formattedName += `${p.address.adminDistrict2}, `;
-    }
-
-    if (p.address.locality) {
-      formattedName += `${p.address.locality}, `;
-    }
-
-    if (p.address.neighborhood) {
-      formattedName += `${p.address.neighborhood}, `;
-    }
-
-    if (formattedName.endsWith(", ")) {
-      formattedName = formattedName.substring(0, formattedName.lastIndexOf(", "));
-    }
-
-    return p.name ? p.name : formattedName;
   }
 
   onClickSearchResult($event: any) {
