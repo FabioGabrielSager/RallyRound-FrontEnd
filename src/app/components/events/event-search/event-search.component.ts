@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SearchResultsListComponent} from "../../shared/search-results-list/search-results-list.component";
 import {DatePipe, NgClass} from "@angular/common";
@@ -7,6 +7,7 @@ import {MatchedActivities} from "../../../models/common/MatchedActivities";
 import {RrActivityService} from "../../../services/rallyroundapi/rr-activity.service";
 import {
   NgbCollapse,
+  NgbCollapseModule,
   NgbPagination,
   NgbPaginationNext,
   NgbPaginationPages,
@@ -19,11 +20,11 @@ import {ToastService} from "../../../services/toast.service";
 import {HourPipe} from "../../../pipe/hour.pipe";
 import {EventsResumesPage} from "../../../models/event/EventsResumesPage";
 import {EventService} from "../../../services/rallyroundapi/event.service";
-import {AddressEntity} from "../../../models/location/AddressEntity";
 import {Address} from "../../../models/location/address";
-import {addDiagnosticChain} from "@angular/compiler-cli/src/ngtsc/diagnostics";
-import {AuthService} from "../../../services/auth/auth.service";
 import {NavbarComponent} from "../../shared/navbar/navbar.component";
+import {
+  EventDetailsPublicComponentComponent
+} from "../event-details-public-component/event-details-public-component.component";
 
 @Component({
   selector: 'rr-event-search',
@@ -39,9 +40,10 @@ import {NavbarComponent} from "../../shared/navbar/navbar.component";
     NgbPaginationPages,
     NgbPaginationNext,
     NgbPaginationPrevious,
+    NgbCollapseModule,
     DatePipe,
     NavbarComponent,
-    NgbCollapse
+    EventDetailsPublicComponentComponent
   ],
   templateUrl: './event-search.component.html',
   styleUrl: './event-search.component.css'
@@ -57,6 +59,7 @@ export class EventSearchComponent implements OnInit{
 
   eventsResumesPage: EventsResumesPage = { } as EventsResumesPage;
   actualPage: number = 1;
+  selectedEventId: string = "";
 
   suggestedActivities: string[] = [];
   anActivityWasSelected: boolean = false;
@@ -71,6 +74,17 @@ export class EventSearchComponent implements OnInit{
 
   hours: string[] = [];
   addingHour: boolean = false;
+
+  isSearchFormCollapsed: boolean = false;
+  eventDetailsContainerClasses: string = "";
+  @ViewChild('resultsContainer') resultsContainer!: ElementRef<HTMLDivElement>;
+
+  protected readonly Array = Array;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.updateEventDetailsContainerClasses();
+  }
 
   ngOnInit(): void {
 
@@ -190,15 +204,15 @@ export class EventSearchComponent implements OnInit{
     this.hours.splice(i, 1);
   }
 
-  protected readonly Array = Array;
-  isSearchFormCollapsed: boolean = false;
-
   onViewEventClick(eventId: string) {
-
+    this.selectedEventId = eventId;
+    this.updateEventDetailsContainerClasses();
   }
 
   onSubmitSearch() {
+    this.actualPage = 1;
     this.searchEvents();
+    this.selectedEventId = "";
   }
 
   onSelectSpecificPage(p: number) {
@@ -240,5 +254,34 @@ export class EventSearchComponent implements OnInit{
           console.error(err);
         }
       });
+  }
+
+  private updateEventDetailsContainerClasses() {
+    if(this.isWindowWidthMD()) {
+      this.eventDetailsContainerClasses = "col-md-6";
+    } else {
+      this.eventDetailsContainerClasses = "position-fixed start-0 bottom-0";
+    }
+  }
+
+  isWindowWidthMD() {
+    const windowWidth = window.innerWidth;
+    return windowWidth >= 768;
+  }
+
+  onCloseEventDetailsView() {
+    this.selectedEventId = "";
+  }
+
+  toggleCollapsedForm(collapsedForm: NgbCollapse) {
+    collapsedForm.toggle();
+    this.isSearchFormCollapsed = !this.isSearchFormCollapsed;
+    if(!this.isSearchFormCollapsed) {
+      this.resultsContainer.nativeElement.classList.remove('overflow-y-auto');
+    }
+  }
+
+  onCollapsedFormHidden() {
+    this.resultsContainer.nativeElement.classList.add('overflow-y-auto');
   }
 }
