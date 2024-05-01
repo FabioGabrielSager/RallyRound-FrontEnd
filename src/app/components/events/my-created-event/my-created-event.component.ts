@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
-import {CreatedEventResponse} from "../../../models/event/createdEventDto";
+import {EventDto} from "../../../models/event/eventDto";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {CreateEventRequest} from "../../../models/event/createEventRequest";
 import {DatePipe} from "@angular/common";
@@ -22,10 +22,8 @@ import {HourPipe} from "../../../pipe/hour.pipe";
 export class MyCreatedEventComponent implements OnInit {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private eventService: EventService = inject(EventService);
-  event: CreatedEventResponse = {} as CreatedEventResponse;
+  event: EventDto = {} as EventDto;
   private eventId: string = "";
-
-  guests: {userId: string, username: string, photo: Blob | string | null}[] = [];
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {

@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {Observable} from "rxjs";
 import {CreateEventRequest} from "../../models/event/createEventRequest";
-import {CreatedEventResponse} from "../../models/event/createdEventDto";
+import {EventDto} from "../../models/event/eventDto";
 import {EventsResumesPage} from "../../models/event/EventsResumesPage";
 
 @Injectable({
@@ -13,21 +13,21 @@ export class EventService {
 
   private httpClient: HttpClient = inject(HttpClient);
   private baseUrl: string = environment.RR_API_BASE_URL + "/events";
-  private _lastCreatedEvent: CreatedEventResponse | null = null;
+  private _lastCreatedEvent: EventDto | null = null;
 
   constructor() { }
 
-  set lastCreatedEvent(value: CreatedEventResponse | null) {
+  set lastCreatedEvent(value: EventDto | null) {
     this._lastCreatedEvent = value;
   }
-  get lastCreatedEvent(): CreatedEventResponse | null {
+  get lastCreatedEvent(): EventDto | null {
     const event = this._lastCreatedEvent;
     this._lastCreatedEvent = null;
     return event;
   }
 
-  createEvent(request: CreateEventRequest): Observable<CreatedEventResponse> {
-    return this.httpClient.post<CreatedEventResponse>(this.baseUrl + "/create/", request);
+  createEvent(request: CreateEventRequest): Observable<EventDto> {
+    return this.httpClient.post<EventDto>(this.baseUrl + "/create/", request);
   }
 
   findEvents(activity: string | undefined, neighborhood: string | undefined, locality: string | undefined,
