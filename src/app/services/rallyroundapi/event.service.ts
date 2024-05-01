@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {CreateEventRequest} from "../../models/event/createEventRequest";
 import {EventDto} from "../../models/event/eventDto";
 import {EventsResumesPage} from "../../models/event/EventsResumesPage";
+import {EventWithParticipantReputationDto} from "../../models/event/eventWithParticipantReputationDto";
 
 @Injectable({
   providedIn: 'root'
@@ -65,5 +66,9 @@ export class EventService {
 
     return this.httpClient.get<EventsResumesPage>(this.baseUrl + "/find/", {
       params: baseParams});
+  }
+
+  findEventById(eventId: string): Observable<EventWithParticipantReputationDto> {
+    return this.httpClient.get<EventWithParticipantReputationDto>(this.baseUrl + "/find/" + eventId);
   }
 }
