@@ -276,7 +276,7 @@ export class CreateEventComponent implements OnInit {
     const createEventRequest: CreateEventRequest = {
       activity: this.activity,
       description: description.value,
-      startHours: this.hours,
+      startingHours: this.hours,
       duration: duration.value,
       durationUnit: durationUnit.value,
       inscriptionPrice: inscriptionPrice.value,
