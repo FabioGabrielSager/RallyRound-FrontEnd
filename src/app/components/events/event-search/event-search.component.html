@@ -105,58 +105,7 @@
              style="max-height: 80vh" [(ngbCollapse)]="!isSearchFormCollapsed" #resultsContainer>
           @for (e of eventsResumesPage.results; track e) {
             <div class="col-12 d-flex justify-content-center">
-              <div class="card mb-3 w-100 rounded-5 rr-bg-secondary" style="max-width: 800px;">
-                <div class="row g-0">
-                  <div class="col-9">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between flex-wrap">
-                        <h6 class="card-title d-inline me-2" style="word-break: break-word">{{ e.activity }}</h6>
-                        <h6 class="card-title d-inline">{{ e.date | date: 'dd/MM/yyyy' }}</h6>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap row-gap-2 column-gap-2 overflow-y-auto"
-                           style="max-height: 3rem">
-                        @for (h of e.startingHours; track h) {
-                          <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2
-                        d-flex align-items-center"
-                               style="font-size: 0.85rem">
-                            <span>{{ h | hour }}</span>
-                          </div>
-                        }
-                      </div>
-                      <div class="mt-2" style="font-size: 0.95rem">
-                        <span>Inscripción: ${{ e.inscriptionPrice }}</span><br>
-                        <span>Cantidad: {{ e.participantsCount }}/{{ e.participantsLimit }}</span>
-                        <div class="d-flex align-items-center flex-wrap row-gap-2 column-gap-2 overflow-y-auto"
-                             style="max-height: 3rem; font-size: 1.1rem">
-                          @if (e.participantsLimit < 50) {
-                            @for (_ of Array.from({length: e.participantsLimit}); track _; let i = $index) {
-                              @if (i < e.participantsCount) {
-                                <i class="bi bi-person-fill me-1" style="font-size: 1.5rem"></i>
-                              } @else {
-                                <i class="bi bi-person me-1" style="font-size: 1.5rem"></i>
-                              }
-                            }
-                          } @else {
-                            @for (_ of Array.from({length: 49}); track _; let i = $index) {
-                              @if (i < e.participantsCount) {
-                                <i class="bi bi-person-fill me-1" style="font-size: 1.5rem"></i>
-                              } @else {
-                                <i class="bi bi-person me-1" style="font-size: 1.5rem"></i>
-                              }
-                            }
-                            <span>...+{{ e.participantsLimit - 49 }}</span>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <button type="submit" class="w-100 btn rr-btn h-100 rounded-start-0 rounded-end-5"
-                            (click)="onViewEventClick(e.eventId)">Ver Sala
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <rr-event-resume-card [eventResume]="e" (onSeeEvent)="onViewEventClick($event)"/>
             </div>
           }
           <div class="col-12">

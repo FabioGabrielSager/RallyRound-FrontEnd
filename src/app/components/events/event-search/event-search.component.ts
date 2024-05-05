@@ -25,6 +25,7 @@ import {NavbarComponent} from "../../shared/navbar/navbar.component";
 import {
   EventDetailsPublicComponentComponent
 } from "../event-details-public-component/event-details-public-component.component";
+import {EventResumeCardComponent} from "../event-resume-card/event-resume-card.component";
 
 @Component({
   selector: 'rr-event-search',
@@ -43,7 +44,8 @@ import {
     NgbCollapseModule,
     DatePipe,
     NavbarComponent,
-    EventDetailsPublicComponentComponent
+    EventDetailsPublicComponentComponent,
+    EventResumeCardComponent
   ],
   templateUrl: './event-search.component.html',
   styleUrl: './event-search.component.css'
