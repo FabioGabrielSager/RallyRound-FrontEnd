@@ -10,5 +10,5 @@ import {ToastContainerComponent} from "./components/shared/toast-container/toast
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'RallyRound-FronEnd';
+  title = 'RallyRound-FrontEnd';
 }
