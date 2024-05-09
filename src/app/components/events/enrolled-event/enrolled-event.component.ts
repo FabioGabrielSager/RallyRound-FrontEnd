@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {EventDetailsComponentComponent} from "../event-details-component/event-details-component.component";
+import {EventDetailsComponent} from "../event-details-component/event-details.component";
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
 import {ParticipantService} from "../../../services/rallyroundapi/participant.service";
 import {ActivatedRoute} from "@angular/router";
@@ -13,7 +13,7 @@ import {AddressEntity} from "../../../models/location/AddressEntity";
   selector: 'rr-enrolled-event',
   standalone: true,
   imports: [
-    EventDetailsComponentComponent
+    EventDetailsComponent
   ],
   templateUrl: './enrolled-event.component.html',
   styleUrl: './enrolled-event.component.css'

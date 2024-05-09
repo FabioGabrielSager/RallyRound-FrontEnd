@@ -103,9 +103,37 @@
           </div>
         </div>
       </div>
+      @if(event.eventInscriptionStatus) {
+        <div class="col-12">
+          <div>
+            @switch (event.eventInscriptionStatus) {
+              @case (EventInscriptionStatus.ACCEPTED) {
+                <span class="badge bg-success w-100" style="text-wrap: wrap;">Inscripción aceptada.</span>
+              }
+              @case (EventInscriptionStatus.INCOMPLETE_MISSING_PAYMENT_AND_HOUR_VOTE) {
+                <span class="badge bg-primary w-100" style="text-wrap: wrap;">Inscripción pendiente de pago.</span>
+              }
+              @case (EventInscriptionStatus.INCOMPLETE_MISSING_HOUR_VOTE) {
+                <span class="badge bg-primary w-100" style="text-wrap: wrap;">Inscripción pendiente votación de hora.</span>
+              }
+              @case (EventInscriptionStatus.REJECTED) {
+                <span class="badge bg-danger w-100" style="text-wrap: wrap;">Inscripción rechazada.</span>
+              }
+            }
+          </div>
+        </div>
+      }
       <div class="col-12">
-        <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between">
-          <span class="flex-grow-1">Unirse</span> <i class="bi bi-box-arrow-right"></i></button>
+        @if(event.eventInscriptionStatus !== EventInscriptionStatus.ACCEPTED) {
+          @if(event.eventInscriptionStatus) {
+            <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
+                    (click)="onCompleteInscription()">
+              <span class="flex-grow-1">Completar inscripción</span> <i class="bi bi-clipboard-check"></i></button>
+          } @else {
+            <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between" (click)="onJoinEvent()">
+              <span class="flex-grow-1">Unirse</span> <i class="bi bi-box-arrow-right"></i></button>
+          }
+        }
       </div>
       <div class="col-12">
         <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between">
@@ -116,3 +144,13 @@
   </div>
 }
 
+<ng-template #hourSelector>
+  <div class="d-flex flex-wrap column-gap-5 justify-content-center">
+    @for(hour of this.event.event.startingHours; track hour) {
+      <div class="d-flex align-items-center p-0 border rr-border-primary-color rounded-5 pe-2 ps-2 me-2">
+        <input type="radio" class="form-check-input rr-radio me-2 mt-0" [id]="$index" [value]="hour" [(ngModel)]="selectedHour">
+        <label [for]="$index">{{hour | hour}}</label>
+      </div>
+    }
+  </div>
+</ng-template>
