@@ -17,6 +17,8 @@ import {EventOutletComponent} from "./components/events/event-outlet/event-outle
 import {MercadoPagoLinkedGuard} from "./guards/mercadopago/mercado-pago-linked.guard";
 import {MyCreatedEventComponent} from "./components/events/my-created-event/my-created-event.component";
 import {EventSearchComponent} from "./components/events/event-search/event-search.component";
+import {MyEventsComponent} from "./components/events/my-events/my-events.component";
+import {EnrolledEventComponent} from "./components/events/enrolled-event/enrolled-event.component";
 
 export const routes: Routes = [
   {
@@ -35,7 +37,8 @@ export const routes: Routes = [
           {path: 'confirmEmail', component: EmailConfirmationComponent, outlet: 'registration'}
         ]
       },
-      {path: 'home/:name', component: ParticipantHomeComponent, canActivate: [AuthGuard]}
+      {path: 'home/:name', component: ParticipantHomeComponent, canActivate: [AuthGuard]},
+      {path: 'home', redirectTo: 'home/', pathMatch: 'full'}
     ]
   },
   {
@@ -44,11 +47,19 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'create', component: CreateEventComponent, outlet: 'events', canActivate: [MercadoPagoLinkedGuard]},
-      {path: 'myevent/:id', component: MyCreatedEventComponent, outlet: 'events', canActivate: [MercadoPagoLinkedGuard]},
-      {path: 'search', component: EventSearchComponent, outlet: 'events'}
+      {path: 'search', component: EventSearchComponent, outlet: 'events'},
+      {
+        path: 'myevents',
+        outlet: 'events',
+        children: [
+          {path: '', component: MyEventsComponent},
+          {path: 'created/:id', component: MyCreatedEventComponent, canActivate: [MercadoPagoLinkedGuard]},
+          {path: 'enrolled/:id', component: EnrolledEventComponent}
+        ]
+      },
     ]
   },
-  { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  {path: 'login', component: LoginComponent},
+  {path: 'home', component: HomeComponent},
+  {path: '', redirectTo: 'home', pathMatch: 'full'}
 ];
