@@ -1,5 +1,5 @@
 import {Component, ElementRef, HostListener, inject, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {SearchResultsListComponent} from "../../shared/search-results-list/search-results-list.component";
 import {DatePipe, NgClass} from "@angular/common";
 import {catchError, debounceTime, filter, ObservableInput, of, Subscription, switchMap} from "rxjs";
@@ -22,16 +22,13 @@ import {EventsResumesPage} from "../../../models/event/EventsResumesPage";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {Address} from "../../../models/location/address";
 import {NavbarComponent} from "../../shared/navbar/navbar.component";
-import {
-  EventDetailsPublicComponentComponent
-} from "../event-details-public-component/event-details-public-component.component";
+import {EventDetailsComponent} from "../event-details-component/event-details.component";
 import {EventResumeCardComponent} from "../event-resume-card/event-resume-card.component";
 
 @Component({
   selector: 'rr-event-search',
   standalone: true,
   imports: [
-    FormsModule,
     ReactiveFormsModule,
     SearchResultsListComponent,
     NgClass,
@@ -44,7 +41,7 @@ import {EventResumeCardComponent} from "../event-resume-card/event-resume-card.c
     NgbCollapseModule,
     DatePipe,
     NavbarComponent,
-    EventDetailsPublicComponentComponent,
+    EventDetailsComponent,
     EventResumeCardComponent
   ],
   templateUrl: './event-search.component.html',
