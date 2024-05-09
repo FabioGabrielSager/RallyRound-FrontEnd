@@ -8,6 +8,7 @@ import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
 import {CreateEventComponent} from "../create-event/create-event.component";
 import {AddressEntity} from "../../../models/location/AddressEntity";
 import {HourPipe} from "../../../pipe/hour.pipe";
+import {ToastService} from "../../../services/toast.service";
 
 @Component({
   selector: 'rr-my-created-event',
@@ -22,7 +23,9 @@ import {HourPipe} from "../../../pipe/hour.pipe";
 export class MyCreatedEventComponent implements OnInit {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private eventService: EventService = inject(EventService);
+  private toastService: ToastService = inject(ToastService);
   event: EventDto = {} as EventDto;
+  isEventLoaded: boolean = false;
   private eventId: string = "";
 
   ngOnInit(): void {
@@ -35,9 +38,20 @@ export class MyCreatedEventComponent implements OnInit {
     if(event !== null) {
       this.event = event;
       this.event.event.address = new AddressEntity(event.event.address.__type, event.event.address.address);
+      this.isEventLoaded = true;
     } else {
       // If the requested event doesn't come from the create event view, ask the api for the event.
-      // TODO: IMPLEMENT THIS.
+      this.eventService.findEventWithCreatorReputationById(this.eventId).subscribe({
+        next: event => {
+          this.event = event;
+          this.event.event.address = new AddressEntity(event.event.address.__type, event.event.address.address);
+          this.isEventLoaded = true;
+        },
+        error: err => {
+          this.toastService.show("Hubo un error al intentar recuperar el evento.", "bg-danger");
+          console.error(err);
+        }
+      });
     }
   }
 
