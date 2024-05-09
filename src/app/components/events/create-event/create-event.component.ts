@@ -72,7 +72,7 @@ export class CreateEventComponent implements OnInit {
       duration: ['', Validators.required],
       durationUnit: ['HOUR', Validators.required],
       participants: ['1', [Validators.required, Validators.min(1)]],
-      inscriptionPrice: ['', [Validators.required, Validators.min(1)]],
+      inscriptionPrice: ['', [Validators.required, Validators.min(0)]],
       participanOrganizer: ['organizer', Validators.required],
       selectedHour: []
     });
@@ -292,7 +292,7 @@ export class CreateEventComponent implements OnInit {
     this.eventService.createEvent(createEventRequest).subscribe({
       next: value =>  {
         this.eventService.lastCreatedEvent = value;
-        this.router.navigate(['/events/', { outlets: { events: ['myevent', value.eventId]}}]);
+        this.router.navigate(['events', { outlets: { events: ['myevents', 'created', value.eventId]}}]);
       },
       error: err => {
         this.toastService.show("Hubo un error al intentar crear el evento.", "bg-danger")
