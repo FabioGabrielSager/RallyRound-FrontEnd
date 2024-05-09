@@ -1,0 +1,40 @@
+<div class="container d-flex flex-column justify-content-center vh-100 align-items-center">
+  <h1 class="rr-dark-purple-text">Tus eventos</h1>
+  <div class="pages-controls w-100 d-flex justify-content-around column-gap-5">
+    <span class="page-selector" (click)="onSelectPage()"
+          [class.selected-page]="!isMyCreatedEventsPageSelected">Participando</span>
+    <span class="page-selector" (click)="onSelectPage()"
+          [class.selected-page]="isMyCreatedEventsPageSelected">Creados por tí</span>
+  </div>
+  <div class="events-container mt-3 ps-3 pe-3" [class.overflow-y-auto]="events.length > 1">
+    @if (eventsAreLoading) {
+      <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    } @else {
+      @if (events.length < 1) {
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-calendar-x" style="font-size: 4rem"></i>
+          @if (isMyCreatedEventsPageSelected) {
+            <h5 class="text-bold">Aún no haz creado ningún evento.</h5>
+            <button class="btn rr-btn w-100" (click)="onCreateEvent()">Crear Evento</button>
+          } @else {
+            <h6 class="text-bold">Aún no te haz unido a ningún evento.</h6>
+            <button class="btn rr-btn w-100"
+                    [routerLink]="['/events/', { outlets: { events: ['search']}}]">Buscar Evento
+            </button>
+          }
+        </div>
+      } @else {
+        <!-- TODO: Add button to reload the shown events -->
+        <!-- TODO: Add Form to filter events -->
+      }
+
+      @for (event of events; track events) {
+        <rr-event-resume-card [eventResume]="event" (onSeeEvent)="onSeeEvent($event)"/>
+      }
+    }
+  </div>
+</div>
