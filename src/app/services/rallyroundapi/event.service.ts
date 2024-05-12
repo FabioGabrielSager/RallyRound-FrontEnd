@@ -33,7 +33,7 @@ export class EventService {
 
   findEvents(activity: string | undefined, neighborhood: string | undefined, locality: string | undefined,
              adminSubdistrict: string | undefined, adminDistrict: string | undefined, dateFrom: string | null,
-             dateTo: string | null,
+             dateTo: string | null, showOnlyAvailableEvents: boolean | undefined,
              hours: string[], limit: number, page: number): Observable<EventsResumesPage> {
     let baseParams: HttpParams = new HttpParams();
 
@@ -60,6 +60,9 @@ export class EventService {
 
     if(hours.length > 0)
       baseParams = baseParams.append('hours', hours.join(','));
+
+    if(showOnlyAvailableEvents)
+      baseParams = baseParams.append('showOnlyAvailableEvents', showOnlyAvailableEvents)
 
     baseParams = baseParams.append('limit', limit);
     baseParams = baseParams.append('page', page);

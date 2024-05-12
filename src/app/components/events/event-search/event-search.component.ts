@@ -92,7 +92,8 @@ export class EventSearchComponent implements OnInit{
         activity: [],
         location: [''],
         dateFrom: [],
-        dateTo: []
+        dateTo: [],
+        onlyAvailableEvents: [true]
       }
     );
 
@@ -236,11 +237,13 @@ export class EventSearchComponent implements OnInit{
       {} as Address;
     const dateFrom = this.form.controls['dateFrom'].value;
     const dateTo = this.form.controls['dateTo'].value;
+    const onlyAvailableEvents = this.form.controls['onlyAvailableEvents'].value;
 
     this.searchEventSub.unsubscribe();
 
-    this.searchEventSub = this.eventService.findEvents(this.selectedActivity, address.neighborhood, address.locality, address.adminDistrict2,
-      address.adminDistrict, dateFrom, dateTo, this.hours, 10, this.actualPage)
+    this.searchEventSub = this.eventService.findEvents(this.selectedActivity, address.neighborhood, address.locality,
+      address.adminDistrict2, address.adminDistrict, dateFrom, dateTo, onlyAvailableEvents, this.hours, 10,
+      this.actualPage)
       .subscribe({
         next: value => {
           this.eventsResumesPage = value;
