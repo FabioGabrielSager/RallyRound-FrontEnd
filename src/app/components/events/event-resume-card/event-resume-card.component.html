@@ -40,22 +40,44 @@
               <span>...+{{ eventResume.participantsLimit - 49 }}</span>
             }
           </div>
-            <div>
-              @switch (eventResume.inscriptionStatus) {
-                @case (EventInscriptionStatus.ACCEPTED) {
-                  <span class="badge bg-success" style="text-wrap: wrap;">Inscripción aceptada.</span>
-                }
-                @case (EventInscriptionStatus.INCOMPLETE_MISSING_PAYMENT_AND_HOUR_VOTE) {
-                  <span class="badge bg-primary" style="text-wrap: wrap;">Inscripción pendiente de pago.</span>
-                }
-                @case (EventInscriptionStatus.INCOMPLETE_MISSING_HOUR_VOTE) {
-                  <span class="badge bg-primary" style="text-wrap: wrap;">Inscripción pendiente votación de hora.</span>
-                }
-                @case (EventInscriptionStatus.REJECTED) {
-                  <span class="badge bg-danger" style="text-wrap: wrap;">Inscripción rechazada.</span>
-                }
+          <div>
+            @switch (eventResume.state) {
+              @case (EventState.WAITING_FOR_PARTICIPANTS) {
+                <span class="badge bg-primary" style="text-wrap: wrap;">Esperando por participantes</span>
               }
-            </div>
+              @case (EventState.READY_TO_START) {
+                <span class="badge bg-danger" style="text-wrap: wrap;">Evento Lleno</span>
+              }
+              @case (EventState.SOON_TO_START) {
+                <span class="badge bg-info" style="text-wrap: wrap;">Evento pronto a comenzar</span>
+              }
+              @case (EventState.IN_PROCESS) {
+                <span class="badge bg-success" style="text-wrap: wrap;">Evento llevándose a cabo</span>
+              }
+              @case (EventState.FINALIZED) {
+                <span class="badge bg-primary" style="text-wrap: wrap;">Evento finalizado</span>
+              }
+              @case (EventState.CANCELED) {
+                <span class="badge bg-danger" style="text-wrap: wrap;">Evento Cancelado</span>
+              }
+            }
+          </div>
+          <div>
+            @switch (eventResume.inscriptionStatus) {
+              @case (EventInscriptionStatus.ACCEPTED) {
+                <span class="badge bg-success" style="text-wrap: wrap;">Inscripción aceptada</span>
+              }
+              @case (EventInscriptionStatus.INCOMPLETE_MISSING_PAYMENT_AND_HOUR_VOTE) {
+                <span class="badge bg-primary" style="text-wrap: wrap;">Inscripción pendiente de pago</span>
+              }
+              @case (EventInscriptionStatus.INCOMPLETE_MISSING_HOUR_VOTE) {
+                <span class="badge bg-primary" style="text-wrap: wrap;">Inscripción pendiente votación de hora</span>
+              }
+              @case (EventInscriptionStatus.REJECTED) {
+                <span class="badge bg-danger" style="text-wrap: wrap;">Inscripción rechazada</span>
+              }
+            }
+          </div>
         </div>
       </div>
     </div>

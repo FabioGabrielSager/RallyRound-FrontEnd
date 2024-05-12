@@ -1,6 +1,7 @@
 import {EventDurationUnit} from "./eventDurationUnit";
 import {AddressEntity} from "../location/AddressEntity";
 import {EventInscriptionStatus} from "./eventInscriptionStatus";
+import {EventState} from "./eventState";
 
 export interface EventResumeDto {
   eventId: string,
@@ -13,5 +14,6 @@ export interface EventResumeDto {
   address: AddressEntity,
   participantsLimit: number,
   participantsCount: number,
-  inscriptionStatus: EventInscriptionStatus | null
+  inscriptionStatus: EventInscriptionStatus | null,
+  state: EventState
 }

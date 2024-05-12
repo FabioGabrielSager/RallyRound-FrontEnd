@@ -3,6 +3,7 @@ import {DatePipe} from "@angular/common";
 import {HourPipe} from "../../../pipe/hour.pipe";
 import {EventResumeDto} from "../../../models/event/eventResumeDto";
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
+import {EventState} from "../../../models/event/eventState";
 
 @Component({
   selector: 'rr-event-resume-card',
@@ -24,4 +25,6 @@ export class EventResumeCardComponent {
   onViewEventClick(eventId: string) {
     this.onSeeEvent.emit(eventId);
   }
+
+  protected readonly EventState = EventState;
 }

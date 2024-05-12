@@ -17,6 +17,7 @@ import {Router} from "@angular/router";
 import {
   EventWithCreatorReputationAndInscriptionStatusDto
 } from "../../../models/event/eventWithCreatorReputationAndInscriptionStatusDto";
+import {EventState} from "../../../models/event/eventState";
 
 @Component({
   selector: 'rr-event-details-component',
@@ -129,8 +130,17 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
                     { outlets: { events: ['myevents', 'enrolled', value.eventId]}}]);
                 },
                 error: err => {
-                  this.toastService.show("Hubo un error al enviar la solicitud de inscripción, por favor " +
-                    "inténtelo más tarde.", "bg-danger");
+                  const statusCode: number = err.status;
+                  if(statusCode >= 400) {
+                    this.toastService.show("Este evento ya no acepta mas participantes.",
+                      "bg-danger");
+                  }
+
+                  if(statusCode >= 500) {
+                    this.toastService.show("Hubo un error al enviar la solicitud de inscripción, por favor " +
+                      "inténtelo más tarde.", "bg-danger");
+                  }
+
                   console.error(err);
                 }
               }
@@ -160,4 +170,6 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       }
     }
   }
+
+  protected readonly EventState = EventState;
 }
