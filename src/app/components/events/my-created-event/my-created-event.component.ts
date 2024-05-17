@@ -1,6 +1,6 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
-import {EventDto} from "../../../models/event/eventDto";
+import {EventResponse} from "../../../models/event/eventResponse";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {CreateEventRequest} from "../../../models/event/createEventRequest";
 import {DatePipe} from "@angular/common";
@@ -10,6 +10,7 @@ import {AddressEntity} from "../../../models/location/AddressEntity";
 import {HourPipe} from "../../../pipe/hour.pipe";
 import {ToastService} from "../../../services/toast.service";
 import {EventState} from "../../../models/event/eventState";
+import {EventResponseForEventCreators} from "../../../models/event/eventResponseForEventCreators";
 
 @Component({
   selector: 'rr-my-created-event',
@@ -25,7 +26,7 @@ export class MyCreatedEventComponent implements OnInit {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private eventService: EventService = inject(EventService);
   private toastService: ToastService = inject(ToastService);
-  @Input() event: EventDto = {} as EventDto;
+  @Input() event: EventResponseForEventCreators = {} as EventResponseForEventCreators;
   isEventLoaded: boolean = false;
   private eventId: string = "";
 
@@ -35,10 +36,10 @@ export class MyCreatedEventComponent implements OnInit {
     });
 
     if(this.event == null) {
-      this.eventService.getParticipantCreatedEvent(this.eventId).subscribe({
+      this.eventService.getCurrentUserCreatedEvent(this.eventId).subscribe({
         next: event => {
           this.event = event;
-          this.event.event.address = new AddressEntity(event.event.address.__type, event.event.address.address);
+          this.event.address = new AddressEntity(event.address.__type, event.address.address);
           this.isEventLoaded = true;
         },
         error: err => {

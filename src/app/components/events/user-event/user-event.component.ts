@@ -3,17 +3,14 @@ import {EventDetailsComponent} from "../event-details-component/event-details.co
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
 import {ActivatedRoute} from "@angular/router";
 import {BehaviorSubject, Subscription} from "rxjs";
-import {
-  EventWithCreatorReputationAndInscriptionStatusDto
-} from "../../../models/event/eventWithCreatorReputationAndInscriptionStatusDto";
 import {AddressEntity} from "../../../models/location/AddressEntity";
 import {ChatComponent} from "../../shared/chat/chat.component";
 import {EventService} from "../../../services/rallyroundapi/event.service";
-import {EventDto} from "../../../models/event/eventDto";
 import {Location, NgClass} from "@angular/common";
 import {ToastService} from "../../../services/toast.service";
 import {MyCreatedEventComponent} from "../my-created-event/my-created-event.component";
 import {browserRefresh} from "../../../app.component";
+import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
 
 @Component({
   selector: 'rr-user-event',
@@ -35,7 +32,7 @@ export class UserEventComponent implements OnInit, OnDestroy {
   private toastService: ToastService = inject(ToastService);
 
   private eventId: string = "";
-  event: EventWithCreatorReputationAndInscriptionStatusDto = {} as EventWithCreatorReputationAndInscriptionStatusDto;
+  event: EventResponseForParticipants = {} as EventResponseForParticipants;
   isChatPageSelected: boolean = false;
   showAsACreatorView: boolean = false;
   protected readonly EventInscriptionStatus = EventInscriptionStatus;
@@ -59,17 +56,17 @@ export class UserEventComponent implements OnInit, OnDestroy {
 
       if (!browserRefresh) {
         this.event = event.event;
-        this.event.event.address = new AddressEntity(this.event.event.address.__type,
-          this.event.event.address.address);
+        this.event.address = new AddressEntity(this.event.address.__type,
+          this.event.address.address);
         this.isEventLoaded$.next(true);
       } else {
         if (this.showAsACreatorView) {
           this.subs.add(
-            this.eventService.getParticipantCreatedEvent(event.event.eventId).subscribe({
+            this.eventService.getCurrentUserCreatedEvent(event.event.id).subscribe({
               next: value => {
-                this.event = value as EventWithCreatorReputationAndInscriptionStatusDto;
-                this.event.event.address = new AddressEntity(this.event.event.address.__type,
-                  this.event.event.address.address);
+                this.event = value as EventResponseForParticipants;
+                this.event.address = new AddressEntity(this.event.address.__type,
+                  this.event.address.address);
                 this.isEventLoaded$.next(true);
               },
               error: err => {
@@ -80,12 +77,12 @@ export class UserEventComponent implements OnInit, OnDestroy {
           )
         } else {
           this.subs.add(
-            this.eventService.getCurrentUserParticipatingEvent(event.event.eventId).subscribe(
+            this.eventService.getCurrentUserParticipatingEvent(event.event.id).subscribe(
               {
                 next: value => {
                   this.event = value;
-                  this.event.event.address = new AddressEntity(this.event.event.address.__type,
-                    this.event.event.address.address);
+                  this.event.address = new AddressEntity(this.event.address.__type,
+                    this.event.address.address);
                   this.isEventLoaded$.next(true);
                 },
                 error: err => {
@@ -106,9 +103,5 @@ export class UserEventComponent implements OnInit, OnDestroy {
 
   onSelectPage() {
     this.isChatPageSelected = !this.isChatPageSelected;
-  }
-
-  getEventAsEventDto() {
-    return this.event as EventDto;
   }
 }

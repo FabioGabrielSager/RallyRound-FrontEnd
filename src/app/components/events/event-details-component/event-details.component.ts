@@ -14,10 +14,8 @@ import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStat
 import {FormsModule} from "@angular/forms";
 import {AddressEntity} from "../../../models/location/AddressEntity";
 import {Router} from "@angular/router";
-import {
-  EventWithCreatorReputationAndInscriptionStatusDto
-} from "../../../models/event/eventWithCreatorReputationAndInscriptionStatusDto";
 import {EventState} from "../../../models/event/eventState";
+import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
 
 @Component({
   selector: 'rr-event-details-component',
@@ -32,7 +30,7 @@ import {EventState} from "../../../models/event/eventState";
 })
 export class EventDetailsComponent implements OnInit,OnDestroy {
   @Input() eventId: string = "";
-  @Input() event!: EventWithCreatorReputationAndInscriptionStatusDto;
+  @Input() event!: EventResponseForParticipants;
 
   private modalService: NgbModal = inject(NgbModal);
   private eventService: EventService = inject(EventService);
@@ -57,14 +55,14 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
         this.eventService.findEventWithCreatorReputationById(this.eventId)
           .subscribe({
             next: event => {
-              this.event = event as EventWithCreatorReputationAndInscriptionStatusDto;
-              this.event.event.address = new AddressEntity(event.event.address.__type, event.event.address.address);
+              this.event = event as EventResponseForParticipants;
+              this.event.address = new AddressEntity(event.address.__type, event.address.address);
               const eventCreator =
                 this.event.eventParticipants.find(p => p.eventCreator);
               if(eventCreator)
                 this.eventCreator = eventCreator.participant;
 
-              this.eventId = event.eventId;
+              this.eventId = event.id;
               this.isEventLoaded = true;
             },
             error: err => {
@@ -81,7 +79,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       if(eventCreator)
         this.eventCreator = eventCreator.participant;
 
-      this.eventId = this.event.eventId;
+      this.eventId = this.event.id;
       this.isEventLoaded = true;
     }
   }
@@ -92,7 +90,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
 
   onJoinEvent() {
     const wantsToContinue: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    if(this.event.event.inscriptionPrice > 0) {
+    if(this.event.inscriptionPrice > 0) {
       const modal: NgbModalRef = this.modalService.open(AlertComponent, {centered: true, size: 'lg'});
       modal.componentInstance.isAConfirm = true;
       modal.componentInstance.title = "Inscribirse en evento";

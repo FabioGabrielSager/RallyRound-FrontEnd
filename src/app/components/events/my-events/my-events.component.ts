@@ -108,7 +108,7 @@ export class MyEventsComponent implements OnInit {
   onSeeEvent(eventId: string) {
     if(this.isMyCreatedEventsPageSelected) {
       this.subs.add(
-        this.eventService.getParticipantCreatedEvent(eventId).subscribe({
+        this.eventService.getCurrentUserCreatedEvent(eventId).subscribe({
           next: () => {
             this.router.navigate(['events', { outlets: { events: ['myevents', eventId]}}]);
           },

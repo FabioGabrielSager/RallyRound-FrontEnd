@@ -1,6 +1,6 @@
-import {EventWithCreatorReputationAndInscriptionStatusDto} from "./eventWithCreatorReputationAndInscriptionStatusDto";
+import {EventResponseForParticipants} from "./eventResponseForParticipants";
 
 export interface CachedEvent {
   isEventCreatedByCurrentUser: boolean | undefined,
-  event: EventWithCreatorReputationAndInscriptionStatusDto | null
+  event: EventResponseForParticipants | null
 }

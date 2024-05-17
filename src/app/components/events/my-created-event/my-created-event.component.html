@@ -2,21 +2,21 @@
   <div class="container d-flex flex-column justify-content-center align-items-start rr-black-text
              mt-3">
     <div class="row row-gap-2 p-2">
-      <h1 class="text-bold rr-dark-purple-text">{{ event.event.activity }}</h1>
+      <h1 class="text-bold rr-dark-purple-text">{{ event.activity }}</h1>
       <div class="col-12">
-        <p class="w-100">{{event.event.description}}</p>
+        <p class="w-100">{{event.description}}</p>
       </div>
       <div class="col-12">
         <h5 class="rr-dark-purple-text text-bold">Ubicación</h5>
         <div class="d-flex align-items-center justify-content-between">
-          <span>{{event.event.address.getFormattedName()}}</span>
+          <span>{{event.address.getFormattedName()}}</span>
           <i class="bi bi-geo-alt ms-1 rr-dark-purple-text" style="font-size: 2rem"></i>
         </div>
       </div>
       <div class="col-12">
         <h5 class="rr-dark-purple-text text-bold">Fecha</h5>
         <div class="d-flex align-items-center justify-content-between">
-          <span>{{event.event.date | date:"dd/MM/yyyy"}}</span>
+          <span>{{event.date | date:"dd/MM/yyyy"}}</span>
           <i class="bi bi-calendar ms-4 rr-dark-purple-text" style="font-size: 2rem"></i>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <h5 class="rr-dark-purple-text text-bold">Posibles horarios de inicio</h5>
         <div class="d-flex align-items-center justify-content-between justify-content-lg-between me-lg-5">
           <div class="d-inline-block">
-            @for (h of event.event.startingHours; track h) {
+            @for (h of event.startingHours; track h) {
               <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-2"
                    style="font-size: 0.85rem">
                 <span>{{ h | hour }}</span>
@@ -38,8 +38,8 @@
         <h5 class="rr-dark-purple-text text-bold">Duración</h5>
         <div class="d-flex align-items-center justify-content-between">
           <div>
-            <span>{{event.event.duration}} </span>
-            @if (event.event.durationUnit === EventDurationUnit.HOUR) {
+            <span>{{event.duration}} </span>
+            @if (event.durationUnit === EventDurationUnit.HOUR) {
               <span>hora/s</span>
             } @else {
               <span>minutos</span>
@@ -50,26 +50,26 @@
       </div>
       <div class="col-12">
         <h5 class="rr-dark-purple-text text-bold">Precio de inscripción</h5>
-        <span>{{event.event.inscriptionPrice}}</span>
+        <span>{{event.inscriptionPrice}}</span>
       </div>
       <div class="col-12">
         <h5 class="rr-dark-purple-text text-bold">Participantes</h5>
         @for (p of event.eventParticipants; track p) {
-          @if(!p.eventCreator || (p.eventCreator && event.event.eventCreatorIsParticipant)) {
+          @if(!p.eventCreator || (p.eventCreator && event.eventCreatorIsParticipant)) {
             <i class="bi bi-person-fill"></i>
           }
         }
-        @for (_ of Array.from({length: event.event.participantsLimit - event.eventParticipants.length});
+        @for (_ of Array.from({length: event.participantsLimit - event.eventParticipants.length});
           track _) {
           <i class="bi bi-person"></i>
         }
-        <span> {{event.eventParticipants.length}}/{{event.event.participantsLimit}}</span>
+        <span> {{event.eventParticipants.length}}/{{event.participantsLimit}}</span>
       </div>
       <div class="col-12">
         <div class="d-flex align-items-center flex-wrap">
           <div class="guests-container">
             @for (g of event.eventParticipants; track g) {
-              @if(!g.eventCreator || (g.eventCreator && event.event.eventCreatorIsParticipant)) {
+              @if(!g.eventCreator || (g.eventCreator && event.eventCreatorIsParticipant)) {
                 <div class="guest me-1">
                   @if (g.participant.base64encodedProfileImage != null) {
                     <img [src]="'data:image/*;base64, ' + g.participant.base64encodedProfileImage" alt="foto-invitado">
@@ -87,10 +87,10 @@
           </button>
         </div>
       </div>
-      @if(event.event.state) {
+      @if(event.state) {
         <div class="col-12">
           <div>
-            @switch (event.event.state) {
+            @switch (event.state) {
               @case (EventState.WAITING_FOR_PARTICIPANTS) {
                 <span class="badge bg-primary w-100" style="text-wrap: wrap;">Esperando por participantes</span>
               }

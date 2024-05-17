@@ -11,7 +11,7 @@
       @if (!isChatPageSelected) {
         <div class="overflow-y-auto">
           @if(showAsACreatorView) {
-            <rr-my-created-event [event]="getEventAsEventDto()"/>
+            <rr-my-created-event [event]="event"/>
           } @else {
             <rr-event-details-component [event]="event"/>
           }
@@ -19,7 +19,7 @@
       }
         <div class="mt-1 pb-2 w-100 start-0 top-0 z-3 h-100"
           [ngClass]="!isChatPageSelected ? 'invisible position-absolute' : 'position-static visible'">
-          <rr-chat [chatId]="event.event.chatId"/>
+          <rr-chat [chatId]="event.chatId"/>
         </div>
     } @else {
       <rr-event-details-component [event]="event"/>

@@ -1,17 +1,15 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
-import {BehaviorSubject, Observable, tap} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {CreateEventRequest} from "../../models/event/createEventRequest";
-import {EventDto} from "../../models/event/eventDto";
+import {EventResponse} from "../../models/event/eventResponse";
 import {EventsResumesPage} from "../../models/event/EventsResumesPage";
-import {EventWithCreatorReputation} from "../../models/event/eventWithCreatorReputation";
-import {
-  EventWithCreatorReputationAndInscriptionStatusDto
-} from "../../models/event/eventWithCreatorReputationAndInscriptionStatusDto";
 import {EventInscriptionStatus} from "../../models/event/eventInscriptionStatus";
 import {MPPaymentStatus} from "../../models/MPPaymentStatus";
 import {CachedEvent} from "../../models/event/cachedEvent";
+import {EventResponseForEventCreators} from "../../models/event/eventResponseForEventCreators";
+import {EventResponseForParticipants} from "../../models/event/eventResponseForParticipants";
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +32,7 @@ export class EventService {
   // Retrieves the last requested event if the id of the current requested event matches with the id
   // of the last requested event, otherwise returns null
   getLastRequestedEvent(eventId: string) {
-    if (this._lastRequestedEvent.event != null && eventId === this._lastRequestedEvent.event.eventId) {
+    if (this._lastRequestedEvent.event != null && eventId === this._lastRequestedEvent.event.id) {
       return this._lastRequestedEvent;
     }
     return null;
@@ -49,12 +47,12 @@ export class EventService {
   // and sets isEventCreatedByCurrentUser to true since the current user is the creator of the event.
   // Note: Changes to the lastRequestedEvent variable occur only when the creation request is successful
   // and retrieves non-null results.
-  createEvent(request: CreateEventRequest): Observable<EventDto> {
-    return this.httpClient.post<EventDto>(this.baseUrlEventEndpoint + "/create/", request)
+  createEvent(request: CreateEventRequest): Observable<EventResponseForEventCreators> {
+    return this.httpClient.post<EventResponseForEventCreators>(this.baseUrlEventEndpoint + "/create/", request)
       .pipe(
         tap(value => {
           if (value != null) {
-            this._lastRequestedEvent.event = value as EventWithCreatorReputationAndInscriptionStatusDto;
+            this._lastRequestedEvent.event = value as EventResponseForParticipants;
             this._lastRequestedEvent.isEventCreatedByCurrentUser = true;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
@@ -108,12 +106,12 @@ export class EventService {
   // and sets isEventCreatedByCurrentUser to false since the current user is the creator of the event, if the event is found.
   // Note: Changes to the lastRequestedEvent variable occur only when the request is successful
   // and retrieves non-null results.
-  findEventWithCreatorReputationById(eventId: string): Observable<EventWithCreatorReputation> {
-    return this.httpClient.get<EventWithCreatorReputation>(this.baseUrlEventEndpoint + "/find/" + eventId)
+  findEventWithCreatorReputationById(eventId: string): Observable<EventResponse> {
+    return this.httpClient.get<EventResponse>(this.baseUrlEventEndpoint + "/find/" + eventId)
       .pipe(
         tap(value => {
           if (value != null) {
-            this._lastRequestedEvent.event = value as EventWithCreatorReputationAndInscriptionStatusDto;
+            this._lastRequestedEvent.event = value as EventResponseForParticipants;
             this._lastRequestedEvent.isEventCreatedByCurrentUser = false;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
@@ -126,12 +124,13 @@ export class EventService {
   // and sets isEventCreatedByCurrentUser to true since the current user is the creator of the event, if the event is found.
   // Note: Changes to the lastRequestedEvent variable occur only when the request is successful
   // and retrieves non-null results.
-  getParticipantCreatedEvent(eventId: string): Observable<EventWithCreatorReputation> {
-    return this.httpClient.get<EventWithCreatorReputation>(this.baseUrlEventEndpoint + "/find/" + eventId)
+  getCurrentUserCreatedEvent(eventId: string): Observable<EventResponseForEventCreators> {
+    return this.httpClient.get<EventResponseForEventCreators>(
+      `${this.baseUrlParticipantEndpoint}/events/${eventId}/created/`)
       .pipe(
         tap(value => {
           if (value != null) {
-            this._lastRequestedEvent.event = value as EventWithCreatorReputationAndInscriptionStatusDto;
+            this._lastRequestedEvent.event = value as EventResponseForParticipants;
             this._lastRequestedEvent.isEventCreatedByCurrentUser = true;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
@@ -223,9 +222,9 @@ export class EventService {
   // Note: Changes to the lastRequestedEvent variable occur only when the request is successful
   // and retrieves non-null results.
   getCurrentUserParticipatingEvent(eventId: string):
-    Observable<EventWithCreatorReputationAndInscriptionStatusDto> {
+    Observable<EventResponseForParticipants> {
     return this.httpClient
-      .get<EventWithCreatorReputationAndInscriptionStatusDto>(
+      .get<EventResponseForParticipants>(
         `${this.baseUrlParticipantEndpoint}/events/${eventId}/enrolled/`)
       .pipe(
         tap(value => {
