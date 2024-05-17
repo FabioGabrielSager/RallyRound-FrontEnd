@@ -18,7 +18,7 @@ import {MercadoPagoLinkedGuard} from "./guards/mercadopago/mercado-pago-linked.g
 import {MyCreatedEventComponent} from "./components/events/my-created-event/my-created-event.component";
 import {EventSearchComponent} from "./components/events/event-search/event-search.component";
 import {MyEventsComponent} from "./components/events/my-events/my-events.component";
-import {EnrolledEventComponent} from "./components/events/enrolled-event/enrolled-event.component";
+import {UserEventComponent} from "./components/events/user-event/user-event.component";
 
 export const routes: Routes = [
   {
@@ -53,8 +53,7 @@ export const routes: Routes = [
         outlet: 'events',
         children: [
           {path: '', component: MyEventsComponent},
-          {path: 'created/:id', component: MyCreatedEventComponent, canActivate: [MercadoPagoLinkedGuard]},
-          {path: 'enrolled/:id', component: EnrolledEventComponent}
+          {path: ':id', component: UserEventComponent}
         ]
       },
     ]

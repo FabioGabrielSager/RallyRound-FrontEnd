@@ -1,8 +1,8 @@
 import {EventParticipant} from "./eventParticipant";
-import {EventWithState} from "./eventWithState";
+import {EventWithStateAndChatId} from "./eventWithStateAndChatId";
 
 export interface EventDto {
   eventId: string;
-  event: EventWithState;
+  event: EventWithStateAndChatId;
   eventParticipants: EventParticipant[];
 }

@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
 import {EventDto} from "../../../models/event/eventDto";
 import {EventService} from "../../../services/rallyroundapi/event.service";
@@ -9,6 +9,7 @@ import {CreateEventComponent} from "../create-event/create-event.component";
 import {AddressEntity} from "../../../models/location/AddressEntity";
 import {HourPipe} from "../../../pipe/hour.pipe";
 import {ToastService} from "../../../services/toast.service";
+import {EventState} from "../../../models/event/eventState";
 
 @Component({
   selector: 'rr-my-created-event',
@@ -24,7 +25,7 @@ export class MyCreatedEventComponent implements OnInit {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private eventService: EventService = inject(EventService);
   private toastService: ToastService = inject(ToastService);
-  event: EventDto = {} as EventDto;
+  @Input() event: EventDto = {} as EventDto;
   isEventLoaded: boolean = false;
   private eventId: string = "";
 
@@ -33,15 +34,8 @@ export class MyCreatedEventComponent implements OnInit {
       this.eventId = params['id'];
     });
 
-    const event = this.eventService.lastCreatedEvent;
-
-    if(event !== null) {
-      this.event = event;
-      this.event.event.address = new AddressEntity(event.event.address.__type, event.event.address.address);
-      this.isEventLoaded = true;
-    } else {
-      // If the requested event doesn't come from the create event view, ask the api for the event.
-      this.eventService.findEventWithCreatorReputationById(this.eventId).subscribe({
+    if(this.event == null) {
+      this.eventService.getParticipantCreatedEvent(this.eventId).subscribe({
         next: event => {
           this.event = event;
           this.event.event.address = new AddressEntity(event.event.address.__type, event.event.address.address);
@@ -52,9 +46,12 @@ export class MyCreatedEventComponent implements OnInit {
           console.error(err);
         }
       });
+    } else {
+      this.isEventLoaded = true;
     }
   }
 
   protected readonly EventDurationUnit = EventDurationUnit;
   protected readonly Array = Array;
+  protected readonly EventState = EventState;
 }

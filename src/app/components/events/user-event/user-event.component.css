@@ -1,0 +1,34 @@
+.page-selector {
+  text-wrap: nowrap;
+}
+
+.page-selector:hover {
+  cursor: pointer;
+}
+
+.selected-page {
+  border-bottom: 1px solid var(--primary-border);
+  transform: scale(1.01);
+}
+
+.main-container {
+  height: 85vh;
+}
+
+@media (max-height: 610px) {
+  .main-container {
+    height: 80vh;
+  }
+}
+
+@media (max-height: 455px) {
+  .main-container {
+    height: 75vh;
+  }
+}
+
+@media (max-height: 370px) {
+  .main-container {
+    height: 70vh;
+  }
+}

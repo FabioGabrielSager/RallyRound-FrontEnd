@@ -2,15 +2,15 @@ import {Component, inject, OnInit} from '@angular/core';
 import {EventResumeDto} from "../../../models/event/eventResumeDto";
 import {EventResumeCardComponent} from "../event-resume-card/event-resume-card.component";
 import {NgbCollapse, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {ParticipantService} from "../../../services/rallyroundapi/participant.service";
 import {Subscription} from "rxjs";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AlertComponent} from "../../shared/alert/alert.component";
 import {MPAuthService} from "../../../services/rallyroundapi/mercadopago/mpauth.service";
 import {ToastService} from "../../../services/toast.service";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SearchResultsListComponent} from "../../shared/search-results-list/search-results-list.component";
 import {NgClass} from "@angular/common";
+import {EventService} from "../../../services/rallyroundapi/event.service";
 
 @Component({
   selector: 'rr-my-events',
@@ -30,13 +30,12 @@ export class MyEventsComponent implements OnInit {
   isMyCreatedEventsPageSelected: boolean = false;
   eventsAreLoading: boolean = false;
   events: EventResumeDto[] = [];
-  private participantService: ParticipantService = inject(ParticipantService);
+  private eventService: EventService = inject(EventService);
   private subs: Subscription = new Subscription();
   private mpAuthService: MPAuthService = inject(MPAuthService);
   private modalService: NgbModal = inject(NgbModal);
   private toastService: ToastService = inject(ToastService);
   private router: Router = inject(Router);
-  private route: ActivatedRoute = inject(ActivatedRoute);
   form!: FormGroup;
   private fb: FormBuilder = inject(FormBuilder);
 
@@ -53,7 +52,7 @@ export class MyEventsComponent implements OnInit {
       durationUnit: ['HOUR', Validators.required],
       participants: ['1', [Validators.required, Validators.min(1)]],
       inscriptionPrice: ['', [Validators.required, Validators.min(1)]],
-      participanOrganizer: ['organizer', Validators.required],
+      participantOrganizer: ['organizer', Validators.required],
       selectedHour: []
     });
     this.getMyEvents();
@@ -72,7 +71,7 @@ export class MyEventsComponent implements OnInit {
   private getMyEvents() {
     // TODO: Add the required filters for this parameters
     this.eventsAreLoading = true;
-    this.participantService.getMyEvents(null, null, null,
+    this.eventService.getCurrentUserParticipatingEvents(null, null, null,
       undefined, undefined, undefined,
       undefined, undefined, null, null, []).subscribe(
       {
@@ -91,7 +90,7 @@ export class MyEventsComponent implements OnInit {
   private getMyCreatedEvents() {
     // TODO: Add the required filters for this parameters
     this.eventsAreLoading = true;
-    this.participantService.getMyCreatedEvents(undefined, undefined, undefined,
+    this.eventService.getCurrentUserCreatedEvents(undefined, undefined, undefined,
       undefined, undefined, null, null, []).subscribe(
       {
         next: value => {
@@ -108,9 +107,31 @@ export class MyEventsComponent implements OnInit {
 
   onSeeEvent(eventId: string) {
     if(this.isMyCreatedEventsPageSelected) {
-      this.router.navigate(['events', { outlets: { events: ['myevents', 'created', eventId]}}]);
+      this.subs.add(
+        this.eventService.getParticipantCreatedEvent(eventId).subscribe({
+          next: () => {
+            this.router.navigate(['events', { outlets: { events: ['myevents', eventId]}}]);
+          },
+          error: err => {
+            this.toastService.show("Hubo un error al intentar recuperar el evento.", "bg-danger");
+            console.error(err);
+          }
+        })
+      )
     } else {
-      this.router.navigate([ 'events', { outlets: { events: ['myevents', 'enrolled', eventId]}}]);
+      this.subs.add(
+        this.eventService.getCurrentUserParticipatingEvent(eventId).subscribe(
+          {
+            next: () => {
+              this.router.navigate([ 'events', { outlets: { events: ['myevents', eventId]}}]);
+            },
+            error: err => {
+              this.toastService.show("Hubo un error al intentar recuperar el evento.", "bg-danger");
+              console.log(err);
+            }
+          }
+        )
+      );
     }
   }
 

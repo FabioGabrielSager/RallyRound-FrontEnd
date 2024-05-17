@@ -1,7 +1,7 @@
 @if(isEventLoaded) {
-  <div class="container vh-100 d-flex flex-column justify-content-center align-items-start rr-black-text
+  <div class="container d-flex flex-column justify-content-center align-items-start rr-black-text
              mt-3">
-    <div class="row row-gap-2 overflow-y-auto p-2">
+    <div class="row row-gap-2 p-2">
       <h1 class="text-bold rr-dark-purple-text">{{ event.event.activity }}</h1>
       <div class="col-12">
         <p class="w-100">{{event.event.description}}</p>
@@ -87,6 +87,33 @@
           </button>
         </div>
       </div>
+      @if(event.event.state) {
+        <div class="col-12">
+          <div>
+            @switch (event.event.state) {
+              @case (EventState.WAITING_FOR_PARTICIPANTS) {
+                <span class="badge bg-primary w-100" style="text-wrap: wrap;">Esperando por participantes</span>
+              }
+              @case (EventState.READY_TO_START) {
+                <span class="badge bg-danger w-100" style="text-wrap: wrap;">Evento Lleno</span>
+              }
+              @case (EventState.SOON_TO_START) {
+                <span class="badge bg-info w-100" style="text-wrap: wrap;">Evento pronto a comenzar</span>
+              }
+              @case (EventState.IN_PROCESS) {
+                <span class="badge bg-success w-100" style="text-wrap: wrap;">Evento llevándose a cabo</span>
+              }
+              @case (EventState.FINALIZED) {
+                <span class="badge bg-primary w-100" style="text-wrap: wrap;">Evento finalizado</span>
+              }
+              @case (EventState.CANCELED) {
+                <span class="badge bg-danger w-100" style="text-wrap: wrap;">Evento Cancelado</span>
+              }
+            }
+          </div>
+
+        </div>
+      }
       <div class="col-12">
         <button class="btn btn-success w-100" disabled>Modificar</button>
       </div>

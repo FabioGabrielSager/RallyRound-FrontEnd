@@ -5,7 +5,7 @@ import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {ParticipantResume} from "../../../models/user/participant/participantResume";
 import {ToastService} from "../../../services/toast.service";
-import {ParticipantService} from "../../../services/rallyroundapi/participant.service";
+import {EventInscriptionService} from "../../../services/rallyroundapi/event-inscription.service";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../../models/event/createEventInscriptionResponse";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
@@ -37,7 +37,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   private modalService: NgbModal = inject(NgbModal);
   private eventService: EventService = inject(EventService);
   private toastService: ToastService = inject(ToastService)
-  private participantService: ParticipantService = inject(ParticipantService);
+  private eventInscription: EventInscriptionService = inject(EventInscriptionService);
   private router: Router = inject(Router);
 
   private subs: Subscription = new Subscription();
@@ -52,7 +52,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   protected readonly EventInscriptionStatus = EventInscriptionStatus;
 
   ngOnInit(): void {
-    if(this.eventId != "") {
+    if(this.event == null && this.eventId != "") {
       this.subs.add(
         this.eventService.findEventWithCreatorReputationById(this.eventId)
           .subscribe({
@@ -114,7 +114,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       next: value => {
         if (value) {
           this.subs.add(
-            this.participantService.createEventInscription(this.eventId).subscribe(
+            this.eventInscription.createEventInscription(this.eventId).subscribe(
               {
                 next: (value: CreateEventInscriptionResponse) => {
                   if(value.requiresPayment) {
@@ -126,8 +126,20 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
                       `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
                     window.open(value.paymentLink, '_blank', features);
                   }
-                  this.router.navigate([ 'events',
-                    { outlets: { events: ['myevents', 'enrolled', value.eventId]}}]);
+
+                  // Reloading lastEventRequested event service variable
+                  this.subs.add(
+                    this.eventService.getCurrentUserParticipatingEvent(value.eventId).subscribe(
+                      {
+                        next: () => {
+                          this.router.navigate([ 'events',
+                            { outlets: { events: ['myevents', value.eventId]}}]);
+                        },
+                        error: err => console.log(err)
+                      }
+                    )
+                  );
+
                 },
                 error: err => {
                   const statusCode: number = err.status;
@@ -158,11 +170,12 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       modal.componentInstance.bodyTemplate = this.hourSelector;
       modal.componentInstance.title = "Elige el horario del evento que mejor se ajuste a tí.";
       modal.componentInstance.confirmBehavior = () => {
-        this.participantService.completeEventInscription(this.eventId, new HourPipe().transform(this.selectedHour)).subscribe(
+        this.eventInscription.completeEventInscription(this.eventId, new HourPipe().transform(this.selectedHour)).subscribe(
           {
             next: value => {
               this.toastService.show("Inscripción completada",
-              "bg-success"); location.reload();
+              "bg-success");
+              location.reload();
               },
             error: err => { console.error(err); }
           }

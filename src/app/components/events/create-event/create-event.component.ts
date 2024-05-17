@@ -291,8 +291,7 @@ export class CreateEventComponent implements OnInit {
 
     this.eventService.createEvent(createEventRequest).subscribe({
       next: value =>  {
-        this.eventService.lastCreatedEvent = value;
-        this.router.navigate(['events', { outlets: { events: ['myevents', 'created', value.eventId]}}]);
+        this.router.navigate(['events', { outlets: { events: ['myevents', value.eventId]}}]);
       },
       error: err => {
         this.toastService.show("Hubo un error al intentar crear el evento.", "bg-danger")
