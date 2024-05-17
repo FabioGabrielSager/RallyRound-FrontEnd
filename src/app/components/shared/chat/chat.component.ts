@@ -39,6 +39,14 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.chatService.getChatMessages(this.chatId).subscribe({
           next: chat => {
             this.chat = chat;
+            this.chat.messages.sort((a, b) => {
+              if(a.timestamp > b.timestamp) {
+                return 1
+              } else if(a.timestamp < b.timestamp) {
+                return -1;
+              }
+              return 0;
+            })
             this.isChatLoaded = true;
             this.chatService.connectToEventChat(this.chatId).subscribe({
                 next: (message: IMessage) => {
@@ -80,10 +88,22 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   hasTheMessagesDateChanged(msgTimeStamp: number, msgIndex: number): boolean {
-    if(msgIndex != 0 && this.chat.messages[msgIndex-1].timestamp !== msgTimeStamp) {
-      return false;
+    if(msgIndex == 0) {
+      return true;
     }
-    return true;
+
+    const lastMsgDate = this.convertMsgTimestampToDate(this.chat.messages[msgIndex-1].timestamp);
+    const currentMsgDate = this.convertMsgTimestampToDate(msgTimeStamp);
+
+    return !this.areDatesEquals(lastMsgDate, currentMsgDate);
+  }
+
+  private areDatesEquals(date1: Date, date2: Date): boolean {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
   }
 
   convertMsgTimestampToDate(msgTimeStamp: number): Date {
