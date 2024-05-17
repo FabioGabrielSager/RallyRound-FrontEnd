@@ -86,7 +86,6 @@
       </div>
       <div class="col-12">
         <div class="d-flex align-items-center flex-wrap">
-          <div class="guests-container">
             @for (g of event.eventParticipants; track g) {
               @if (!g.eventCreator || (g.eventCreator && event.event.eventCreatorIsParticipant)) {
                 <div class="guest me-1">
@@ -100,7 +99,6 @@
                 </div>
               }
             }
-          </div>
         </div>
       </div>
       @if(event.event.state) {
