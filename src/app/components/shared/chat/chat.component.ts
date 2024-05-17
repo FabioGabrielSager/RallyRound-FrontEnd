@@ -80,8 +80,10 @@ export class ChatComponent implements OnInit, OnDestroy {
         { chatId: this.chat.chatId, messageId: messageId,  message: this.messageToSend, timestamp: new Date() } as MessageDto;
       this.lastSentMessageId = messageId;
       this.chatService.sendMessage(message).subscribe({
+        next: () => this.messageToSend = "",
         error: err => {
           this.lastSentMessageId = "";
+          this.toastService.show("Hubo un error al intentar enviar el mensaje.", "bg-danger")
         }
       });
     }
@@ -108,6 +110,13 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   convertMsgTimestampToDate(msgTimeStamp: number): Date {
     return new Date(msgTimeStamp * 1000);
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if(event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
   }
 }
 
