@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 
 /src/enviroment
+/src/assets/test-image.png
