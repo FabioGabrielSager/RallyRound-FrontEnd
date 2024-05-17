@@ -1,0 +1,71 @@
+#send-btn:active {
+  transform: scale(1.04);
+}
+
+#send-btn:focus {
+  box-shadow: 0 0 0 0;
+}
+
+.chat-date-separator {
+  background-color: var(--rr-secondary);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.messages-container {
+  height: 90%;
+}
+
+.send-message-control-container {
+  height: 10%;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.message {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+}
+
+.received-message {
+  background-color: #DE6E1B;
+}
+
+.sent-message {
+  background-color: #E0C276
+}
+
+.message-text {
+  font-size: 1rem;
+}
+
+.message-time {
+  font-size: 0.85rem;
+  align-self: end;
+}
+
+.received-message-flap {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 22px 12px 0;
+  border-color: transparent #DE6E1B transparent transparent;
+  position: absolute;
+  left: 0;
+}
+
+.sent-message-flap {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 12px 22px 0 0;
+  border-color: #E0C276 transparent transparent transparent;
+  position: absolute;
+  right: 0;
+}

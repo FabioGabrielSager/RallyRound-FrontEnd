@@ -1,0 +1,63 @@
+@if(isChatLoaded) {
+  <div class="chat-container w-100 h-100">
+    <div class="messages-container w-100 border rr-border-primary-color rounded overflow-y-auto">
+      @if (chat.messages.length < 1) {
+        <div class="h-100 p-3 d-flex justify-content-center align-items-center flex-column">
+          <i class="bi bi-envelope-fill" style="font-size: 4rem"></i>
+          <h5 class="text-bold text-center">Aún no se ha enviado ningún mensaje en este chat.</h5>
+        </div>
+      }
+      @for (msg of chat.messages; track msg) {
+        @if (hasTheMessagesDateChanged(msg.timestamp, $index)) {
+          <div class="d-flex w-100 justify-content-center pt-1">
+            <span class="chat-date-separator">{{ convertMsgTimestampToDate(msg.timestamp) | date:"dd/MM/yyyy" }}</span>
+          </div>
+        }
+
+        @if (!msg.submittedByRequester) {
+          <div class="message-container">
+            <div class="position-relative w-100 p-3">
+              <span>{{ msg.sender.name }}</span>
+              <div>
+                <div class="received-message-flap"></div>
+                <div class="message received-message">
+              <span
+                class="message-text flex-grow-1 mb-1">{{ msg.message }}</span>
+                  <span class="message-time ms-md-3">
+                    {{ convertMsgTimestampToDate(msg.timestamp) | date: "hh:mm" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="message-container">
+            <div class="position-relative w-100 p-3">
+              <div>
+                <div class="sent-message-flap"></div>
+                <div class="message sent-message">
+              <span
+                class="message-text flex-grow-1 mb-1">{{ msg.message }}</span>
+                  <div class="d-flex justify-content-end">
+                    <span class="message-time ms-md-3">
+                      {{ convertMsgTimestampToDate(msg.timestamp) | date: "hh:mm" }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+    <div class="send-message-control-container w-100 mt-3">
+      <div class="input-group">
+        <textarea class="form-control rr-input" [(ngModel)]="messageToSend"></textarea>
+        <button id="send-btn" class="btn rr-btn bg-transparent rr-border-primary-color" (click)="sendMessage()">
+          <i class="bi bi-send-fill rr-dark-purple-text"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
