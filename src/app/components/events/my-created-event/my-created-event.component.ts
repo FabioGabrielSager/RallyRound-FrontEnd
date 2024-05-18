@@ -13,6 +13,7 @@ import {EventState} from "../../../models/event/eventState";
 import {EventResponseForEventCreators} from "../../../models/event/eventResponseForEventCreators";
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {UserPublicProfileComponent} from "../../participants/user-public-profile/user-public-profile.component";
 
 @Component({
   selector: 'rr-my-created-event',
@@ -21,7 +22,8 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
     DatePipe,
     HourPipe,
     NgbTooltip,
-    NgClass
+    NgClass,
+    UserPublicProfileComponent
   ],
   templateUrl: './my-created-event.component.html',
   styleUrl: './my-created-event.component.css'
@@ -33,6 +35,13 @@ export class MyCreatedEventComponent implements OnInit {
   @Input() event: EventResponseForEventCreators = {} as EventResponseForEventCreators;
   isEventLoaded: boolean = false;
   private eventId: string = "";
+  showUserProfile: boolean = false;
+  showedUserProfileId: string = "";
+
+  protected readonly EventDurationUnit = EventDurationUnit;
+  protected readonly Array = Array;
+  protected readonly EventState = EventState;
+
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -56,11 +65,17 @@ export class MyCreatedEventComponent implements OnInit {
     }
   }
 
-  protected readonly EventDurationUnit = EventDurationUnit;
-  protected readonly Array = Array;
-  protected readonly EventState = EventState;
-
   getHourVotes(h: string) {
     return this.event.startingHoursTimesVoted.get(new HourPipe().transform(h));
+  }
+
+  onClickUser(userId: string) {
+    this.showUserProfile = true;
+    this.showedUserProfileId = userId;
+  }
+
+  onCloseUserProfileView() {
+    this.showedUserProfileId = "";
+    this.showUserProfile = false;
   }
 }

@@ -4,11 +4,12 @@ import {environment} from "../../../enviroment/enviroment";
 import {Observable} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../models/event/createEventInscriptionResponse";
 import {EventInscriptionResponse} from "../../models/event/EventInscriptionResponse";
+import {UserPublicDataDto} from "../../models/user/participant/userPublicDataDto";
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventInscriptionService {
+export class ParticipantService {
 
   private httpClient: HttpClient = inject(HttpClient);
   private baseUrl: string = environment.RR_API_BASE_URL + "/participant";
@@ -23,5 +24,9 @@ export class EventInscriptionService {
   completeEventInscription(eventId: string, selectedHour: string): Observable<EventInscriptionResponse> {
     return this.httpClient.put<EventInscriptionResponse>(
       `${this.baseUrl}/events/${eventId}/inscriptions/complete/${selectedHour}`, {});
+  }
+
+  getUserData(userId: string): Observable<UserPublicDataDto> {
+    return this.httpClient.get<UserPublicDataDto>(this.baseUrl + "/public/" + userId);
   }
 }

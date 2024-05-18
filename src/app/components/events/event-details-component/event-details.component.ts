@@ -5,7 +5,7 @@ import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {ParticipantResume} from "../../../models/user/participant/participantResume";
 import {ToastService} from "../../../services/toast.service";
-import {EventInscriptionService} from "../../../services/rallyroundapi/event-inscription.service";
+import {ParticipantService} from "../../../services/rallyroundapi/participant.service";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../../models/event/createEventInscriptionResponse";
 import {NgbModal, NgbModalRef, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
@@ -16,6 +16,7 @@ import {AddressEntity} from "../../../models/location/AddressEntity";
 import {Router} from "@angular/router";
 import {EventState} from "../../../models/event/eventState";
 import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
+import {UserPublicProfileComponent} from "../../participants/user-public-profile/user-public-profile.component";
 
 @Component({
   selector: 'rr-event-details-component',
@@ -25,7 +26,8 @@ import {EventResponseForParticipants} from "../../../models/event/eventResponseF
     HourPipe,
     FormsModule,
     NgClass,
-    NgbTooltip
+    NgbTooltip,
+    UserPublicProfileComponent
   ],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.css'
@@ -37,16 +39,20 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   private modalService: NgbModal = inject(NgbModal);
   private eventService: EventService = inject(EventService);
   private toastService: ToastService = inject(ToastService)
-  private eventInscription: EventInscriptionService = inject(EventInscriptionService);
+  private eventInscription: ParticipantService = inject(ParticipantService);
   private router: Router = inject(Router);
 
   private subs: Subscription = new Subscription();
   eventCreator: ParticipantResume = {} as ParticipantResume;
   isEventLoaded: boolean = false;
 
+  showUserProfile: boolean = false;
+  showedUserProfileId: string = "";
+
   @ViewChild('hourSelector') hourSelector!: TemplateRef<any>;
   selectedHour: string = "";
 
+  protected readonly EventState = EventState;
   protected readonly Array = Array;
   protected readonly EventDurationUnit = EventDurationUnit;
   protected readonly EventInscriptionStatus = EventInscriptionStatus;
@@ -184,9 +190,17 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
     }
   }
 
-  protected readonly EventState = EventState;
-
   getHourVotes(h: string) {
     return this.event.startingHoursTimesVoted.get(new HourPipe().transform(h));
+  }
+
+  onClickUser(userId: string) {
+    this.showUserProfile = true;
+    this.showedUserProfileId = userId;
+  }
+
+  onCloseUserProfileView() {
+    this.showedUserProfileId = "";
+    this.showUserProfile = false;
   }
 }

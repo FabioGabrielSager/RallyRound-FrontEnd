@@ -1,5 +1,5 @@
 export interface ParticipantResume {
-  id: number;
+  id: string;
   name: string;
   base64encodedProfileImage: string | null;
 }

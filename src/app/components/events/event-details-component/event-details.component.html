@@ -105,7 +105,7 @@
         <div class="d-flex align-items-center flex-wrap">
             @for (g of event.eventParticipants; track g) {
               @if (!g.eventCreator || (g.eventCreator && event.eventCreatorIsParticipant)) {
-                <div class="guest me-1">
+                <div class="guest me-1" (click)="onClickUser(g.participant.id)">
                   @if (g.participant.base64encodedProfileImage != null) {
                     <img [src]="'data:image/*;base64, ' + g.participant.base64encodedProfileImage" alt="foto-invitado">
                   } @else {
@@ -177,12 +177,23 @@
           }
         }
       </div>
-      <div class="col-12">
+      <div class="col-12 d-none">
         <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between">
           <span class="flex-grow-1">Enviar mensaje al creador</span>
           <i class="bi bi-send"></i></button>
       </div>
     </div>
+  </div>
+}
+
+@if (showUserProfile) {
+  <div class="position-fixed start-0 bottom-0 vh-100 w-100 d-flex
+  justify-content-center align-items-center" style="background-color: var(--rr-primary);
+        z-index: 1021">
+    <button type="button" class="btn position-fixed top-0 start-0" (click)="onCloseUserProfileView()">
+      <i class="bi bi-arrow-left" style="font-size: 1.5rem; font-weight: bold"></i>
+    </button>
+    <rr-user-public-profile [userId]="showedUserProfileId"/>
   </div>
 }
 
