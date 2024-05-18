@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {DatePipe} from "@angular/common";
+import {DatePipe, NgClass} from "@angular/common";
 import {HourPipe} from "../../../pipe/hour.pipe";
 import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
 import {EventService} from "../../../services/rallyroundapi/event.service";
@@ -8,7 +8,7 @@ import {ToastService} from "../../../services/toast.service";
 import {EventInscriptionService} from "../../../services/rallyroundapi/event-inscription.service";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../../models/event/createEventInscriptionResponse";
-import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, NgbModalRef, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {AlertComponent} from "../../shared/alert/alert.component";
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
 import {FormsModule} from "@angular/forms";
@@ -23,7 +23,9 @@ import {EventResponseForParticipants} from "../../../models/event/eventResponseF
   imports: [
     DatePipe,
     HourPipe,
-    FormsModule
+    FormsModule,
+    NgClass,
+    NgbTooltip
   ],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.css'
@@ -183,4 +185,8 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   }
 
   protected readonly EventState = EventState;
+
+  getHourVotes(h: string) {
+    return this.event.startingHoursTimesVoted.get(new HourPipe().transform(h));
+  }
 }

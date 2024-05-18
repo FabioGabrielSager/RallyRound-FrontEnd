@@ -17,6 +17,6 @@ export interface EventResponse {
   eventCreatorReputation: string;
   state: EventState;
   startingHours: string[];
-  startingHoursTimesVoted?: Map<string, number>;
+  startingHoursTimesVoted: Map<string, number>;
   eventParticipants: EventParticipant[];
 }

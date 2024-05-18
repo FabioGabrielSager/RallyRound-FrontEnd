@@ -3,7 +3,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {EventResponse} from "../../../models/event/eventResponse";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {CreateEventRequest} from "../../../models/event/createEventRequest";
-import {DatePipe} from "@angular/common";
+import {DatePipe, NgClass} from "@angular/common";
 import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
 import {CreateEventComponent} from "../create-event/create-event.component";
 import {AddressEntity} from "../../../models/location/AddressEntity";
@@ -11,13 +11,17 @@ import {HourPipe} from "../../../pipe/hour.pipe";
 import {ToastService} from "../../../services/toast.service";
 import {EventState} from "../../../models/event/eventState";
 import {EventResponseForEventCreators} from "../../../models/event/eventResponseForEventCreators";
+import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'rr-my-created-event',
   standalone: true,
   imports: [
     DatePipe,
-    HourPipe
+    HourPipe,
+    NgbTooltip,
+    NgClass
   ],
   templateUrl: './my-created-event.component.html',
   styleUrl: './my-created-event.component.css'
@@ -55,4 +59,8 @@ export class MyCreatedEventComponent implements OnInit {
   protected readonly EventDurationUnit = EventDurationUnit;
   protected readonly Array = Array;
   protected readonly EventState = EventState;
+
+  getHourVotes(h: string) {
+    return this.event.startingHoursTimesVoted.get(new HourPipe().transform(h));
+  }
 }

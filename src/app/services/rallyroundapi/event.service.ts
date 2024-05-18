@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
-import {Observable, tap} from "rxjs";
+import {map, Observable, tap} from "rxjs";
 import {CreateEventRequest} from "../../models/event/createEventRequest";
 import {EventResponse} from "../../models/event/eventResponse";
 import {EventsResumesPage} from "../../models/event/EventsResumesPage";
@@ -24,7 +24,7 @@ export class EventService {
 
   constructor() {
     const lastRequestedEvent = sessionStorage.getItem("lastRequestedEvent");
-    if(lastRequestedEvent != null) {
+    if (lastRequestedEvent != null) {
       this._lastRequestedEvent = JSON.parse(lastRequestedEvent);
     }
   }
@@ -115,6 +115,10 @@ export class EventService {
             this._lastRequestedEvent.isEventCreatedByCurrentUser = false;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
+        }),
+        map(value => {
+          value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          return value;
         })
       );
   }
@@ -134,6 +138,10 @@ export class EventService {
             this._lastRequestedEvent.isEventCreatedByCurrentUser = true;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
+        }),
+        map(value => {
+          value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          return value;
         })
       );
   }
@@ -234,7 +242,11 @@ export class EventService {
               sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
             }
           }
-        )
+        ),
+        map(value => {
+          value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          return value;
+        })
       );
   }
 }
