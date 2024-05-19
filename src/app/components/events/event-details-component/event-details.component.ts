@@ -17,6 +17,7 @@ import {Router} from "@angular/router";
 import {EventState} from "../../../models/event/eventState";
 import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
 import {UserPublicProfileComponent} from "../../participants/user-public-profile/user-public-profile.component";
+import {ParticipantReputationMessages} from "../../../models/user/participant/reputation/participantReputationMessages";
 
 @Component({
   selector: 'rr-event-details-component',
@@ -44,6 +45,8 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
 
   private subs: Subscription = new Subscription();
   eventCreator: ParticipantResume = {} as ParticipantResume;
+  participantReputationMessages = ParticipantReputationMessages;
+
   isEventLoaded: boolean = false;
 
   showUserProfile: boolean = false;

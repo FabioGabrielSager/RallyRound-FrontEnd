@@ -7,6 +7,7 @@ import {ParticipantService} from "../../../services/rallyroundapi/participant.se
 import {ToastService} from "../../../services/toast.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {ReportParticipantModalComponent} from "../report-participant-modal/report-participant-modal.component";
+import {ParticipantReputationMessages} from "../../../models/user/participant/reputation/participantReputationMessages";
 
 @Component({
   selector: 'rr-user-public-profile',
@@ -16,15 +17,9 @@ import {ReportParticipantModalComponent} from "../report-participant-modal/repor
   styleUrl: './user-public-profile.component.css'
 })
 export class UserPublicProfileComponent implements OnInit, OnDestroy {
-  userData: UserPublicDataDto = {
-    reputationAsEventCreator: "BUENA",
-    reputationAsParticipant: "BUENA",
-    name: "Fabio",
-    favoriteActivities: [
-      {name: "Futbol", order: 0} as UserFavoriteActivity,
-      {name: "Básquet", order: 1} as UserFavoriteActivity
-    ]
-  } as UserPublicDataDto;
+  userData!: UserPublicDataDto;
+
+  participantReputationMessages = ParticipantReputationMessages;
 
   private toastService: ToastService = inject(ToastService);
   private modalService: NgbModal = inject(NgbModal);

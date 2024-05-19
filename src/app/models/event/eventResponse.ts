@@ -1,6 +1,7 @@
 import {EventParticipant} from "./eventParticipant";
 import {AddressEntity} from "../location/AddressEntity";
 import {EventState} from "./eventState";
+import {ParticipantReputation} from "../user/participant/reputation/participantReputation";
 
 export interface EventResponse {
   id: string;
@@ -14,7 +15,7 @@ export interface EventResponse {
   address: AddressEntity;
   participantsLimit: number;
   eventCreatorIsParticipant: boolean;
-  eventCreatorReputation: string;
+  eventCreatorReputation: ParticipantReputation;
   state: EventState;
   startingHours: string[];
   startingHoursTimesVoted: Map<string, number>;

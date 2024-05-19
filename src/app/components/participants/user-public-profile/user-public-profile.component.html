@@ -23,12 +23,12 @@
             @if (userData.reputationAsEventCreator) {
               <h6 class="rr-dark-purple-text">
                 Como creador de eventos:
-                {{ userData.reputationAsEventCreator }}
+                {{ participantReputationMessages[userData.reputationAsEventCreator] }}
               </h6>
             }
             <h6 class="rr-dark-purple-text">
               Como participante de eventos:
-              {{ userData.reputationAsParticipant }}
+              {{ participantReputationMessages[userData.reputationAsParticipant] }}
             </h6>
           </div>
         </div>
