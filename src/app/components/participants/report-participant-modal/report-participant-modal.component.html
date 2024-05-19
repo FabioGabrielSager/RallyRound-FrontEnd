@@ -1,0 +1,64 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Reportar usuario</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="reportForm" class="row row-gap-3" (ngSubmit)="onSubmitReport()">
+      <div class="col-12">
+        <h4 class="rr-dark-purple-text text-bold">Reportar por su rol como: </h4>
+        <div class="form-check">
+          <input type="radio" formControlName="asEventCreator" id="asEventCreator" [value]="true"
+                 class="form-check-input rr-radio">
+          <label for="asEventCreator">Creador de eventos.</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" formControlName="asEventCreator" id="asEventParticipant" [value]="false"
+                 class="form-check-input rr-radio">
+          <label for="asEventCreator">Participante de eventos.</label>
+        </div>
+        @if (reportForm.controls['asEventCreator'].invalid &&
+        (reportForm.controls['asEventCreator'].touched || reportForm.controls['asEventCreator'].dirty)) {
+          @if (reportForm.controls['asEventCreator'].hasError('required')) {
+            <span class="error-text">Debe seleccionar el rol del usuario.</span>
+          }
+        }
+      </div>
+      <div class="col-12">
+        <h4 class="rr-dark-purple-text text-bold">Motivo: </h4>
+        @for (motive of reportMotiveOrder; track motive) {
+          <div class="form-check">
+            <input type="radio" class="form-check-input rr-radio" [id]="motive" [value]="motive" formControlName="reportMotive" />
+            <label [for]="motive">{{ reportMotiveMessages[motive]}}</label>
+          </div>
+        }
+      </div>
+      @if (reportForm.controls['reportMotive'].invalid &&
+      (reportForm.controls['reportMotive'].touched || reportForm.controls['reportMotive'].dirty)) {
+        @if (reportForm.controls['reportMotive'].hasError('required')) {
+          <span class="error-text">Debe seleccionar un motivo de reporte.</span>
+        }
+      }
+      <div class="col-12">
+        <div class="position-relative">
+         <textarea type="text" class="form-control rr-input" name="description"
+                   id="description-input" placeholder="Descripción" formControlName="description"
+                   aria-describedby="descripción" rows="2" spellcheck="true"
+                   [class.is-invalid]="reportForm.controls['description'].invalid
+                && (reportForm.controls['description'].touched || reportForm.controls['description'].dirty)"></textarea>
+          <div style="position: absolute; bottom: 5px; right: 5px; font-size: 0.85rem">{{ descriptionLength }}/500</div>
+        </div>
+        @if (reportForm.controls['description'].invalid &&
+        (reportForm.controls['description'].touched || reportForm.controls['description'].dirty)) {
+          @if (reportForm.controls['description'].hasError('required')) {
+            <span class="error-text">Este campo es requerido.</span>
+          }
+        }
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn rr-btn" (click)="activeModal.close('cancel click')">Cancelar</button>
+    <button type="submit" class="btn btn-danger" (click)="onSubmitReport()">Reportar</button>
+  </div>
+</div>
