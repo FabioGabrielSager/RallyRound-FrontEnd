@@ -1,0 +1,72 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Tus actividades favoritas.</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <span class="form-text mb-3" style="font-style: italic">
+    Con el botón <i class="bi bi-list rr-black-text"></i> puedes arrastrar las actividades
+    para ordenarlas desde las que más te gustas a las que menos.</span>
+    <form [formGroup]="form" (ngSubmit)="onSubmitSelection()" class="overflow-y-auto pt-3" style="max-height: 200px;">
+      <ng-container formArrayName="activities">
+        <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+          @for (act of activitiesFormArray.controls; track act; let i = $index) {
+            <div [formGroupName]="i" class="mb-2" cdkDrag>
+              <div class="d-flex align-items-center">
+                <div class="w-100">
+                  <div class="d-flex">
+                    <label class="align-self-center">{{ i + 1 }}.</label>
+                    <div class="w-100 position-relative">
+                      <div class="input-group">
+                        <input type="text" class="form-control rr-input border-end-0"
+                               placeholder="Ej.: Básquet, Música, Futbol, etc." [id]="i"
+                               [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners'
+                             : 'rounded-bottom-corners'"
+                               aria-describedby="actividad" formControlName="activity" (blur)="onBlur()">
+                        <button
+                          tabindex="-1"
+                          [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'"
+                          class="rr-drag-btn rr-border-primary-color border-start-0 pe-3 rr-bg-primary" type="button"
+                          cdkDragHandle>
+                          <i class="bi bi-list rr-black-text" style="font-size: 1.5rem"></i>
+                        </button>
+                      </div>
+
+                      @if (actualFocusedActivityControlIndex === i) {
+                        <rr-search-results-list (onSelectedResult)="onClickSearchResult($event, i)"
+                                                [resultsList]="activitiesNames"/>
+                      }
+                    </div>
+                  </div>
+                </div>
+                @if (i != 0) {
+                  <button
+                    class="bg-transparent border-0 d-inline-block delete-activity-btn"
+                    (click)="deleteActivity(i)" type="button">
+                    <i class="bi bi-x-circle text-danger" style="font-size: 1.8rem"></i>
+                  </button>
+                }
+              </div>
+
+              @if (activitiesFormArray.controls[i].get('activity')?.hasError('required')
+              && (activitiesFormArray.controls[i].get('activity')?.touched
+                || activitiesFormArray.controls[i].get('activity')?.dirty)) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+            </div>
+          }
+        </div>
+      </ng-container>
+      @if (form.hasError('duplicateActivities')) {
+        <span class="error-text">No puede indicar dos veces la misma actividad.</span>
+      }
+    </form>
+    <div class="text-end">
+      <button type="button" class="mt-4 btn rr-btn pe-5 ps-5" (click)="addActivity()">Añadir</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('cancel click')">Cancelar</button>
+    <button type="submit" class="btn rr-btn" (click)="onSubmitSelection()">Confirmar</button>
+  </div>
+</div>
