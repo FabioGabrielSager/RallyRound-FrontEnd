@@ -19,13 +19,16 @@ import {MyCreatedEventComponent} from "./components/events/my-created-event/my-c
 import {EventSearchComponent} from "./components/events/event-search/event-search.component";
 import {MyEventsComponent} from "./components/events/my-events/my-events.component";
 import {UserEventComponent} from "./components/events/user-event/user-event.component";
+import {
+  ParticipantAccountDetailsComponent
+} from "./components/participants/participant-account-details/participant-account-details.component";
 
 export const routes: Routes = [
   {
     path: 'participant',
     children: [
       {
-        path: 'account', children: []
+        path: 'account', component: ParticipantAccountDetailsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'register',

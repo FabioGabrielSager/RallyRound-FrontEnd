@@ -271,3 +271,11 @@ h1 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.guest:hover {
+  transform: scale(1.05);
+}
+
+.guest:active {
+  transform: scale(0.95);
+}

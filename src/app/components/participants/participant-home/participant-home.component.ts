@@ -45,7 +45,9 @@ export class ParticipantHomeComponent implements OnInit, OnDestroy {
         href: "",
         bootstrapIconClasses: "bi bi-person-square",
         iconInLeftOfTitle: true,
-        onClick: undefined
+        onClick: () => {
+          this.router.navigate(["/participant/account"])
+        }
       },
       {
         title: "Salir",

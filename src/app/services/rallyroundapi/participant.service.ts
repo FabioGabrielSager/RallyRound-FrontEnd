@@ -7,6 +7,8 @@ import {EventInscriptionResponse} from "../../models/event/EventInscriptionRespo
 import {UserPublicDataDto} from "../../models/user/participant/userPublicDataDto";
 import {ReportRequest} from "../../models/user/participant/report/reportRequest";
 import {ReportResponse} from "../../models/user/participant/report/reportResponse";
+import {ParticipantPersonalDataDto} from "../../models/user/participant/participantPersonalDataDto";
+import {ParticipantModificationRequest} from "../../models/user/participant/participantModificationRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +34,27 @@ export class ParticipantService {
     return this.httpClient.get<UserPublicDataDto>(this.baseUrl + "/public/" + userId);
   }
 
+  getUserPersonalData(): Observable<ParticipantPersonalDataDto> {
+    return this.httpClient.get<ParticipantPersonalDataDto>(this.baseUrl + "/personal/")
+  }
+
   sendUserReport(reportRequest: ReportRequest): Observable<ReportResponse> {
     return this.httpClient.post<ReportResponse>(this.baseUrl + "/report/", reportRequest);
+  }
+
+  modifyUserAccount(request: ParticipantModificationRequest | null, newProfilePhoto: File | null) {
+    const formData = new FormData();
+
+    let personalInfo = request;
+    if(personalInfo == null) {
+      personalInfo = {} as ParticipantPersonalDataDto;
+    }
+
+    formData.append('participantData', JSON.stringify(personalInfo));
+    if(newProfilePhoto != null) {
+      formData.append('profilePhoto', newProfilePhoto);
+    }
+
+    return this.httpClient.put<ParticipantPersonalDataDto>(this.baseUrl + "/modify/", formData);
   }
 }
