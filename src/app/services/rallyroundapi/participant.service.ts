@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../models/event/createEventInscriptionResponse";
 import {EventInscriptionResponse} from "../../models/event/EventInscriptionResponse";
 import {UserPublicDataDto} from "../../models/user/participant/userPublicDataDto";
@@ -56,5 +56,12 @@ export class ParticipantService {
     }
 
     return this.httpClient.put<ParticipantPersonalDataDto>(this.baseUrl + "/modify/", formData);
+  }
+
+  deleteUserAccount(password: string): Observable<any> {
+    return this.httpClient.delete(this.baseUrl + "/delete/", {params: { "password": password }})
+      .pipe(
+        tap(() => sessionStorage.removeItem("token"))
+      );
   }
 }

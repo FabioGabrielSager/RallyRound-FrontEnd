@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ParticipantPersonalDataDto} from "../../../models/user/participant/participantPersonalDataDto";
 import {UserFavoriteActivity} from "../../../models/user/participant/userFavoriteActivity";
 import {Place} from "../../../models/location/place";
@@ -21,6 +21,7 @@ import {CropperModalResult, ImageCropperModalComponent} from "../../shared/image
 import {DomSanitizer} from "@angular/platform-browser";
 import {FavoriteActivitiesModalComponent} from "../favorite-activities-modal/favorite-activities-modal.component";
 import {arraysEqual} from "../../../utils/arrays-utils";
+import {HourPipe} from "../../../pipe/hour.pipe";
 
 @Component({
   selector: 'rr-participant-account-details',
@@ -68,6 +69,10 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
   uploadedPhotoPreview: any;
   private uploadedPhoto: File | null = null;
 
+  deleteConfirmationForm: FormGroup = this.fb.group({});
+  passwordIsHide: boolean = true;
+  @ViewChild('deleteAccountConfirmation') deleteAccountConfirmation!: TemplateRef<any>;
+
   ngOnInit(): void {
     this.navbarItems = [
       {
@@ -98,6 +103,12 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
         },
       }
     ];
+
+    // Password confirmation form initialization:
+    this.deleteConfirmationForm = this.fb.group({
+      password: ["", [Validators.required, Validators.minLength(5)]],
+      confirmation: ["", [Validators.required, Validators.pattern("CONFIRMAR")]]
+    })
 
     // Form initialization
     this.form = this.fb.group({
@@ -168,38 +179,38 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
     Object.keys(this.form.controls).forEach((controlName: string) => {
       if (controlName != "locality") {
         this.form.get(controlName)!.valueChanges.subscribe((value: string) => {
-          if(this.wasFormInitialized) {
+          if (this.wasFormInitialized) {
             if (this.userData[controlName as keyof ParticipantPersonalDataDto] !== value) {
               if (this.userModifiedData == null) {
                 this.userModifiedData = {} as ParticipantPersonalDataDto;
               }
               switch (controlName) {
                 case "name": {
-                  if(this.userModifiedData.name == undefined || this.userModifiedData.name == "") {
+                  if (this.userModifiedData.name == undefined || this.userModifiedData.name == "") {
                     this.userDataModifiedFieldCount++;
                     this.onUserDataModification$.next(this.userDataModifiedFieldCount);
                   }
-                  if(value) {
+                  if (value) {
                     this.userModifiedData.name = value;
                   }
                   break;
                 }
                 case "lastName": {
-                  if(this.userModifiedData.lastName == undefined || this.userModifiedData.lastName == "") {
+                  if (this.userModifiedData.lastName == undefined || this.userModifiedData.lastName == "") {
                     this.userDataModifiedFieldCount++;
                     this.onUserDataModification$.next(this.userDataModifiedFieldCount);
                   }
-                  if(value) {
+                  if (value) {
                     this.userModifiedData.lastName = value;
                   }
                   break;
                 }
                 case "birthdate": {
-                  if(this.userModifiedData.birthdate == undefined || this.userModifiedData.birthdate == "") {
+                  if (this.userModifiedData.birthdate == undefined || this.userModifiedData.birthdate == "") {
                     this.userDataModifiedFieldCount++;
                     this.onUserDataModification$.next(this.userDataModifiedFieldCount);
                   }
-                  if(value) {
+                  if (value) {
                     this.userModifiedData.birthdate = value;
                   }
                   break;
@@ -255,7 +266,7 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
 
   onClickSearchResult($event: any) {
     this.selectedPlace = this.formattedNamePlaces.get($event.target.innerText);
-    if(this.selectedPlace) {
+    if (this.selectedPlace) {
       this.selectedPlace = new Place(this.selectedPlace.__type, this.selectedPlace.address, this.selectedPlace.name)
     }
 
@@ -366,5 +377,46 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
           },
           error: err => console.error(err)
         });
+  }
+
+  togglePasswordVisibility() {
+    this.passwordIsHide = !this.passwordIsHide;
+  }
+
+  onClickDeleteAccount() {
+    const modal = this.modalService.open(AlertComponent, {centered: true});
+    modal.componentInstance.isAConfirm = true;
+    modal.componentInstance.bodyTemplate = this.deleteAccountConfirmation;
+    modal.componentInstance.title = "Eliminar cuenta.";
+    modal.componentInstance.closeModalAfterConfirm = false;
+    modal.componentInstance.confirmBehavior = () => {
+      if (this.deleteConfirmationForm.invalid) {
+        this.deleteConfirmationForm.markAllAsTouched();
+        return;
+      }
+
+      this.subs.add(
+        this.participantService.deleteUserAccount(this.deleteConfirmationForm.controls["password"].value)
+          .subscribe({
+            next: () => {
+              this.toastService.show("Cuenta eliminada con éxito.", "bg-success");
+              location.reload();
+            },
+            error: err => {
+              if (err.status == 401) {
+                this.toastService.show("Error: Contraseña no valida.", "bg-danger");
+              } else {
+                this.toastService.show("Hubo un error al intentar eliminar la cuenta.",
+                  "bg-danger");
+              }
+            }
+          })
+      );
+
+      this.deleteConfirmationForm.reset();
+      modal.close();
+    }
+
+    this.subs.add(modal.closed.subscribe( () => this.deleteConfirmationForm.reset() ))
   }
 }

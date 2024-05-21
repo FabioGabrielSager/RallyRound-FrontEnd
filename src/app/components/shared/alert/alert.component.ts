@@ -28,12 +28,15 @@ export class AlertComponent {
   @Input() bodyString: BodyString | null = null;
   @Input() isAConfirm: boolean = false;
   @Input() confirmBehavior: Function | null = null;
+  @Input() closeModalAfterConfirm: boolean = true;
 
   handleConfirmClick(): void {
     if (this.confirmBehavior) {
       this.confirmBehavior();
     }
-    this.activeModal.dismiss();
+    if(this.closeModalAfterConfirm) {
+      this.activeModal.dismiss();
+    }
   }
 
   isTemplate(): boolean {

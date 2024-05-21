@@ -2,7 +2,8 @@
            [navBarItems]="navbarItems" itemsColor="var(--black-100)" itemsIconFontSize="1.5rem"
            itemsTitleFontSize="1.1rem"/>
 @if(wasFormInitialized) {
-  <div class="container d-flex justify-content-center align-items-center rr-black-text mt-2 mb-2">
+  <div class="container d-flex flex-column justify-content-center align-items-center rr-black-text mt-2 mb-2">
+    <h1 class="text-bold rr-dark-purple-text align-self-start">Tu cuenta</h1>
     <form [formGroup]="form" class="row row-gap-3" (ngSubmit)="onSaveChanges()">
       <div class="col-12 col-md-6">
         <div class="d-flex justify-content-start column-gap-2">
@@ -147,7 +148,8 @@
         </button>
       </div>
       <div class="col-12">
-        <button class="btn btn-danger w-100 d-flex align-items-center justify-content-between">
+        <button class="btn btn-danger w-100 d-flex align-items-center justify-content-between"
+                (click)="onClickDeleteAccount()">
           <span class="flex-grow-1">Eliminar cuenta</span>
           <i class="bi bi-x-octagon"></i>
         </button>
@@ -155,3 +157,57 @@
     </form>
   </div>
 }
+
+<ng-template #deleteAccountConfirmation>
+  <h4 class="text-bold text-danger">¿Seguro quieres eliminar tu cuenta?</h4>
+  <form [formGroup]="deleteConfirmationForm" class="d-flex flex-column">
+    <label for="confirmation-input" class="rr-black-text form-label">Escribe "CONFIRMAR" (sin las comillas):</label>
+    <input type="text" id="confirmation-input" name="confirmation-input" class="form-control rr-input"
+           formControlName="confirmation"
+           [class.is-invalid]="deleteConfirmationForm.controls['confirmation'].invalid
+               && (deleteConfirmationForm.controls['confirmation'].touched
+               || deleteConfirmationForm.controls['confirmation'].dirty)">
+
+    @if (deleteConfirmationForm.controls['confirmation'].invalid
+    && (deleteConfirmationForm.controls['confirmation'].touched
+      || deleteConfirmationForm.controls['confirmation'].dirty)) {
+      @if (deleteConfirmationForm.controls['confirmation'].hasError('required')) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+      @if (deleteConfirmationForm.controls['confirmation'].hasError('pattern')) {
+        <span class="error-text">Debe ingresar "CONFIRMAR" (sin las comillas).</span>
+      }
+    }
+
+    <label for="password-input" class="rr-black-text form-label">Contraseña</label>
+    <div class="input-group">
+      <input [type]="passwordIsHide ? 'password' : 'text'"
+             class="form-control rr-input border-end-0" formControlName="password" name="password"
+             id="password-input"
+             aria-describedby="contraseña" [class.is-invalid]="deleteConfirmationForm.controls['password'].invalid
+               && (deleteConfirmationForm.controls['password'].touched
+               || deleteConfirmationForm.controls['password'].dirty)">
+      <button (click)="togglePasswordVisibility()"
+              tabindex="-1"
+              class="rr-hide-password-btn rr-bg-primary rounded-end-3 pe-3"
+              type="button" [class.border-danger]="deleteConfirmationForm.controls['password'].invalid
+               && (deleteConfirmationForm.controls['password'].touched
+               || deleteConfirmationForm.controls['password'].dirty)">
+        @if (passwordIsHide) {
+          <i class="bi bi-eye-fill"></i>
+        } @else {
+          <i class="bi bi-eye-slash-fill"></i>
+        }
+      </button>
+    </div>
+    @if (deleteConfirmationForm.controls['password'].invalid
+    && (deleteConfirmationForm.controls['password'].touched || deleteConfirmationForm.controls['password'].dirty)) {
+      @if (deleteConfirmationForm.controls['password'].hasError('required')) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+      @if (deleteConfirmationForm.controls['password'].hasError('minlength')) {
+        <span class="error-text">La contraseña debe contener como mínimo 5 caracteres.</span>
+      }
+    }
+  </form>
+</ng-template>
