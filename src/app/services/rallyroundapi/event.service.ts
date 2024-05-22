@@ -140,7 +140,8 @@ export class EventService {
           }
         }),
         map(value => {
-          value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          if(value.startingHours.length > 1 && value.startingHoursTimesVoted != null)
+            value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
           return value;
         })
       );
@@ -244,7 +245,8 @@ export class EventService {
           }
         ),
         map(value => {
-          value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          if(value.startingHours.length > 1 && value.startingHoursTimesVoted != null)
+            value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
           return value;
         })
       );
