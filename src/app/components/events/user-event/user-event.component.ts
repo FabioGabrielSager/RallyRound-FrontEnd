@@ -11,6 +11,7 @@ import {ToastService} from "../../../services/toast.service";
 import {MyCreatedEventComponent} from "../my-created-event/my-created-event.component";
 import {browserRefresh} from "../../../app.component";
 import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
+import {EventState} from "../../../models/event/eventState";
 
 @Component({
   selector: 'rr-user-event',
@@ -104,4 +105,6 @@ export class UserEventComponent implements OnInit, OnDestroy {
   onSelectPage() {
     this.isChatPageSelected = !this.isChatPageSelected;
   }
+
+  protected readonly EventState = EventState;
 }

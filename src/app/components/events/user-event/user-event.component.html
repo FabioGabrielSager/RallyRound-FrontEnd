@@ -1,7 +1,8 @@
 @if (isEventLoaded$.value) {
   <div class="main-container container d-flex flex-column  align-items-center rr-black-text
              mt-3 pb-5">
-    @if (event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED || showAsACreatorView) {
+    @if (event.state != EventState.CANCELED && event.state != EventState.FINALIZED &&
+      (event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED || showAsACreatorView)) {
       <div class="pages-controls w-100 d-flex justify-content-around column-gap-5">
         <span class="page-selector" (click)="onSelectPage()"
           [class.selected-page]="!isChatPageSelected">Detalles del evento</span>
