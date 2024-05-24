@@ -1,4 +1,4 @@
-@if(isEventLoaded){
+@if (isEventLoaded) {
   <div class="container d-flex flex-column justify-content-center align-items-start rr-black-text
              mt-3 pb-5">
     <div class="row row-gap-2 overflow-y-auto p-2">
@@ -9,12 +9,12 @@
             <div class="guest">
               <img [src]="'data:image/*;base64, ' + eventCreator.base64encodedProfileImage" alt="foto-invitado">
               <div class="guest-name-container pe-1 ps-1">
-                <span>{{  eventCreator.name }}</span>
+                <span>{{ eventCreator.name }}</span>
               </div>
             </div>
           }
           <div class="d-flex flex-column justify-content-center align-items-start">
-            <h6 class="rr-dark-purple-text text-bold">Creador: {{eventCreator.name}}</h6>
+            <h6 class="rr-dark-purple-text text-bold">Creador: {{ eventCreator.name }}</h6>
             <h6 class="rr-dark-purple-text text-bold">Reputación:
               {{ participantReputationMessages[event.eventCreatorReputation] }}</h6>
           </div>
@@ -50,7 +50,7 @@
 
         <div class="d-flex align-items-center justify-content-between justify-content-lg-between me-lg-5">
           <div class="d-inline-block">
-            @if(event.startingHours.length > 1) {
+            @if (event.startingHours.length > 1) {
               @for (h of event.startingHours; track h) {
                 <div class="d-inline-block border border-success rounded-5 pe-2 ps-2 me-2"
                      style="font-size: 0.85rem"
@@ -58,7 +58,7 @@
                     && h[0] === event.selectedStartingHour[0] && h[1] === event.selectedStartingHour[1]
                     ? 'border-success' : 'rr-border-primary-color'">
                   <span>{{ h | hour }}</span>
-                  @if(event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED
+                  @if (event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED
                   && h[0] === event.selectedStartingHour[0] && h[1] === event.selectedStartingHour[1]) {
                     <i class="bi bi-check-circle text-success ms-1"></i>
                   }
@@ -107,28 +107,29 @@
           <i class="bi bi-person"></i>
         }
         <span> {{
-            event.eventCreatorIsParticipant ?  event.eventParticipants.length
-          : event.eventParticipants.length - 1 }}/{{ event.participantsLimit }}
+            event.eventCreatorIsParticipant ? event.eventParticipants.length
+              : event.eventParticipants.length - 1
+          }}/{{ event.participantsLimit }}
         </span>
       </div>
       <div class="col-12">
         <div class="d-flex align-items-center flex-wrap">
-            @for (g of event.eventParticipants; track g) {
-              @if (!g.eventCreator || (g.eventCreator && event.eventCreatorIsParticipant)) {
-                <div class="guest me-1" (click)="onClickUser(g.participant.id)">
-                  @if (g.participant.base64encodedProfileImage != null) {
-                    <img [src]="'data:image/*;base64, ' + g.participant.base64encodedProfileImage" alt="foto-invitado">
-                  } @else {
-                    <div class="guest-name-container pe-1 ps-1">
-                      <span>{{ g.participant.name }}</span>
-                    </div>
-                  }
-                </div>
-              }
+          @for (g of event.eventParticipants; track g) {
+            @if (!g.eventCreator || (g.eventCreator && event.eventCreatorIsParticipant)) {
+              <div class="guest me-1" (click)="onClickUser(g.participant.id)">
+                @if (g.participant.base64encodedProfileImage != null) {
+                  <img [src]="'data:image/*;base64, ' + g.participant.base64encodedProfileImage" alt="foto-invitado">
+                } @else {
+                  <div class="guest-name-container pe-1 ps-1">
+                    <span>{{ g.participant.name }}</span>
+                  </div>
+                }
+              </div>
             }
+          }
         </div>
       </div>
-      @if(event.state) {
+      @if (event.state) {
         <div class="col-12">
           <div>
             @switch (event.state) {
@@ -155,7 +156,7 @@
 
         </div>
       }
-      @if(event.eventInscriptionStatus) {
+      @if (event.eventInscriptionStatus) {
         <div class="col-12">
           <div>
             @switch (event.eventInscriptionStatus) {
@@ -166,7 +167,8 @@
                 <span class="badge bg-primary w-100" style="text-wrap: wrap;">Inscripción pendiente de pago</span>
               }
               @case (EventInscriptionStatus.INCOMPLETE_MISSING_HOUR_VOTE) {
-                <span class="badge bg-primary w-100" style="text-wrap: wrap;">Inscripción pendiente votación de hora</span>
+                <span class="badge bg-primary w-100"
+                      style="text-wrap: wrap;">Inscripción pendiente votación de hora</span>
               }
               @case (EventInscriptionStatus.REJECTED) {
                 <span class="badge bg-danger w-100" style="text-wrap: wrap;">Inscripción rechazada</span>
@@ -176,17 +178,29 @@
         </div>
       }
       <div class="col-12">
-        @if(event.state === EventState.WAITING_FOR_PARTICIPANTS) {
-          @if(event.eventInscriptionStatus !== EventInscriptionStatus.ACCEPTED) {
-            @if(event.eventInscriptionStatus) {
+        @if (event.state === EventState.WAITING_FOR_PARTICIPANTS) {
+          @if (event.eventInscriptionStatus !== EventInscriptionStatus.ACCEPTED) {
+            @if (event.eventInscriptionStatus) {
               <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
                       (click)="onCompleteInscription()">
-                <span class="flex-grow-1">Completar inscripción</span> <i class="bi bi-clipboard-check"></i></button>
+                <span class="flex-grow-1">Completar inscripción</span>
+                <i style="font-size: 1.5rem" class="bi bi-clipboard-check"></i>
+              </button>
             } @else {
-              <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between" (click)="onJoinEvent()">
-                <span class="flex-grow-1">Unirse</span> <i class="bi bi-box-arrow-right"></i></button>
+              <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
+                      (click)="onJoinEvent()">
+                <span class="flex-grow-1">Unirse</span>
+                <i style="font-size: 1.5rem" class="bi bi-box-arrow-right"></i>
+              </button>
             }
           }
+        } @else if (event.state === EventState.FINALIZED
+        && event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED && !event.hasAlreadySentEventFeedback) {
+          <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
+                  (click)="onSendFeedback()">
+            <span class="flex-grow-1">Enviar feedback sobre el evento</span>
+            <i style="font-size: 1.5rem" class="bi bi-file-earmark-text"></i>
+          </button>
         }
       </div>
       <div class="col-12 d-none">
@@ -211,10 +225,11 @@
 
 <ng-template #hourSelector>
   <div class="d-flex flex-wrap column-gap-5 justify-content-center">
-    @for(hour of this.event.startingHours; track hour) {
+    @for (hour of this.event.startingHours; track hour) {
       <div class="d-flex align-items-center p-0 border rr-border-primary-color rounded-5 pe-2 ps-2 me-2">
-        <input type="radio" class="form-check-input rr-radio me-2 mt-0" [id]="$index" [value]="hour" [(ngModel)]="selectedHour">
-        <label [for]="$index">{{hour | hour}}</label>
+        <input type="radio" class="form-check-input rr-radio me-2 mt-0" [id]="$index" [value]="hour"
+               [(ngModel)]="selectedHour">
+        <label [for]="$index">{{ hour | hour }}</label>
       </div>
     }
   </div>

@@ -18,6 +18,7 @@ import {EventState} from "../../../models/event/eventState";
 import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
 import {UserPublicProfileComponent} from "../../participants/user-public-profile/user-public-profile.component";
 import {ParticipantReputationMessages} from "../../../models/user/participant/reputation/participantReputationMessages";
+import {EventFeedbackModalComponent} from "../event-feedback-modal/event-feedback-modal.component";
 
 @Component({
   selector: 'rr-event-details-component',
@@ -205,5 +206,18 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   onCloseUserProfileView() {
     this.showedUserProfileId = "";
     this.showUserProfile = false;
+  }
+
+  onSendFeedback() {
+    const modal = this.modalService.open(EventFeedbackModalComponent,
+      { centered: true, size: "lg" });
+
+    modal.componentInstance.eventId = this.eventId;
+
+    this.subs.add(
+      modal.componentInstance.onFeedbackSubmitSuccess.subscribe(() => {
+        this.event.hasAlreadySentEventFeedback = true
+      })
+    );
   }
 }
