@@ -111,6 +111,14 @@ h1 {
 
 /* Buttons */
 
+.btn:hover {
+  transform: scale(1.01);
+}
+
+.btn:focus {
+  transform: scale(1.01);
+}
+
 .rr-btn {
   background-color: var(--dark-purple);
   color: white;
