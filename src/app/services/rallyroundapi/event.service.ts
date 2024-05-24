@@ -10,6 +10,7 @@ import {MPPaymentStatus} from "../../models/MPPaymentStatus";
 import {CachedEvent} from "../../models/event/cachedEvent";
 import {EventResponseForEventCreators} from "../../models/event/eventResponseForEventCreators";
 import {EventResponseForParticipants} from "../../models/event/eventResponseForParticipants";
+import {EventFeedbackRequest} from "../../models/event/eventFeedbackRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -250,5 +251,9 @@ export class EventService {
           return value;
         })
       );
+  }
+
+  sendEventFeedback(request: EventFeedbackRequest): Observable<any> {
+    return this.httpClient.post(this.baseUrlEventEndpoint + "/feedback/", request);
   }
 }

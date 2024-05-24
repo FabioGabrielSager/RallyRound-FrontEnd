@@ -1,0 +1,17 @@
+.filled {
+  color: var(--dark-purple);
+}
+
+.low {
+  color: var(--error);
+}
+
+i {
+  font-size: 2rem;
+  color: var(--dark-purple);
+
+}
+
+label {
+  font-size: 1.5rem;
+}

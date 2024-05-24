@@ -1,0 +1,77 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h4 class="modal-title text-bold rr-dark-purple-text" id="modal-basic-title">Enviar feedback</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body overflow-y-auto" style="max-height: 700px">
+    <div class="d-flex flex-column">
+      <label>Satisfacción general</label>
+      <ngb-rating [(rate)]="feedback.overallSatisfaction" [max]="5">
+        <ng-template let-fill="fill" let-index="index">
+          <i class="bi-star{{ fill === 100 ? '-fill' : '' }}" [class.filled]="fill === 100"></i>
+        </ng-template>
+      </ngb-rating>
+      @if(submitButtonWasPressed && feedback.overallSatisfaction === 0) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+
+      <label>Organización</label>
+      <ngb-rating [(rate)]="feedback.organizationRating" [max]="5">
+        <ng-template let-fill="fill" let-index="index">
+          <i class="bi-star{{ fill === 100 ? '-fill' : '' }}" [class.filled]="fill === 100"></i>
+        </ng-template>
+      </ngb-rating>
+      @if(submitButtonWasPressed && feedback.overallSatisfaction === 0) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+
+      <label>Coordinadores</label>
+      <ngb-rating [(rate)]="feedback.coordinatorsRating" [max]="5">
+        <ng-template let-fill="fill" let-index="index">
+          <i class="bi-star{{ fill === 100 ? '-fill' : '' }}" [class.filled]="fill === 100"></i>
+        </ng-template>
+      </ngb-rating>
+      @if(submitButtonWasPressed && feedback.overallSatisfaction === 0) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+
+      <label>Calidad del contenido</label>
+      <ngb-rating [(rate)]="feedback.contentQualityRating" [max]="5">
+        <ng-template let-fill="fill" let-index="index">
+          <i class="bi-star{{ fill === 100 ? '-fill' : '' }}" [class.filled]="fill === 100"></i>
+        </ng-template>
+      </ngb-rating>
+      @if(submitButtonWasPressed && feedback.overallSatisfaction === 0) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+
+      <label>Relación calidad/precio</label>
+      <ngb-rating [(rate)]="feedback.valueForMoneyRating" [max]="5">
+        <ng-template let-fill="fill" let-index="index">
+          <i class="bi-star{{ fill === 100 ? '-fill' : '' }}" [class.filled]="fill === 100"></i>
+        </ng-template>
+      </ngb-rating>
+      @if(submitButtonWasPressed && feedback.overallSatisfaction === 0) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+
+      <label>Calificación del lugar en el que se llevo a cabo</label>
+      <ngb-rating [(rate)]="feedback.venueRating" [max]="5">
+        <ng-template let-fill="fill" let-index="index">
+          <i class="bi-star{{ fill === 100 ? '-fill' : '' }}" [class.filled]="fill === 100"></i>
+        </ng-template>
+      </ngb-rating>
+      @if(submitButtonWasPressed && feedback.overallSatisfaction === 0) {
+        <span class="error-text">Este campo es requerido.</span>
+      }
+
+      <label class="mt-1">Comentarios (opcional)</label>
+      <textarea type="text" class="form-control rr-input" id="description-input"
+                aria-describedby="comentarios" [(ngModel)]="feedback.comments"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('cancel click')">Cancelar</button>
+    <button type="submit" class="btn rr-btn" (click)="onSubmitFeedback()">Enviar</button>
+  </div>
+</div>
