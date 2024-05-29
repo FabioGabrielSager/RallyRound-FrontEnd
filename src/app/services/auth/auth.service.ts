@@ -89,6 +89,8 @@ export class AuthService {
   logout(): void {
     sessionStorage.removeItem("token");
     this.currentUserLoginOn.next(false);
+    sessionStorage.removeItem("privileges");
+    this.currentUserLoginOnPrivileges.next([]);
   }
 
   validateUserToken(): Observable<boolean> {

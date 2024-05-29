@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -11,36 +11,46 @@ import {
 import {AdminService} from "../../../services/rallyroundapi/admin.service";
 import {DepartmentService} from "../../../services/rallyroundapi/department.service";
 import {ToastService} from "../../../services/toast.service";
-import {BehaviorSubject, Subject, Subscription} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {PrivilegeCategoryDto} from "../../../models/user/auth/privilege/privilegeCategoryDto";
 import {PrivilegeCategoryMessages} from "../../../models/user/auth/privilege/privilegeCategoryMessages";
 import {PrivilegeMessages} from "../../../models/user/auth/privilege/privilegeMessages";
-import {formatDate} from "@angular/common";
+import {DatePipe, formatDate} from "@angular/common";
 import {minAgeValidator} from "../../../validators/minAgeValidator";
-import {AdminRegistrationRequest} from "../../../models/user/admin/adminRegistrationRequest";
 import {AdminCompleteDataDto} from "../../../models/user/admin/adminCompleteDataDto";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {AdminModificationRequest} from "../../../models/user/admin/adminModificationRequest";
+import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {AlertComponent} from "../../shared/alert/alert.component";
+import {AuthService} from "../../../services/auth/auth.service";
 
 @Component({
   selector: 'rr-admin-details',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DatePipe
   ],
   templateUrl: './admin-details.component.html',
   styleUrl: './admin-details.component.css'
 })
 export class AdminDetailsComponent implements OnInit, OnDestroy {
   private adminService: AdminService = inject(AdminService);
+  private authService: AuthService = inject(AuthService);
   private departmentService: DepartmentService = inject(DepartmentService);
   private toastService: ToastService = inject(ToastService);
   private route: ActivatedRoute = inject(ActivatedRoute);
+  private router: Router = inject(Router);
   private subs: Subscription = new Subscription();
+  private modalService: NgbModal = inject(NgbModal);
+
+  canCurrentUserModifyAdmins: boolean = true;
+  canCurrentUserDisableAdmins: boolean = true;
 
   // Admin data
   private adminId: string = "";
   admin!: AdminCompleteDataDto;
-  private adminModifiedData: AdminCompleteDataDto = {} as AdminCompleteDataDto;
+  private adminModifiedData: AdminModificationRequest = {} as AdminModificationRequest;
   adminDataHasBeenLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   adminDataModifiedFieldCount: number = 0;
   adminPrivilegesWereModified: boolean = false;
@@ -138,7 +148,7 @@ export class AdminDetailsComponent implements OnInit, OnDestroy {
                 }
               } else {
                 if (this.adminModifiedData != null) {
-                  if (this.adminModifiedData[controlName as keyof AdminCompleteDataDto]) {
+                  if (this.adminModifiedData[controlName as keyof AdminModificationRequest]) {
                     switch (controlName) {
                       case "name": {
                         this.adminModifiedData.name = "";
@@ -196,6 +206,13 @@ export class AdminDetailsComponent implements OnInit, OnDestroy {
                 next: (data: PrivilegeCategoryDto[]) => {
                   this.adminsPrivileges = data;
                   this.initPrivilegeCategoriesFormArray();
+                  if(!this.authService.currentUserLoginOnPrivileges.value.includes("MODIFY_ADMIN")) {
+                    this.form.disable();
+                    this.canCurrentUserModifyAdmins = false;
+                  }
+                  if(!this.authService.currentUserLoginOnPrivileges.value.includes("DELETE_ADMIN")) {
+                    this.canCurrentUserDisableAdmins = false;
+                  }
                 },
                 error: err => console.error(err)
               })
@@ -349,7 +366,7 @@ export class AdminDetailsComponent implements OnInit, OnDestroy {
       }
     );
 
-    const category: PrivilegeCategoryDto = this.admin.privileges[index];
+    const category: PrivilegeCategoryDto = this.adminsPrivileges[index];
 
     let modifiedPrivilegeCategory = this.adminModifiedData.privileges
       .find(pc => pc.categoryId === category.categoryId);
@@ -371,54 +388,93 @@ export class AdminDetailsComponent implements OnInit, OnDestroy {
     this.updateAdminPrivilegesWereModifiedVariable();
   }
 
-  onSubmit() {
+  onSaveChanges() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    let registrationRequest = new AdminRegistrationRequest();
+    this.adminModifiedData.adminId = this.adminId;
 
-    registrationRequest.name = this.form.controls['name'].value;
-    registrationRequest.lastName = this.form.controls['lastName'].value;
-    registrationRequest.birthdate = this.form.controls['birthdate'].value;
-    registrationRequest.email = this.form.controls['email'].value;
-    registrationRequest.password = this.form.controls['password'].value;
-    registrationRequest.phoneNumber = this.form.controls['phone'].value;
-    registrationRequest.department = this.form.controls['department'].value;
-
-    let selectedPrivileges: PrivilegeCategoryDto[] = [];
-    const privilegeCategoriesFormArray = this.privilegesCategoriesAsFormArray;
-    for (let i = 0; i < privilegeCategoriesFormArray.length; i++) {
-      if (privilegeCategoriesFormArray.controls[i].get('category')?.value) {
-        selectedPrivileges.push(this.adminsPrivileges[i]);
-      } else {
-        const privilegeControl =
-          privilegeCategoriesFormArray.controls[i].get('privileges');
-        if (privilegeControl != null) {
-          const privilegesFormArray = this.privilegeControlAsFormArray(privilegeControl);
-          selectedPrivileges.push(JSON.parse(JSON.stringify(this.adminsPrivileges[i])));
-
-          for (let j = 0; j < privilegesFormArray.length; j++) {
-            if (!privilegesFormArray.controls[j].value) {
-              selectedPrivileges[i].privileges.splice(j, 1);
-              console.log(selectedPrivileges, this.adminsPrivileges);
-            }
-          }
+    if(this.adminDataModifiedFieldCount > 0 || this.adminPrivilegesWereModified) {
+      if(this.admin.requesterAccount) {
+        const modal: NgbModalRef = this.modalService.open(AlertComponent, {centered: true});
+        modal.componentInstance.isAConfirm = true;
+        modal.componentInstance.title = "Modificar mi cuenta";
+        modal.componentInstance.bodyString = {
+          textParagraphs: [
+            "Una vez modificada su cuenta deberá re-ingresar.",
+            "¿Seguro quieres modificar esta cuenta?"
+          ]
+        };
+        modal.componentInstance.confirmBehavior = () => {
+          this.subs.add(
+            this.adminService.modifyAdmin(this.adminModifiedData).subscribe({
+              next: value => {
+                this.authService.logout();
+                this.router.navigate(["login"])
+              },
+              error: err => console.error(err)
+            })
+          );
         }
+      } else {
+        this.subs.add(
+          this.adminService.modifyAdmin(this.adminModifiedData).subscribe({
+            next: value =>  {
+              this.admin = value;
+              this.adminDataModifiedFieldCount = 0;
+              this.adminPrivilegesWereModified = false;
+              this.toastService.show("Cambios guardados con éxito.", "bg-success");
+            },
+            error: err => console.error(err)
+          })
+        );
       }
     }
+  }
 
-    registrationRequest.privileges = selectedPrivileges;
+  onDisableAdmin() {
+    const modal: NgbModalRef = this.modalService.open(AlertComponent, {centered: true, size: 'lg'});
+    modal.componentInstance.isAConfirm = true;
+    modal.componentInstance.title = "Deshabilitar administrador";
+    modal.componentInstance.bodyString = {
+      textParagraphs: [
+        "¿Seguro quieres deshabilitar esta cuenta de administrador?"
+      ]
+    };
+    modal.componentInstance.confirmBehavior = () => {
+      this.subs.add(
+        this.adminService.disableAdminAccount(this.adminId).subscribe({
+          next: () => {
+            this.admin.enabled = false;
+            this.toastService.show("Cuenta de administrador deshabilitada con éxito.", "bg-success");
+          },
+          error: err => console.error(err)
+        })
+      );
+    };
+  }
 
-    this.subs.add(this.adminService.registerAdmin(registrationRequest).subscribe({
-      next: value => {
-        console.log(value);
-        this.toastService.show("Admin registrado con éxito", "bg-success");
-      },
-      error: err => {
-        console.error(err);
-      }
-    }));
+  onEnableAdmin() {
+    const modal: NgbModalRef = this.modalService.open(AlertComponent, {centered: true, size: 'lg'});
+    modal.componentInstance.isAConfirm = true;
+    modal.componentInstance.title = "Habilitar administrador";
+    modal.componentInstance.bodyString = {
+      textParagraphs: [
+        "¿Seguro quieres habilitar esta cuenta de administrador?"
+      ]
+    };
+    modal.componentInstance.confirmBehavior = () => {
+      this.subs.add(
+        this.adminService.enableAdminAccount(this.adminId).subscribe({
+          next: () => {
+            this.admin.enabled = true;
+            this.toastService.show("Cuenta de administrador habilitada con éxito.", "bg-success");
+          },
+          error: err => console.error(err)
+        })
+      );
+    };
   }
 }

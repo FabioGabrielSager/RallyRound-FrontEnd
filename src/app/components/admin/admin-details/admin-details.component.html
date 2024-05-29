@@ -6,7 +6,37 @@
       } @else {
         <h3 class="rr-dark-purple-text text-bold">Detalles de administrador</h3>
       }
-      <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSaveChanges()">
+        <div class="col-12">
+          <div class="d-flex justify-content-start row-gap-3 column-gap-5 flex-wrap">
+            <div>
+              <label class="rr-black-text form-label">Estado</label>
+              <div class="fst-italic">
+                @if(admin.enabled) {
+                  Habilitado.
+                } @else {
+                  Bloqueado.
+                }
+              </div>
+            </div>
+            <div>
+              <label class="rr-black-text form-label">Fecha de registro</label>
+              <div class="fst-italic">
+                {{admin.registrationDate | date:'d/M/yy, h:mm a' }}
+              </div>
+            </div>
+            <div>
+              <label class="rr-black-text form-label">Último ingreso</label>
+              <div class="fst-italic">
+                @if(admin.lastLoginTime) {
+                  {{ admin.lastLoginTime | date:'d/M/yy, h:mm a' }}
+                } @else {
+                  Aún no se a registrado ningún ingreso.
+                }
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="col-12 col-sm-6">
           <label for="name-input" class="rr-black-text form-label">Nombre</label>
           <input type="text" class="form-control rr-input" formControlName="name" name="name" id="name-input"
@@ -139,18 +169,26 @@
             }
           </ng-container>
         </div>
-        <div class="col-12 mt-3">
-          <button class="w-100 btn rr-btn" type="button"
-                  [disabled]="!adminPrivilegesWereModified">
-            Guardar cambios
-          </button>
-        </div>
-        <div class="col-12">
+        @if(canCurrentUserModifyAdmins) {
+          <div class="col-12 mt-3">
+            <button class="w-100 btn rr-btn" type="submit"
+                    [disabled]="!adminPrivilegesWereModified && adminDataModifiedFieldCount == 0">
+              Guardar cambios
+            </button>
+          </div>
+        }
+        <div class="col-12 d-none">
           <button class="w-100 btn rr-btn" type="button">Ver registros de actividad</button>
         </div>
-        <div class="col-12">
-          <button class="w-100 btn btn-danger" type="button">Bloquear</button>
-        </div>
+        @if(canCurrentUserDisableAdmins && !admin.requesterAccount) {
+          <div class="col-12">
+            @if(admin.enabled) {
+              <button class="w-100 btn btn-danger" type="button" (click)="onDisableAdmin()">Deshabilitar</button>
+            } @else {
+              <button class="w-100 btn btn-success" type="button" (click)="onEnableAdmin()">Habilitar</button>
+            }
+          </div>
+        }
       </form>
     </div>
   </div>

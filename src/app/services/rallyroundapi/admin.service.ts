@@ -7,6 +7,7 @@ import {PrivilegeCategoryDto} from "../../models/user/auth/privilege/privilegeCa
 import {AdminRegistrationRequest} from "../../models/user/admin/adminRegistrationRequest";
 import {AuthResponse} from "../../models/user/auth/AuthResponse";
 import {AdminCompleteDataDto} from "../../models/user/admin/adminCompleteDataDto";
+import {AdminModificationRequest} from "../../models/user/admin/adminModificationRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,18 @@ export class AdminService {
 
   registerAdmin(request: AdminRegistrationRequest): Observable<AuthResponse> {
     return this.httpClient.post<AuthResponse>(this.baseUrl + "/register", request);
+  }
+
+  modifyAdmin(request: AdminModificationRequest): Observable<AdminCompleteDataDto> {
+    return this.httpClient.put<AdminCompleteDataDto>(this.baseUrl + "/modify", request);
+  }
+
+  disableAdminAccount(adminId: string) {
+    return this.httpClient.delete(this.baseUrl + "/disable/" + adminId);
+  }
+
+  enableAdminAccount(adminId: string) {
+    return this.httpClient.put(this.baseUrl + "/enable/" + adminId, {});
   }
 
   getRegisteredAdmins(name: string | undefined, lastName: string | undefined, enabled: boolean | undefined,
