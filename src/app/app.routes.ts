@@ -22,8 +22,38 @@ import {UserEventComponent} from "./components/events/user-event/user-event.comp
 import {
   ParticipantAccountDetailsComponent
 } from "./components/participants/participant-account-details/participant-account-details.component";
+import {AdminOutletComponent} from "./components/admin/admin-outlet/admin-outlet.component";
+import {AdminHomeComponent} from "./components/admin/admin-home/admin-home.component";
+import {RegisterAdminComponent} from "./components/admin/register-admin/register-admin.component";
+import {
+  OverUsersActionsMenuComponent
+} from "./components/admin/over-users-actions-menu/over-users-actions-menu.component";
+import {RegisteredAdminsComponent} from "./components/admin/registered-admins/registered-admins.component";
+import {AdminDetailsComponent} from "./components/admin/admin-details/admin-details.component";
 
 export const routes: Routes = [
+  {
+    path: 'admin',
+    children: [
+      {
+        path: 'actions',
+        component: AdminOutletComponent,
+        children: [
+          {
+            path: 'users',
+            outlet: 'admin',
+            children: [
+              {path: '', component: OverUsersActionsMenuComponent},
+              {path: 'admin/register', component: RegisterAdminComponent},
+              {path: 'admins', component: RegisteredAdminsComponent},
+              {path: 'admin/:adminId', component: AdminDetailsComponent}
+            ]
+          }
+        ]
+      },
+      {path: 'home/:name', component: AdminHomeComponent},
+    ]
+  },
   {
     path: 'participant',
     children: [

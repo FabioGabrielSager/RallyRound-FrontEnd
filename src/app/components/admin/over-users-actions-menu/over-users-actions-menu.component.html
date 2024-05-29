@@ -1,0 +1,20 @@
+<div class="container-fluid vh-100 d-flex justify-content-center">
+  <div id="menu-container" class="align-self-center">
+    <h1 class="text-bold rr-dark-purple-text text-center">Usuarios</h1>
+    <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
+    <div class="row row-cols-1 gy-1 mt-2">
+      <div class="col" *hasPrivilege="'REGISTER_ADMIN'">
+        <button class="btn rr-btn w-100"
+                [routerLink]="['/admin/', 'actions', {outlets: {admin: ['users','admin','register']}}]">
+          Registrar administrador
+        </button>
+      </div>
+      <div class="col" *hasPrivilege="'READ_ADMINS'"
+           [routerLink]="['/admin/', 'actions', {outlets: {admin: ['users','admins']}}]">
+        <button class="btn rr-btn w-100">
+          Ver administradores registrados
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,10 +19,13 @@ export class AuthService {
   private baseUrl: string = environment.RR_API_BASE_URL + "/auth";
   currentUserLoginOn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentUserLoginOnToken: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  currentUserLoginOnPrivileges: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   constructor() {
     this.currentUserLoginOn=new BehaviorSubject<boolean>(sessionStorage.getItem("token")!=null);
     this.currentUserLoginOnToken=new BehaviorSubject<string>(sessionStorage.getItem("token") || "");
+    this.currentUserLoginOnPrivileges=
+      new BehaviorSubject<string[]>(JSON.parse(sessionStorage.getItem("privileges") || "[]"));
   }
 
   setParticipantRegistrationRequestData(data: ParticipantRegistrarionRequest) {
@@ -68,14 +71,18 @@ export class AuthService {
     });
   }
 
-  login(loginRequest: LoginRequest): Observable<String> {
-    return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/login", loginRequest).pipe(
+  login(loginRequest: LoginRequest): Observable<{ username: string, roles: string[] }> {
+    sessionStorage.removeItem("token");
+    this.currentUserLoginOnToken.next("");
+    return this.httpClient.post<AuthResponse>(this.baseUrl + "/login", loginRequest).pipe(
       tap(authResponse => {
         sessionStorage.setItem("token", authResponse.token);
+        sessionStorage.setItem("privileges", JSON.stringify(authResponse.privileges));
         this.currentUserLoginOnToken.next(authResponse.token);
+        this.currentUserLoginOnPrivileges.next(authResponse.privileges);
         this.currentUserLoginOn.next(true);
       }),
-      map(authResponse => authResponse.username)
+      map(authResponse => { return {username: authResponse.username, roles: authResponse.userRoles} })
     );
   }
 

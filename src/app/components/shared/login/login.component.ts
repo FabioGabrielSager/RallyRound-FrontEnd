@@ -47,9 +47,13 @@ export class LoginComponent implements OnDestroy{
 
     this.loginSub = this.authService.login(loginRequest).subscribe(
       {
-        next: username => {
+        next: (user: {username: string, roles: string[]}) => {
           // Redirects to user home
-          this.router.navigate(["/participant/home/" + username]);
+          if(user.roles.includes("PARTICIPANT")) {
+            this.router.navigate(["/participant/home", user.username]);
+          } else if(user.roles.includes("ADMIN")) {
+            this.router.navigate(["/admin/home", user.username]);
+          }
         },
         error: err => {
           if(err.status === 403) {

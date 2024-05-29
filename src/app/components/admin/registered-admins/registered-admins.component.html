@@ -1,0 +1,116 @@
+@if(haveInitialValues){
+  <div class="container mb-3 mt-3 table-responsive">
+    <h2 class="text-bold rr-dark-purple-text">Tu Cuenta</h2>
+    <table class="table table-hover table-borderless">
+      <tbody>
+      <tr (click)="onClickAdmin(currentLoginOnAdminAccount.id)">
+        <td>
+          {{ currentLoginOnAdminAccount.name }}, {{ currentLoginOnAdminAccount.lastName }}
+        </td>
+        <td>
+          {{ currentLoginOnAdminAccount.department }}
+        </td>
+        <td>
+          {{ currentLoginOnAdminAccount.lastLoginTime | date:'d/M/yy, h:mm a' }}
+        </td>
+        <td>
+          <div class="d-flex justify-content-center pe-5">
+            @if (currentLoginOnAdminAccount.enabled) {
+              <i class="bi bi-check-circle text-success" style="font-size: 1.3rem"></i>
+            } @else {
+              <i class="bi bi-x-circle text-danger" style="font-size: 1.3rem"></i>
+            }
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <h2 class="text-bold rr-dark-purple-text">Administradores</h2>
+
+    <form [formGroup]="filtersForm" class="overflow-x-auto p-2" (ngSubmit)="onSubmit()">
+      <div class="d-flex justify-content-start column-gap-2">
+        <div #dateDropdown="ngbDropdown" ngbDropdown container="body">
+          <button type="button" class="btn border rr-border-primary-color" ngbDropdownToggle>
+            Fecha de registro
+          </button>
+          <div ngbDropdownMenu class="rr-bg-primary">
+            <div class="px-4 py-3">
+              <div class="mb-3">
+                <label class="form-label align-self-center">Desde</label>
+                <input type="date" class="form-control rr-input" formControlName="regDateFrom" style="min-width: 150px">
+              </div>
+              <div class="mb-3">
+                <label class="form-label align-self-center">Hasta</label>
+                <input type="date" class="form-control rr-input" formControlName="regDateTo" style="min-width: 150px">
+              </div>
+              <button type="button" class="btn rr-btn" (click)="dateDropdown.close()">Aceptar</button>
+            </div>
+          </div>
+        </div>
+        <input type="text" class="form-control rr-input" formControlName="name" placeholder="Nombre"
+               style="min-width: 90px">
+        <input type="text" class="form-control rr-input" formControlName="lastName" placeholder="Apellido"
+               style="min-width: 100px">
+        <label for="department-select" class="rr-black-text form-label">Departamento</label>
+        <select type="text" id="department-select" class="form-select rr-input" formControlName="department"
+                style="min-width: 150px">
+          @if(!filtersForm.controls['department'].touched) {
+            <option value="" selected disabled class="rr-bg-primary">Presione para desplegar</option>
+          }
+          @for (department of departments; track department) {
+            <option [value]="department" class="rr-bg-primary">{{department}}</option>
+          }
+        </select>
+        <div class="form-check align-self-center">
+          <input type="checkbox" class="form-check-input rr-checkbox" formControlName="enabled">
+          <label>Habilitado</label>
+        </div>
+      </div>
+      <button class="btn rr-btn mt-2" style="position: sticky; left: 0">Filtrar</button>
+    </form>
+
+    <table class="table table-hover table-borderless">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Departamento</th>
+        <th scope="col">Ultimo ingreso</th>
+        <th scope="col">Habilitado</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (admin of admins; track admin.id; let i = $index) {
+          @if (!admin.requesterAccount) {
+            <tr (click)="onClickAdmin(admin.id)">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>
+                {{ admin.name }}, {{ admin.lastName }}
+              </td>
+              <td>
+                {{ admin.department }}
+              </td>
+              <td>
+                @if(admin.lastLoginTime) {
+                  {{ admin.lastLoginTime | date:'short' }}
+                } @else {
+                  Aún no ingresó
+                }
+              </td>
+              <td>
+                <div class="d-flex justify-content-center pe-5">
+                  @if (admin.enabled) {
+                    <i class="bi bi-check-circle text-success" style="font-size: 1.3rem"></i>
+                  } @else {
+                    <i class="bi bi-x-circle text-danger" style="font-size: 1.3rem"></i>
+                  }
+                </div>
+
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+}

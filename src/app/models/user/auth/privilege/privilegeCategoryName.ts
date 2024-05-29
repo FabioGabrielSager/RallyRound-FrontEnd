@@ -1,0 +1,5 @@
+export enum PrivilegeCategoryName {
+  OVER_USERS = 'OVER_USERS',
+  OVER_STATISTICS = 'OVER_STATISTICS',
+  OVER_EVENTS = 'OVER_EVENTS'
+}

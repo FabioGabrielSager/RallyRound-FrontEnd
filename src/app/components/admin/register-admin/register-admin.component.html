@@ -1,6 +1,6 @@
-<div class="container d-flex justify-content-center mb-3">
+<div class="container d-flex justify-content-center mb-3 mt-3">
   <div id="form-container" class="align-self-center">
-    <h3 id="create-account-title" class="rr-dark-purple-text text-bold">Información personal.</h3>
+    <h3 id="create-account-title" class="rr-dark-purple-text text-bold">Registrar Administrador</h3>
     <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="col-12 col-sm-6">
         <label for="name-input" class="rr-black-text form-label">Nombre</label>
@@ -30,34 +30,6 @@
             }
           </div>
         }
-      </div>
-      <div class="col-12">
-        <div class="position-relative">
-          <label for="locality-input" class="rr-black-text form-label">Localidad</label>
-          <textarea type="text" class="form-control rr-input" formControlName="locality" name="locality"
-                    id="locality-input" placeholder="Ej.: Provincia, departamento, localidad..."
-                    aria-describedby="localidad" [ngClass]="formattedNames.length > 0
-                    ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
-                    [class.is-invalid]="form.controls['locality'].invalid
-                    && (form.controls['locality'].touched || form.controls['locality'].dirty)"
-                    (blur)="onBlur()"></textarea>
-
-          <rr-search-results-list (onSelectedResult)="onClickSearchResult($event)"
-                                  [resultsList]="formattedNames"/>
-
-          @if (form.controls['locality'].invalid
-          && (form.controls['locality'].touched || form.controls['locality'].dirty)) {
-            <div class="invalid-feedback">
-              @if (form.controls['locality'].hasError('required')
-              && form.controls['locality'].value == "") {
-                <span class="error-text">Este campo es requerido.</span>
-              }
-            </div>
-          }
-          @if (form.controls['locality'].value !== "" && selectedPlace == undefined) {
-            <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
-          }
-        </div>
       </div>
       <div class="col-12 col-md-6">
         <label for="birthdate-input" class="rr-black-text form-label">Fecha de nacimiento</label>
@@ -93,6 +65,43 @@
             }
             @if (form.controls['email'].hasError('email')) {
               <span class="error-text">Debe ingresar una dirección de email válida.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="email-input" class="rr-black-text form-label">Nro. Teléfono</label>
+        <input type="tel" class="form-control rr-input" formControlName="phone" name="phone" id="phone-input"
+               aria-describedby="numero de teléfono"
+               [class.is-invalid]="form.controls['phone'].invalid
+               && (form.controls['phone'].touched || form.controls['phone'].dirty)">
+        @if (form.controls['phone'].invalid
+        && (form.controls['phone'].touched || form.controls['phone'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['phone'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="department-select" class="rr-black-text form-label">Departamento</label>
+        <select type="text" id="department-select" class="form-select rr-input" formControlName="department"
+                style="min-width: 150px"
+                [class.is-invalid]="form.controls['department'].invalid
+                && (form.controls['department'].touched || form.controls['department'].dirty)">
+          @if(form.controls['department'].invalid) {
+            <option value="" selected disabled class="rr-bg-primary">Presione para desplegar</option>
+          }
+          @for (department of departments; track department) {
+            <option [value]="department" class="rr-bg-primary">{{department}}</option>
+          }
+        </select>
+        @if (form.controls['department'].invalid
+        && (form.controls['department'].touched || form.controls['department'].dirty)) {
+          <div class="invalid-feedback">
+            @if (form.controls['department'].hasError('required')) {
+              <span class="error-text">Este campo es requerido.</span>
             }
           </div>
         }
@@ -164,8 +173,36 @@
           </div>
         }
       </div>
+      <div class="col-12">
+        <label class="rr-black-text form-label">Permisos</label>
+        <ng-container formArrayName="privilegesCategories">
+          @for (categoryControl of privilegesCategoriesAsFormArray.controls; track categoryControl; let catIndex=$index) {
+            <div class="form-check" formGroupName="{{catIndex}}">
+              <input type="checkbox" [id]="catIndex" formControlName="category" class="form-check-input rr-checkbox"
+                     (change)="onClickPrivilegeCategory(categoryControl)">
+              <label [for]="catIndex">{{privilegesCategoriesMessages[adminsPrivileges[catIndex].categoryName]}}</label>
+
+              @if(privilegeCategoryControlAsFormGroup(categoryControl).controls['privileges']) {
+                <ng-container formArrayName="privileges">
+                  @for (privilegeControl of
+                    privilegeControlAsFormArray(privilegeCategoryControlAsFormGroup(categoryControl)
+                      .controls['privileges']).controls; track privilegeControl;) {
+                    <div class="form-check">
+                      <input type="checkbox" [id]="catIndex + '-' + $index" [formControlName]="$index"
+                             class="form-check-input rr-checkbox">
+                      <label [for]="$index">
+                        {{ privilegesMessages[adminsPrivileges[catIndex].privileges[$index].privilegeName] }}
+                      </label>
+                    </div>
+                  }
+                </ng-container>
+              }
+            </div>
+          }
+        </ng-container>
+      </div>
       <div class="col-12 mt-3">
-        <button class="w-100 btn rr-btn">Siguiente</button>
+        <button class="w-100 btn rr-btn" type="submit">Registrar</button>
       </div>
     </form>
   </div>

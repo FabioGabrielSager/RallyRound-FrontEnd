@@ -248,7 +248,6 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
         if (value === 0) {
           this.userModifiedData = null;
         }
-        console.log(this.userModifiedData);
       }
     ));
   }

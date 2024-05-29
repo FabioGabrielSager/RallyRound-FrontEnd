@@ -1,0 +1,34 @@
+<rr-navbar [showBrand]="true" [floatingNavbar]="true" [navBarItems]="navbarItems" itemsColor="var(--black-100)"
+           itemsIconFontSize="1.5rem" itemsTitleFontSize="1.1rem"/>
+<router-outlet name="admin"/>
+<div class="container-fluid vh-100 d-flex justify-content-center">
+  <div id="menu-container" class="align-self-center">
+    @if(username) {
+      <h1 class="rr-dark-purple-text text-center">Bienvenido de nuevo {{ username }}!</h1>
+    } @else {
+      <h1 class="rr-dark-purple-text text-center">Bienvenido de nuevo!</h1>
+    }
+    <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
+    <div class="row row-cols-1 gy-1 mt-2">
+      <div class="col" *hasPrivilege="'OVER_STATISTICS'">
+        <button class="btn rr-btn w-100 d-flex justify-content-between align-items-center">
+          <span class="flex-grow-1 text-center">Estadísticas</span>
+          <i class="bi bi-graph-up"></i>
+        </button>
+      </div>
+      <div class="col" *hasPrivilege="'OVER_USERS'">
+        <button [routerLink]="['/admin/', 'actions', {outlets: {admin: ['users']}}]"
+          class="btn rr-btn w-100 d-flex justify-content-between align-items-center">
+          <span class="flex-grow-1 text-center">Usuarios</span>
+          <i class="bi bi-people-fill"></i>
+        </button>
+      </div>
+      <div class="col" *hasPrivilege="'OVER_EVENTS'">
+        <button class="btn rr-btn w-100 d-flex justify-content-between align-items-center">
+          <span class="flex-grow-1 text-center">Eventos</span>
+          <i class="bi bi-calendar-event"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

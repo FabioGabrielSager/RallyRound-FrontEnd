@@ -1,0 +1,158 @@
+@if(adminDataHasBeenLoaded$.value) {
+  <div class="container d-flex justify-content-center mb-3 mt-3">
+    <div id="form-container" class="align-self-center">
+      @if(admin.requesterAccount) {
+        <h3 class="rr-dark-purple-text text-bold">Tu cuenta</h3>
+      } @else {
+        <h3 class="rr-dark-purple-text text-bold">Detalles de administrador</h3>
+      }
+      <form class="row row-gap-2 mt-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="col-12 col-sm-6">
+          <label for="name-input" class="rr-black-text form-label">Nombre</label>
+          <input type="text" class="form-control rr-input" formControlName="name" name="name" id="name-input"
+                 aria-describedby="nombre" [class.is-invalid]="form.controls['name'].invalid
+               && (form.controls['name'].touched || form.controls['name'].dirty)">
+          @if (form.controls['name'].invalid
+          && (form.controls['name'].touched || form.controls['name'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['name'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="col-12 col-sm-6">
+          <label for="last-name-input" class="rr-black-text form-label">Apellido</label>
+          <input type="text" class="form-control rr-input" formControlName="lastName" name="lastName" id="last-name-input"
+                 aria-describedby="apellido" [class.is-invalid]="form.controls['lastName'].invalid
+               && (form.controls['lastName'].touched || form.controls['lastName'].dirty)">
+
+          @if (form.controls['lastName'].invalid
+          && (form.controls['lastName'].touched || form.controls['lastName'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['lastName'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="birthdate-input" class="rr-black-text form-label">Fecha de nacimiento</label>
+          <input type="date" class="form-control rr-input" formControlName="birthdate" name="birthdate"
+                 id="birthdate-input" aria-describedby="fecha de nacimiento"
+                 [class.is-invalid]="form.controls['birthdate'].invalid
+               && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)">
+
+          @if (form.controls['birthdate'].invalid
+          && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['birthdate'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+              @if (form.controls['birthdate'].hasError('minimumAge')) {
+                <span class="error-text">Debe ser mayor de edad para registrarse.</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="email-input" class="rr-black-text form-label">Email</label>
+          <input type="email" class="form-control rr-input" formControlName="email" name="email" id="email-input"
+                 aria-describedby="email"
+                 [class.is-invalid]="form.controls['email'].invalid
+               && (form.controls['email'].touched || form.controls['email'].dirty)">
+
+          @if (form.controls['email'].invalid
+          && (form.controls['email'].touched || form.controls['email'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['email'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+              @if (form.controls['email'].hasError('email')) {
+                <span class="error-text">Debe ingresar una dirección de email válida.</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="email-input" class="rr-black-text form-label">Nro. Teléfono</label>
+          <input type="tel" class="form-control rr-input" formControlName="phoneNumber" name="phone" id="phone-input"
+                 aria-describedby="numero de teléfono"
+                 [class.is-invalid]="form.controls['phoneNumber'].invalid
+               && (form.controls['phoneNumber'].touched || form.controls['phoneNumber'].dirty)">
+          @if (form.controls['phoneNumber'].invalid
+          && (form.controls['phoneNumber'].touched || form.controls['phoneNumber'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['phoneNumber'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="department-select" class="rr-black-text form-label">Departamento</label>
+          <select type="text" id="department-select" class="form-select rr-input" formControlName="department"
+                  style="min-width: 150px"
+                  [class.is-invalid]="form.controls['department'].invalid
+                && (form.controls['department'].touched || form.controls['department'].dirty)">
+            @if(form.controls['department'].invalid) {
+              <option value="" selected disabled class="rr-bg-primary">Presione para desplegar</option>
+            }
+            @for (department of departments; track department) {
+              <option [value]="department" class="rr-bg-primary">{{department}}</option>
+            }
+          </select>
+          @if (form.controls['department'].invalid
+          && (form.controls['department'].touched || form.controls['department'].dirty)) {
+            <div class="invalid-feedback">
+              @if (form.controls['department'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="col-12">
+          <label class="rr-black-text form-label">Permisos</label>
+          <ng-container formArrayName="privilegesCategories">
+            @for (categoryControl of privilegesCategoriesAsFormArray.controls; track categoryControl; let catIndex=$index) {
+              <div class="form-check" formGroupName="{{catIndex}}">
+                <input type="checkbox" [id]="catIndex" formControlName="category" class="form-check-input rr-checkbox"
+                       (change)="onClickPrivilegeCategory(categoryControl, catIndex)">
+                <label [for]="catIndex">{{privilegesCategoriesMessages[adminsPrivileges[catIndex].categoryName]}}</label>
+
+                @if(privilegeCategoryControlAsFormGroup(categoryControl).controls['privileges']) {
+                  <ng-container formArrayName="privileges">
+                    @for (privilegeControl of
+                      privilegeControlAsFormArray(privilegeCategoryControlAsFormGroup(categoryControl)
+                        .controls['privileges']).controls; track privilegeControl;) {
+                      <div class="form-check">
+                        <input type="checkbox" [id]="catIndex + '-' + $index" [formControlName]="$index"
+                               class="form-check-input rr-checkbox">
+                        <label [for]="$index">
+                          {{ privilegesMessages[adminsPrivileges[catIndex].privileges[$index].privilegeName] }}
+                        </label>
+                      </div>
+                    }
+                  </ng-container>
+                }
+              </div>
+            }
+          </ng-container>
+        </div>
+        <div class="col-12 mt-3">
+          <button class="w-100 btn rr-btn" type="button"
+                  [disabled]="!adminPrivilegesWereModified">
+            Guardar cambios
+          </button>
+        </div>
+        <div class="col-12">
+          <button class="w-100 btn rr-btn" type="button">Ver registros de actividad</button>
+        </div>
+        <div class="col-12">
+          <button class="w-100 btn btn-danger" type="button">Bloquear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+

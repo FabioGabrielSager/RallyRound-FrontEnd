@@ -1,0 +1,9 @@
+table {
+  border-collapse:separate;
+  border:solid var(--rr-secondary) 5px;
+  border-radius:6px;
+}
+
+table > :not(caption) > * > * {
+  background-color: var(--rr-secondary);
+}
