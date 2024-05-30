@@ -192,7 +192,6 @@ export class RegisterAdminComponent implements OnInit,OnDestroy {
           for(let j=0; j < privilegesFormArray.length; j++) {
             if(!privilegesFormArray.controls[j].value) {
               selectedPrivileges[i].privileges.splice(j,1);
-              console.log(selectedPrivileges, this.adminsPrivileges);
             }
           }
         }
@@ -203,7 +202,6 @@ export class RegisterAdminComponent implements OnInit,OnDestroy {
 
     this.subs.add(this.adminService.registerAdmin(registrationRequest).subscribe({
       next: value => {
-        console.log(value);
         this.toastService.show("Admin registrado con éxito", "bg-success");
       },
       error: err => {
