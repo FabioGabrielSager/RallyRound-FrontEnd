@@ -61,6 +61,10 @@ export class EventService {
       );
   }
 
+  cancelEvent(eventId: string) {
+    return this.httpClient.patch(this.baseUrlEventEndpoint + "/cancel/" + eventId, {});
+  }
+
   findEvents(activity: string | undefined, neighborhood: string | undefined, locality: string | undefined,
              adminSubdistrict: string | undefined, adminDistrict: string | undefined, dateFrom: string | null,
              dateTo: string | null, showOnlyAvailableEvents: boolean | undefined,
