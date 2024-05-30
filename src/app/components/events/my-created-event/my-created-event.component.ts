@@ -24,7 +24,7 @@ import {Subscription} from "rxjs";
   templateUrl: './my-created-event.component.html',
   styleUrl: './my-created-event.component.css'
 })
-export class MyCreatedEventComponent implements OnInit {
+export class MyCreatedEventComponent implements OnInit, OnDestroy {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private eventService: EventService = inject(EventService);
   private toastService: ToastService = inject(ToastService);
@@ -108,5 +108,9 @@ export class MyCreatedEventComponent implements OnInit {
         })
       );
     };
+  }
+
+  onClickModifyEvent() {
+    this.router.navigate(["events", { outlets: { events: ["myevents", "modify", this.eventId]}}]);
   }
 }

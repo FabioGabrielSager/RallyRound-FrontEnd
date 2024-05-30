@@ -132,9 +132,11 @@
 
         </div>
       }
-      <div class="col-12">
-        <button class="btn btn-success w-100" disabled>Modificar</button>
-      </div>
+      @if(event.state === EventState.WAITING_FOR_PARTICIPANTS) {
+        <div class="col-12">
+          <button class="btn btn-success w-100" (click)="onClickModifyEvent()">Modificar</button>
+        </div>
+      }
       <div class="col-12">
         <button class="btn btn-danger w-100" (click)="onClickCancelEvent()">Cancelar evento</button>
       </div>

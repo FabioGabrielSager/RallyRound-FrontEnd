@@ -11,6 +11,7 @@ import {CachedEvent} from "../../models/event/cachedEvent";
 import {EventResponseForEventCreators} from "../../models/event/eventResponseForEventCreators";
 import {EventResponseForParticipants} from "../../models/event/eventResponseForParticipants";
 import {EventFeedbackRequest} from "../../models/event/eventFeedbackRequest";
+import {EventModificationRequest} from "../../models/event/eventModificationRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,24 @@ export class EventService {
             this._lastRequestedEvent.isEventCreatedByCurrentUser = true;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
+        })
+      );
+  }
+
+  modifyEvent(request: EventModificationRequest): Observable<EventResponseForEventCreators> {
+    return this.httpClient.patch<EventResponseForEventCreators>(this.baseUrlEventEndpoint + "/modify/", request)
+      .pipe(
+        tap(value => {
+          if (value != null) {
+            this._lastRequestedEvent.event = value as EventResponseForParticipants;
+            this._lastRequestedEvent.isEventCreatedByCurrentUser = true;
+            sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
+          }
+        }),
+        map(value => {
+          if(value.startingHours.length > 1 && value.startingHoursTimesVoted != null)
+            value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          return value;
         })
       );
   }

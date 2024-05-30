@@ -30,6 +30,7 @@ import {
 } from "./components/admin/over-users-actions-menu/over-users-actions-menu.component";
 import {RegisteredAdminsComponent} from "./components/admin/registered-admins/registered-admins.component";
 import {AdminDetailsComponent} from "./components/admin/admin-details/admin-details.component";
+import {ModifyEventComponent} from "./components/events/modify-event/modify-event.component";
 
 export const routes: Routes = [
   {
@@ -86,7 +87,8 @@ export const routes: Routes = [
         outlet: 'events',
         children: [
           {path: '', component: MyEventsComponent},
-          {path: ':id', component: UserEventComponent}
+          {path: ':id', component: UserEventComponent},
+          {path: 'modify/:id', component: ModifyEventComponent}
         ]
       },
     ]
