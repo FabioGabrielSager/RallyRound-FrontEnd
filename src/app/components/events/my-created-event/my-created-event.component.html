@@ -34,10 +34,9 @@
               @for (h of event.startingHours; track h) {
                 <div class="d-inline-block border border-success rounded-5 pe-2 ps-2 me-2"
                      style="font-size: 0.85rem"
-                     [ngClass]="h[0] === event.selectedStartingHour[0] && h[1] === event.selectedStartingHour[1]
-                    ? 'border-success' : 'rr-border-primary-color'">
-                  <span>{{ h | hour }}</span>
-                  @if (h[0] === event.selectedStartingHour[0] && h[1] === event.selectedStartingHour[1]) {
+                     [ngClass]="h === event.selectedStartingHour ? 'border-success' : 'rr-border-primary-color'">
+                  <span>{{ h }}</span>
+                  @if (h === event.selectedStartingHour) {
                     <i class="bi bi-check-circle text-success ms-1"></i>
                   }
                   {{ getHourVotes(h) }}
@@ -47,7 +46,7 @@
               @for (h of event.startingHours; track h) {
                 <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-2"
                      style="font-size: 0.85rem">
-                  <span>{{ h | hour }}</span>
+                  <span>{{ h }}</span>
                 </div>
               }
             }

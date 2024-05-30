@@ -1,6 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DatePipe} from "@angular/common";
-import {HourPipe} from "../../../pipe/hour.pipe";
 import {EventResumeDto} from "../../../models/event/eventResumeDto";
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
 import {EventState} from "../../../models/event/eventState";
@@ -9,8 +8,7 @@ import {EventState} from "../../../models/event/eventState";
   selector: 'rr-event-resume-card',
   standalone: true,
   imports: [
-    DatePipe,
-    HourPipe
+    DatePipe
   ],
   templateUrl: './event-resume-card.component.html',
   styleUrl: './event-resume-card.component.css'

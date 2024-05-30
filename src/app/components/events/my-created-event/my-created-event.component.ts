@@ -2,12 +2,9 @@ import {Component, inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
 import {EventResponse} from "../../../models/event/eventResponse";
 import {EventService} from "../../../services/rallyroundapi/event.service";
-import {CreateEventRequest} from "../../../models/event/createEventRequest";
 import {DatePipe, NgClass} from "@angular/common";
 import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
-import {CreateEventComponent} from "../create-event/create-event.component";
 import {AddressEntity} from "../../../models/location/AddressEntity";
-import {HourPipe} from "../../../pipe/hour.pipe";
 import {ToastService} from "../../../services/toast.service";
 import {EventState} from "../../../models/event/eventState";
 import {EventResponseForEventCreators} from "../../../models/event/eventResponseForEventCreators";
@@ -20,7 +17,6 @@ import {UserPublicProfileComponent} from "../../participants/user-public-profile
   standalone: true,
   imports: [
     DatePipe,
-    HourPipe,
     NgbTooltip,
     NgClass,
     UserPublicProfileComponent
@@ -66,7 +62,7 @@ export class MyCreatedEventComponent implements OnInit {
   }
 
   getHourVotes(h: string) {
-    return this.event.startingHoursTimesVoted.get(new HourPipe().transform(h));
+    return this.event.startingHoursTimesVoted.get(h);
   }
 
   onClickUser(userId: string) {

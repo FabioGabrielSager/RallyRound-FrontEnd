@@ -12,7 +12,7 @@
             <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2
                         d-flex align-items-center"
                  style="font-size: 0.85rem">
-              <span>{{ h | hour }}</span>
+              <span>{{ h }}</span>
             </div>
           }
         </div>
@@ -20,7 +20,7 @@
           <span>Inscripción: ${{ eventResume.inscriptionPrice }}</span><br>
           <span>Cantidad: {{ eventResume.participantsCount }}/{{ eventResume.participantsLimit }}</span>
           <div class="d-flex align-items-center flex-wrap row-gap-2 column-gap-2 overflow-y-auto"
-               style="max-height: 3rem; font-size: 1.1rem">
+               style="max-width: 18rem; max-height: 3rem; font-size: 1.1rem">
             @if (eventResume.participantsLimit < 50) {
               @for (_ of Array.from({length: eventResume.participantsLimit}); track _; let i = $index) {
                 @if (i < eventResume.participantsCount) {

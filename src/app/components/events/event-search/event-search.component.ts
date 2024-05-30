@@ -17,7 +17,6 @@ import {
 import {Place} from "../../../models/location/place";
 import {MapApiService} from "../../../services/location/map-api.service";
 import {ToastService} from "../../../services/toast.service";
-import {HourPipe} from "../../../pipe/hour.pipe";
 import {EventsResumesPage} from "../../../models/event/EventsResumesPage";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {Address} from "../../../models/location/address";
@@ -33,7 +32,6 @@ import {EventResumeCardComponent} from "../event-resume-card/event-resume-card.c
     SearchResultsListComponent,
     NgClass,
     NgbTooltip,
-    HourPipe,
     NgbPagination,
     NgbPaginationPages,
     NgbPaginationNext,

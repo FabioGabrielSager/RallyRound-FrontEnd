@@ -55,11 +55,10 @@
                 <div class="d-inline-block border border-success rounded-5 pe-2 ps-2 me-2"
                      style="font-size: 0.85rem"
                      [ngClass]="(event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED)
-                    && h[0] === event.selectedStartingHour[0] && h[1] === event.selectedStartingHour[1]
-                    ? 'border-success' : 'rr-border-primary-color'">
-                  <span>{{ h | hour }}</span>
+                    && h === event.selectedStartingHour ? 'border-success' : 'rr-border-primary-color'">
+                  <span>{{ h }}</span>
                   @if (event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED
-                  && h[0] === event.selectedStartingHour[0] && h[1] === event.selectedStartingHour[1]) {
+                  && h == event.selectedStartingHour) {
                     <i class="bi bi-check-circle text-success ms-1"></i>
                   }
                   {{ getHourVotes(h) }}
@@ -69,7 +68,7 @@
               @for (h of event.startingHours; track h) {
                 <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2 me-2"
                      style="font-size: 0.85rem">
-                  <span>{{ h | hour }}</span>
+                  <span>{{ h }}</span>
                 </div>
               }
             }
@@ -229,7 +228,7 @@
       <div class="d-flex align-items-center p-0 border rr-border-primary-color rounded-5 pe-2 ps-2 me-2">
         <input type="radio" class="form-check-input rr-radio me-2 mt-0" [id]="$index" [value]="hour"
                [(ngModel)]="selectedHour">
-        <label [for]="$index">{{ hour | hour }}</label>
+        <label [for]="$index">{{ hour }}</label>
       </div>
     }
   </div>

@@ -8,7 +8,7 @@ export interface EventResponse {
   activity: string;
   description: string;
   eventSchedules: string;
-  duration: string;
+  duration: number;
   durationUnit: string;
   inscriptionPrice: number;
   date: string;

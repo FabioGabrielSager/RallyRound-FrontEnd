@@ -21,7 +21,6 @@ import {CropperModalResult, ImageCropperModalComponent} from "../../shared/image
 import {DomSanitizer} from "@angular/platform-browser";
 import {FavoriteActivitiesModalComponent} from "../favorite-activities-modal/favorite-activities-modal.component";
 import {arraysEqual} from "../../../utils/arrays-utils";
-import {HourPipe} from "../../../pipe/hour.pipe";
 
 @Component({
   selector: 'rr-participant-account-details',

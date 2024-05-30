@@ -1,6 +1,5 @@
 import {Component, inject, Input, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {DatePipe, NgClass} from "@angular/common";
-import {HourPipe} from "../../../pipe/hour.pipe";
 import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {ParticipantResume} from "../../../models/user/participant/participantResume";
@@ -25,7 +24,6 @@ import {EventFeedbackModalComponent} from "../event-feedback-modal/event-feedbac
   standalone: true,
   imports: [
     DatePipe,
-    HourPipe,
     FormsModule,
     NgClass,
     NgbTooltip,
@@ -180,7 +178,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       modal.componentInstance.bodyTemplate = this.hourSelector;
       modal.componentInstance.title = "Elige el horario del evento que mejor se ajuste a tí.";
       modal.componentInstance.confirmBehavior = () => {
-        this.eventInscription.completeEventInscription(this.eventId, new HourPipe().transform(this.selectedHour)).subscribe(
+        this.eventInscription.completeEventInscription(this.eventId, this.selectedHour).subscribe(
           {
             next: value => {
               this.toastService.show("Inscripción completada",
@@ -195,7 +193,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   }
 
   getHourVotes(h: string) {
-    return this.event.startingHoursTimesVoted.get(new HourPipe().transform(h));
+    return this.event.startingHoursTimesVoted.get(h);
   }
 
   onClickUser(userId: string) {
