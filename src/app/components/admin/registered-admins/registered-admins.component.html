@@ -54,9 +54,7 @@
         <label for="department-select" class="rr-black-text form-label">Departamento</label>
         <select type="text" id="department-select" class="form-select rr-input" formControlName="department"
                 style="min-width: 150px">
-          @if(!filtersForm.controls['department'].touched) {
-            <option value="" selected disabled class="rr-bg-primary">Presione para desplegar</option>
-          }
+          <option value="" selected class="rr-bg-primary">Todos</option>
           @for (department of departments; track department) {
             <option [value]="department" class="rr-bg-primary">{{department}}</option>
           }
