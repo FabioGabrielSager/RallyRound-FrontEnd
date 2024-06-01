@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
-import {Observable, tap} from "rxjs";
+import {map, Observable, tap} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../models/event/createEventInscriptionResponse";
 import {EventInscriptionResponse} from "../../models/event/EventInscriptionResponse";
 import {UserPublicDataDto} from "../../models/user/participant/userPublicDataDto";
@@ -23,6 +23,13 @@ export class ParticipantService {
   createEventInscription(eventId: string): Observable<CreateEventInscriptionResponse> {
     return this.httpClient.post<CreateEventInscriptionResponse>(
       `${this.baseUrl}/events/${eventId}/inscriptions/create`, {});
+  }
+
+  retrieveEventInscriptionPaymentLink(eventId: string): Observable<string> {
+    return this.httpClient.get<{ link:string }>(`${this.baseUrl}/events/${eventId}/inscriptions/paymentlink`)
+      .pipe(
+        map((payment: { link:string }) => payment.link)
+      );
   }
 
   completeEventInscription(eventId: string, selectedHour: string): Observable<EventInscriptionResponse> {

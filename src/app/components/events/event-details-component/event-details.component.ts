@@ -172,6 +172,24 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   }
 
   onCompleteInscription() {
+    if(this.event.eventInscriptionStatus === EventInscriptionStatus.INCOMPLETE_MISSING_PAYMENT_AND_HOUR_VOTE) {
+      this.eventInscription.retrieveEventInscriptionPaymentLink(this.eventId).subscribe({
+        next: (paymentLink: string) => {
+            const width = 600;
+            const height = 800;
+            const left = window.innerWidth / 2 - width / 2;
+            const top = window.innerHeight / 2 - height / 2;
+            const features =
+              `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
+            window.open(paymentLink, '_blank', features);
+            console.log(paymentLink);
+        },
+        error: () => {
+          this.toastService.show("Hubo un error al intentar recuperar el link de pago.", "bg-danger");
+        }
+      })
+    }
+
     if(this.event.eventInscriptionStatus === EventInscriptionStatus.INCOMPLETE_MISSING_HOUR_VOTE) {
       const modal: NgbModalRef = this.modalService.open(AlertComponent, {});
       modal.componentInstance.isAConfirm = true;
@@ -180,7 +198,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       modal.componentInstance.confirmBehavior = () => {
         this.eventInscription.completeEventInscription(this.eventId, this.selectedHour).subscribe(
           {
-            next: value => {
+            next: () => {
               this.toastService.show("Inscripción completada",
               "bg-success");
               location.reload();
