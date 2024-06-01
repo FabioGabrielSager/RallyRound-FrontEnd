@@ -1,0 +1,34 @@
+<div class="rr-bg-secondary rounded-2">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Notificaciones</h4>
+        <button type="button" class="btn-close" aria-label="Close"
+                (click)="activeModal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body overflow-y-auto" style="max-height: 500px">
+        @if (notifications.length > 0) {
+            @for (notification of notifications; track notification) {
+                <div class="card mb-3 w-100 rounded-5 rr-bg-primary">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn-close" aria-label="Close"
+                                    (click)="onCloseNotification($index)"></button>
+                        </div>
+                        <h4 class="card-title text-bold rr-dark-purple-text"
+                            style="word-break: break-word">{{ notification.title }}</h4>
+                        <p class="card-text">{{ notification.message }}</p>
+                        <div class="d-flex align-items-end flex-column">
+                            <p class="card-text fst-italic">
+                                <small>{{ notification.timestamp | date: "d/M/yy, h:mm a" }}</small></p>
+                        </div>
+                        <button class="btn rr-btn" (click)="onSeeEvent(notification)">Ver evento</button>
+                    </div>
+                </div>
+            }
+        } @else {
+          <div class="d-flex align-items-center flex-column">
+            <i class="bi bi-bell-slash" style="font-size: 4rem"></i>
+            <h5 class="text-bold text-center">No has recibido ningúna notificación nueva.</h5>
+          </div>
+        }
+    </div>
+</div>

@@ -20,12 +20,14 @@ export class AuthService {
   currentUserLoginOn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentUserLoginOnToken: BehaviorSubject<string> = new BehaviorSubject<string>("");
   currentUserLoginOnPrivileges: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  currentUserLoginOnNotificationTrayId: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor() {
     this.currentUserLoginOn=new BehaviorSubject<boolean>(sessionStorage.getItem("token")!=null);
     this.currentUserLoginOnToken=new BehaviorSubject<string>(sessionStorage.getItem("token") || "");
     this.currentUserLoginOnPrivileges=
       new BehaviorSubject<string[]>(JSON.parse(sessionStorage.getItem("privileges") || "[]"));
+    this.currentUserLoginOnNotificationTrayId=new BehaviorSubject<string>(sessionStorage.getItem("notificationTrayId") || "");
   }
 
   setParticipantRegistrationRequestData(data: ParticipantRegistrarionRequest) {
@@ -58,8 +60,10 @@ export class AuthService {
     return this.httpClient.post<AuthResponse>(this.baseUrl + "/participant/confirm/email", request).pipe(
       tap(authResponse => {
         sessionStorage.setItem("token", authResponse.token);
+        sessionStorage.setItem("notificationTrayId", authResponse.notificationTrayId);
         this.currentUserLoginOnToken.next(authResponse.token);
         this.currentUserLoginOn.next(true);
+        this.currentUserLoginOnNotificationTrayId.next(authResponse.notificationTrayId);
       }),
       map(authResponse => authResponse.username)
     );
@@ -78,8 +82,12 @@ export class AuthService {
       tap(authResponse => {
         sessionStorage.setItem("token", authResponse.token);
         sessionStorage.setItem("privileges", JSON.stringify(authResponse.privileges));
+        sessionStorage.setItem("notificationTrayId", authResponse.notificationTrayId);
         this.currentUserLoginOnToken.next(authResponse.token);
         this.currentUserLoginOnPrivileges.next(authResponse.privileges);
+        if(authResponse.notificationTrayId) {
+          this.currentUserLoginOnNotificationTrayId.next(authResponse.notificationTrayId);
+        }
         this.currentUserLoginOn.next(true);
       }),
       map(authResponse => { return {username: authResponse.username, roles: authResponse.userRoles} })

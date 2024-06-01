@@ -1,0 +1,4 @@
+export enum ParticipantEventNotificationType {
+  EVENT_STATE_UPDATE = "EVENT_STATE_UPDATE",
+  EVENT_INSCRIPTION_UPDATE = "EVENT_INSCRIPTION_UPDATE"
+}

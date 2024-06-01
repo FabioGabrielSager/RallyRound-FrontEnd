@@ -25,3 +25,17 @@
     </div>
   </div>
 </div>
+
+<div class="position-absolute" style="top: 20%; left: 0.5%">
+  <button type="button" class="btn rr-btn rounded-5 position-relative" (click)="onShowNotifications()">
+    <i class="bi bi-bell" style="font-size: 1.7rem"></i>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      @if(userNotifications.length < 100) {
+        {{ userNotifications.length }}
+      } @else {
+        +99
+      }
+    <span class="visually-hidden">unread notifications</span>
+  </span>
+  </button>
+</div>
