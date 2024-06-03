@@ -185,6 +185,11 @@
                 <span class="flex-grow-1">Completar inscripción</span>
                 <i style="font-size: 1.5rem" class="bi bi-clipboard-check"></i>
               </button>
+              <button class="btn btn-danger w-100 d-flex align-items-center justify-content-between mt-2"
+                      (click)="onCancelInscription()">
+                <span class="flex-grow-1">Cancelar inscripción</span>
+                <i style="font-size: 1.5rem" class="bi bi-x-octagon"></i>
+              </button>
             } @else {
               <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
                       (click)="onJoinEvent()">
@@ -199,6 +204,15 @@
                   (click)="onSendFeedback()">
             <span class="flex-grow-1">Enviar feedback sobre el evento</span>
             <i style="font-size: 1.5rem" class="bi bi-file-earmark-text"></i>
+          </button>
+        }
+
+        @if(event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED
+        && event.state === EventState.WAITING_FOR_PARTICIPANTS || event.state === EventState.READY_TO_START) {
+          <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
+                  (click)="onLeaveEvent()">
+            <span class="flex-grow-1">Abandonar evento</span>
+            <i style="font-size: 1.5rem" class="bi bi-box-arrow-right"></i>
           </button>
         }
       </div>

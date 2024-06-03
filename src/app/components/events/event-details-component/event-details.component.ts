@@ -236,4 +236,56 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
       })
     );
   }
+
+  onCancelInscription() {
+    const modal: NgbModalRef = this.modalService.open(AlertComponent, {centered: true, size: 'lg'});
+    modal.componentInstance.isAConfirm = true;
+    modal.componentInstance.title = "Cancelar inscripción a evento.";
+    modal.componentInstance.bodyString = {
+      textParagraphs: [
+        "¿Seguro que quieres cancelar tu inscripción a evento?",
+        "Ten en cuenta que si la inscripción es paga, el dinero no te será rembolsado."
+      ]
+    };
+    modal.componentInstance.confirmBehavior = () => {
+      this.subs.add(
+        this.eventInscription.cancelEventInscription(this.eventId).subscribe({
+          next: () => {
+            this.toastService.show("Inscripción cancelada con éxito.",
+              "bg-success");
+            location.reload();
+          },
+          error: err => {
+            console.error(err);
+          }
+        })
+      );
+    }
+  }
+
+  onLeaveEvent() {
+    const modal: NgbModalRef = this.modalService.open(AlertComponent, {centered: true, size: 'lg'});
+    modal.componentInstance.isAConfirm = true;
+    modal.componentInstance.title = "Abandonar evento.";
+    modal.componentInstance.bodyString = {
+      textParagraphs: [
+        "¿Seguro que quieres abandonar evento?",
+        "Ten en cuenta que si la inscripción es paga, el dinero no te será rembolsado."
+      ]
+    };
+    modal.componentInstance.confirmBehavior = () => {
+      this.subs.add(
+        this.eventInscription.leaveEvent(this.eventId).subscribe({
+          next: () => {
+            this.toastService.show("Evento abandonado éxito.",
+              "bg-success");
+            this.router.navigate(['/events/', { outlets: { events: ['myevents']}}]);
+          },
+          error: err => {
+            console.error(err);
+          }
+        })
+      );
+    }
+  }
 }

@@ -32,6 +32,10 @@ export class ParticipantService {
       );
   }
 
+  cancelEventInscription(eventId: string) {
+    return this.httpClient.delete(`${this.baseUrl}/events/${eventId}/inscriptions/cancel`);
+  }
+
   completeEventInscription(eventId: string, selectedHour: string): Observable<EventInscriptionResponse> {
     return this.httpClient.put<EventInscriptionResponse>(
       `${this.baseUrl}/events/${eventId}/inscriptions/complete/${selectedHour}`, {});
@@ -70,5 +74,9 @@ export class ParticipantService {
       .pipe(
         tap(() => sessionStorage.removeItem("token"))
       );
+  }
+
+  leaveEvent(eventId: string){
+    return this.httpClient.delete(this.baseUrl + `/events/${eventId}/leave/`);
   }
 }
