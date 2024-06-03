@@ -313,7 +313,9 @@ export class AdminDetailsComponent implements OnInit, OnDestroy {
             }
 
             if (!value) {
-              privilegeCategoryToModify.privileges.splice(index, 1);
+              const privilege = category.privileges[index];
+              privilegeCategoryToModify.privileges
+                .splice(privilegeCategoryToModify.privileges.indexOf(privilege), 1);
             } else {
               privilegeCategoryToModify.privileges.push(category.privileges[index]);
             }

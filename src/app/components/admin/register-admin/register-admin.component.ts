@@ -191,7 +191,8 @@ export class RegisterAdminComponent implements OnInit,OnDestroy {
 
           for(let j=0; j < privilegesFormArray.length; j++) {
             if(!privilegesFormArray.controls[j].value) {
-              selectedPrivileges[i].privileges.splice(j,1);
+              const privilege = this.adminsPrivileges[i].privileges[j];
+              selectedPrivileges[i].privileges.splice(selectedPrivileges[i].privileges.indexOf(privilege),1);
             }
           }
         }
