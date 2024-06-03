@@ -144,8 +144,10 @@ export class CreateEventComponent implements OnInit {
           this.isStreetNumberCheckboxChecked = value;
           if(value) {
             this.form.controls['streetNumber'].addValidators([Validators.required]);
+            this.form.controls['streetNumber'].updateValueAndValidity();
           } else {
             this.form.controls['streetNumber'].clearValidators();
+            this.form.controls['streetNumber'].updateValueAndValidity();
           }
         }
       )

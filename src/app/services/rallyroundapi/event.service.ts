@@ -58,6 +58,11 @@ export class EventService {
             this._lastRequestedEvent.isEventCreatedByCurrentUser = true;
             sessionStorage.setItem('lastRequestedEvent', JSON.stringify(this._lastRequestedEvent));
           }
+        }),
+        map(value => {
+          if(value.startingHours.length > 1 && value.startingHoursTimesVoted != null)
+            value.startingHoursTimesVoted = new Map<string, number>(Object.entries(value.startingHoursTimesVoted));
+          return value;
         })
       );
   }
