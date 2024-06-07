@@ -253,7 +253,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
           next: () => {
             this.toastService.show("Inscripción cancelada con éxito.",
               "bg-success");
-            location.reload();
+            this.router.navigate(['/events/', { outlets: { events: ['myevents']}}]);
           },
           error: err => {
             console.error(err);
