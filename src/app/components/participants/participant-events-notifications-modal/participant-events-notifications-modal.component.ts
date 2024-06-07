@@ -37,19 +37,22 @@ export class ParticipantEventsNotificationsModalComponent implements OnDestroy {
   }
 
   onCloseNotification(notificationIndex: number): void {
-    this.subs = this.notificationService.markNotificationAsViewed(this.notifications[notificationIndex].id)
-      .subscribe({
-        error: err => console.error(err)
-        }
-      );
+    this.subs.add(
+      this.notificationService.markNotificationAsViewed(this.notifications[notificationIndex].id)
+        .subscribe({
+            error: err => console.error(err)
+          }
+        )
+    );
     this.notifications.splice(notificationIndex, 1);
   }
 
-  onSeeEvent(notification: ParticipantEventNotificationDto): void {
+  onSeeEvent(notification: ParticipantEventNotificationDto, notificationIndex: number): void {
     if(notification.participantEventCreated) {
       this.subs.add(
         this.eventService.getCurrentUserCreatedEvent(notification.impliedResourceId).subscribe({
           next: () => {
+            this.onCloseNotification(notificationIndex);
             this.router.navigate(['events', { outlets: { events: ['myevents', notification.impliedResourceId]}}]);
             this.activeModal.close();
           },
@@ -64,6 +67,7 @@ export class ParticipantEventsNotificationsModalComponent implements OnDestroy {
         this.eventService.getCurrentUserParticipatingEvent(notification.impliedResourceId).subscribe(
           {
             next: () => {
+              this.onCloseNotification(notificationIndex);
               this.router.navigate([ 'events', { outlets: { events: ['myevents', notification.impliedResourceId]}}]);
               this.activeModal.close();
             },

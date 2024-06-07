@@ -20,7 +20,7 @@
                             <p class="card-text fst-italic">
                                 <small>{{ notification.timestamp | date: "d/M/yy, h:mm a" }}</small></p>
                         </div>
-                        <button class="btn rr-btn" (click)="onSeeEvent(notification)">Ver evento</button>
+                        <button class="btn rr-btn" (click)="onSeeEvent(notification, $index)">Ver evento</button>
                     </div>
                 </div>
             }
