@@ -6,5 +6,5 @@ export interface UserPublicDataDto extends ParticipantResume {
   reputationAsEventCreator: ParticipantReputation;
   reputationAsParticipant: ParticipantReputation;
   favoriteActivities: UserFavoriteActivity[];
-  isDeletedAccount: boolean;
+  deletedAccount: boolean;
 }

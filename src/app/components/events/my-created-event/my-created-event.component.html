@@ -100,9 +100,11 @@
               </div>
             }
           }
-          <button class="inviteButton btn d-inline-block">
-            <span>+</span>
-          </button>
+          @if(event.state === EventState.WAITING_FOR_PARTICIPANTS) {
+            <button class="inviteButton btn d-inline-block" (click)="onAddUser()">
+              <span>+</span>
+            </button>
+          }
         </div>
       </div>
       @if (event.state) {
@@ -149,7 +151,19 @@
       <button type="button" class="btn position-fixed top-0 start-0" (click)="onCloseUserProfileView()">
         <i class="bi bi-arrow-left" style="font-size: 1.5rem; font-weight: bold"></i>
       </button>
-      <rr-user-public-profile [userId]="showedUserProfileId"/>
+      <rr-user-public-profile [userId]="showedUserProfileId">
+        <div class="col-12">
+          <button class="btn btn-danger w-100 d-flex align-items-center justify-content-between"
+                  (click)="onReportUserClick()">
+            <span class="flex-grow-1">Reportar</span>
+            <i class="bi bi-flag"></i></button>
+        </div>
+        <div class="col-12 d-none">
+          <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between">
+            <span class="flex-grow-1">Enviar mensaje</span>
+            <i class="bi bi-send"></i></button>
+        </div>
+      </rr-user-public-profile>
     </div>
   }
 }

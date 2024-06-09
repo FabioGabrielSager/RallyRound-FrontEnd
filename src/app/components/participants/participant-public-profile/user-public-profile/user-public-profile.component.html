@@ -1,0 +1,58 @@
+<div class="container d-flex justify-content-center align-items-center rr-black-text mt-2">
+  @if(isEventLoaded) {
+    @if (!userData.deletedAccount) {
+      <div class="row row-gap-3 column-gap-2">
+        <div class="col-12">
+          <div class="d-flex justify-content-center justify-content-md-start align-items-center
+        flex-column flex-md-row column-gap-2">
+            <div class="d-flex flex-column align-items-center">
+              <div class="guest me-1">
+                @if (userData.base64encodedProfileImage != null) {
+                  <img [src]="'data:image/*;base64, ' + userData.base64encodedProfileImage" alt="foto-invitado">
+                } @else {
+                  <div class="guest-name-container pe-1 ps-1">
+                    <span>{{ userData.name }}</span>
+                  </div>
+                }
+              </div>
+              @if (userData.base64encodedProfileImage != null) {
+                <span>{{userData.name}}</span>
+              }
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-start mt-2">
+              <h5 class="rr-dark-purple-text text-bold">Reputación: </h5>
+              @if (userData.reputationAsEventCreator) {
+                <h6 class="rr-dark-purple-text">
+                  Como creador de eventos:
+                  {{ participantReputationMessages[userData.reputationAsEventCreator] }}
+                </h6>
+              }
+              <h6 class="rr-dark-purple-text">
+                Como participante de eventos:
+                {{ participantReputationMessages[userData.reputationAsParticipant] }}
+              </h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+        </div>
+        <div class="col-12">
+          <h5 class="rr-dark-purple-text text-bold">Actividades favoritas: </h5>
+          <ul class="list-group list-group-flush">
+            @for (a of userData.favoriteActivities; track a) {
+              <li class="list-group-item rr-bg-primary border-secondary">
+                {{ a.order + 1 }}. {{ a.name }}
+              </li>
+            }
+          </ul>
+        </div>
+        <ng-content #overUserControls></ng-content>
+      </div>
+    } @else {
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <i class="bi bi-emoji-frown" style="font-size: 4rem"></i>
+        <h5 class="text-bold">Esta cuenta fue eliminada.</h5>
+      </div>
+    }
+  }
+</div>

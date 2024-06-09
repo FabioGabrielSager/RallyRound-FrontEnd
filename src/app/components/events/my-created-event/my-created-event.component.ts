@@ -8,9 +8,19 @@ import {ToastService} from "../../../services/toast.service";
 import {EventState} from "../../../models/event/eventState";
 import {EventResponseForEventCreators} from "../../../models/event/eventResponseForEventCreators";
 import {NgbModal, NgbModalRef, NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
-import {UserPublicProfileComponent} from "../../participants/user-public-profile/user-public-profile.component";
+import {UserPublicProfileComponent} from "../../participants/participant-public-profile/user-public-profile/user-public-profile.component";
 import {AlertComponent} from "../../shared/alert/alert.component";
 import {Subscription} from "rxjs";
+import {
+  ReportParticipantModalComponent
+} from "../../participants/report-participant-modal/report-participant-modal.component";
+import {
+  SearchParticipantModalComponent
+} from "../../participants/search-participant/search-participant-modal/search-participant-modal.component";
+import {
+  InviteParticipantModalComponent
+} from "../../participants/participant-public-profile/invite-participant-modal/invite-participant-modal.component";
+import {ParticipantResume} from "../../../models/user/participant/participantResume";
 
 @Component({
   selector: 'rr-my-created-event',
@@ -112,5 +122,23 @@ export class MyCreatedEventComponent implements OnInit, OnDestroy {
 
   onClickModifyEvent() {
     this.router.navigate(["events", { outlets: { events: ["myevents", "modify", this.eventId]}}]);
+  }
+
+  onReportUserClick() {
+    const modal: NgbModalRef = this.modalService.open(ReportParticipantModalComponent, { centered: true});
+    modal.componentInstance.reportedUserId = this.showedUserProfileId;
+  }
+
+  onAddUser() {
+    const modal: NgbModalRef = this.modalService.open(SearchParticipantModalComponent);
+    this.subs.add(
+      modal.componentInstance.onClickParticipant.subscribe(
+        (value: ParticipantResume) => {
+          const inviteUserModal = this.modalService.open(InviteParticipantModalComponent, { centered: true});
+          inviteUserModal.componentInstance.participant = value;
+          inviteUserModal.componentInstance.eventId = this.eventId;
+        }
+      )
+    );
   }
 }

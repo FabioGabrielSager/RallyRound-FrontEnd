@@ -9,6 +9,7 @@ import {ReportRequest} from "../../models/user/participant/report/reportRequest"
 import {ReportResponse} from "../../models/user/participant/report/reportResponse";
 import {ParticipantPersonalDataDto} from "../../models/user/participant/participantPersonalDataDto";
 import {ParticipantModificationRequest} from "../../models/user/participant/participantModificationRequest";
+import {SearchedParticipantResult} from "../../models/user/participant/searchedParticipantResult";
 
 @Injectable({
   providedIn: 'root'
@@ -78,5 +79,13 @@ export class ParticipantService {
 
   leaveEvent(eventId: string){
     return this.httpClient.delete(this.baseUrl + `/events/${eventId}/leave/`);
+  }
+
+  searchParticipant(query: string): Observable<SearchedParticipantResult> {
+    return this.httpClient.get<SearchedParticipantResult>(this.baseUrl + "/search/" + query);
+  }
+
+  inviteParticipantToEvent(eventId: string, participantId: string) {
+    return this.httpClient.post(`${this.baseUrl}/event/${eventId}/created/invite/${participantId}`, {});
   }
 }

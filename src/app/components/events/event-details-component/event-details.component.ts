@@ -12,12 +12,15 @@ import {AlertComponent} from "../../shared/alert/alert.component";
 import {EventInscriptionStatus} from "../../../models/event/eventInscriptionStatus";
 import {FormsModule} from "@angular/forms";
 import {AddressEntity} from "../../../models/location/AddressEntity";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {EventState} from "../../../models/event/eventState";
 import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
-import {UserPublicProfileComponent} from "../../participants/user-public-profile/user-public-profile.component";
+import {UserPublicProfileComponent} from "../../participants/participant-public-profile/user-public-profile/user-public-profile.component";
 import {ParticipantReputationMessages} from "../../../models/user/participant/reputation/participantReputationMessages";
 import {EventFeedbackModalComponent} from "../event-feedback-modal/event-feedback-modal.component";
+import {
+  ReportParticipantModalComponent
+} from "../../participants/report-participant-modal/report-participant-modal.component";
 
 @Component({
   selector: 'rr-event-details-component',
@@ -41,6 +44,7 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   private toastService: ToastService = inject(ToastService)
   private eventInscription: ParticipantService = inject(ParticipantService);
   private router: Router = inject(Router);
+  private route: ActivatedRoute = inject(ActivatedRoute);
 
   private subs: Subscription = new Subscription();
   eventCreator: ParticipantResume = {} as ParticipantResume;
@@ -60,6 +64,12 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   protected readonly EventInscriptionStatus = EventInscriptionStatus;
 
   ngOnInit(): void {
+    this.subs.add(
+      this.route.params.subscribe((params: Params) => {
+        this.eventId = params['id'];
+      })
+    );
+
     if(this.event == null && this.eventId != "") {
       this.subs.add(
         this.eventService.findEventWithCreatorReputationById(this.eventId)
@@ -287,5 +297,10 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
         })
       );
     }
+  }
+
+  onReportUserClick() {
+    const modal: NgbModalRef = this.modalService.open(ReportParticipantModalComponent, { centered: true});
+    modal.componentInstance.reportedUserId = this.showedUserProfileId;
   }
 }

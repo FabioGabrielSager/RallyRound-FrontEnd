@@ -31,6 +31,7 @@ import {
 import {RegisteredAdminsComponent} from "./components/admin/registered-admins/registered-admins.component";
 import {AdminDetailsComponent} from "./components/admin/admin-details/admin-details.component";
 import {ModifyEventComponent} from "./components/events/modify-event/modify-event.component";
+import {EventDetailsComponent} from "./components/events/event-details-component/event-details.component";
 
 export const routes: Routes = [
   {
@@ -91,6 +92,7 @@ export const routes: Routes = [
           {path: 'modify/:id', component: ModifyEventComponent}
         ]
       },
+      {path: ':id', component: EventDetailsComponent, outlet: 'events'},
     ]
   },
   {path: 'login', component: LoginComponent},

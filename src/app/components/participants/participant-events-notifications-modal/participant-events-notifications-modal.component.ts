@@ -10,6 +10,9 @@ import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {ToastService} from "../../../services/toast.service";
+import {
+  ParticipantEventNotificationType
+} from "../../../models/user/participant/notification/participantEventNotificationType";
 
 @Component({
   selector: 'rr-participant-events-notification-modal',
@@ -63,21 +66,28 @@ export class ParticipantEventsNotificationsModalComponent implements OnDestroy {
         })
       )
     } else {
-      this.subs.add(
-        this.eventService.getCurrentUserParticipatingEvent(notification.impliedResourceId).subscribe(
-          {
-            next: () => {
-              this.onCloseNotification(notificationIndex);
-              this.router.navigate([ 'events', { outlets: { events: ['myevents', notification.impliedResourceId]}}]);
-              this.activeModal.close();
-            },
-            error: err => {
-              this.toastService.show("Hubo un error al intentar recuperar el evento.", "bg-danger");
-              console.log(err);
+      if(notification.type === ParticipantEventNotificationType.EVENT_INVITATION) {
+        this.onCloseNotification(notificationIndex);
+        this.router.navigate([ 'events', { outlets: { events: [notification.impliedResourceId]}}]);
+        this.activeModal.close();
+      } else {
+        this.subs.add(
+          this.eventService.getCurrentUserParticipatingEvent(notification.impliedResourceId).subscribe(
+            {
+              next: () => {
+                this.onCloseNotification(notificationIndex);
+                this.router.navigate([ 'events', { outlets: { events: ['myevents', notification.impliedResourceId]}}]);
+                this.activeModal.close();
+              },
+              error: err => {
+                this.toastService.show("Hubo un error al intentar recuperar el evento.", "bg-danger");
+                console.log(err);
+              }
             }
-          }
-        )
-      );
+          )
+        );
+      }
+
     }
   }
 }

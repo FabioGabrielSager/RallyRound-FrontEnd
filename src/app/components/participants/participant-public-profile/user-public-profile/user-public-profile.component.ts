@@ -1,13 +1,13 @@
 import {Component, inject, Input, input, OnDestroy, OnInit} from '@angular/core';
-import {UserPublicDataDto} from "../../../models/user/participant/userPublicDataDto";
-import {UserFavoriteActivity} from "../../../models/user/participant/userFavoriteActivity";
+import {UserPublicDataDto} from "../../../../models/user/participant/userPublicDataDto";
+import {UserFavoriteActivity} from "../../../../models/user/participant/userFavoriteActivity";
 import {ActivatedRoute} from "@angular/router";
 import {Subscription, tap} from "rxjs";
-import {ParticipantService} from "../../../services/rallyroundapi/participant.service";
-import {ToastService} from "../../../services/toast.service";
+import {ParticipantService} from "../../../../services/rallyroundapi/participant.service";
+import {ToastService} from "../../../../services/toast.service";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {ReportParticipantModalComponent} from "../report-participant-modal/report-participant-modal.component";
-import {ParticipantReputationMessages} from "../../../models/user/participant/reputation/participantReputationMessages";
+import {ReportParticipantModalComponent} from "../../report-participant-modal/report-participant-modal.component";
+import {ParticipantReputationMessages} from "../../../../models/user/participant/reputation/participantReputationMessages";
 
 @Component({
   selector: 'rr-user-public-profile',
@@ -26,6 +26,7 @@ export class UserPublicProfileComponent implements OnInit, OnDestroy {
   private participantService: ParticipantService = inject(ParticipantService)
   private route: ActivatedRoute = inject(ActivatedRoute);
   private subs: Subscription = new Subscription();
+  isEventLoaded: boolean = false;
   @Input() userId: string = "";
 
   ngOnInit(): void {
@@ -38,9 +39,10 @@ export class UserPublicProfileComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.participantService.getUserData(this.userId).subscribe(
         {
-          next: value => {
+          next: (value: UserPublicDataDto) => {
             this.userData = value;
-            this.userData.favoriteActivities.sort((a, b) => a.order - b.order)
+            this.userData.favoriteActivities.sort((a, b) => a.order - b.order);
+            this.isEventLoaded = true;
           },
           error: err => {
             this.toastService.show("Hubo un error al intentar recuperar los datos del usuario.",
@@ -53,10 +55,5 @@ export class UserPublicProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-  }
-
-  onReportClick() {
-    const modal: NgbModalRef = this.modalService.open(ReportParticipantModalComponent, { centered: true});
-    modal.componentInstance.reportedUserId = this.userId;
   }
 }
