@@ -1,7 +1,14 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {EventResumeDto} from "../../../models/event/eventResumeDto";
 import {EventResumeCardComponent} from "../event-resume-card/event-resume-card.component";
-import {NgbCollapse, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgbCollapse, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle,
+  NgbModal,
+  NgbModalRef,
+  NgbPagination,
+  NgbPaginationNext,
+  NgbPaginationPages, NgbPaginationPrevious
+} from "@ng-bootstrap/ng-bootstrap";
 import {Subscription} from "rxjs";
 import {Router, RouterLink} from "@angular/router";
 import {AlertComponent} from "../../shared/alert/alert.component";
@@ -11,6 +18,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {SearchResultsListComponent} from "../../shared/search-results-list/search-results-list.component";
 import {NgClass} from "@angular/common";
 import {EventService} from "../../../services/rallyroundapi/event.service";
+import {EventsResumesPage} from "../../../models/event/EventsResumesPage";
 
 @Component({
   selector: 'rr-my-events',
@@ -21,7 +29,14 @@ import {EventService} from "../../../services/rallyroundapi/event.service";
     RouterLink,
     ReactiveFormsModule,
     SearchResultsListComponent,
-    NgClass
+    NgClass,
+    NgbPagination,
+    NgbPaginationNext,
+    NgbPaginationPages,
+    NgbPaginationPrevious,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle
   ],
   templateUrl: './my-events.component.html',
   styleUrl: './my-events.component.css'
@@ -29,18 +44,19 @@ import {EventService} from "../../../services/rallyroundapi/event.service";
 export class MyEventsComponent implements OnInit {
   isMyCreatedEventsPageSelected: boolean = false;
   eventsAreLoading: boolean = false;
-  events: EventResumeDto[] = [];
+  events!: EventsResumesPage;
+  actualPage: number = 0;
   private eventService: EventService = inject(EventService);
   private subs: Subscription = new Subscription();
   private mpAuthService: MPAuthService = inject(MPAuthService);
   private modalService: NgbModal = inject(NgbModal);
   private toastService: ToastService = inject(ToastService);
   private router: Router = inject(Router);
-  form!: FormGroup;
+  filtersForm!: FormGroup;
   private fb: FormBuilder = inject(FormBuilder);
 
   ngOnInit(): void {
-    this.form = this.fb.group({
+    this.filtersForm = this.fb.group({
       activity: ['Actividad', Validators.required],
       description: ['', [Validators.required, Validators.maxLength( 2000)]],
       address: ['', Validators.required],
@@ -60,12 +76,17 @@ export class MyEventsComponent implements OnInit {
 
   onSelectPage() {
     this.isMyCreatedEventsPageSelected = !this.isMyCreatedEventsPageSelected;
+    this.searchEvents();
+  }
 
+  private searchEvents() {
     if(!this.isMyCreatedEventsPageSelected) {
       this.getMyEvents();
     } else {
       this.getMyCreatedEvents();
     }
+
+    this.actualPage = this.events.page;
   }
 
   private getMyEvents() {
@@ -76,7 +97,7 @@ export class MyEventsComponent implements OnInit {
       undefined, undefined, null, null, []).subscribe(
       {
         next: value => {
-          this.events = value.results;
+          this.events = value;
           this.eventsAreLoading = false;
         },
         error: err => {
@@ -94,7 +115,7 @@ export class MyEventsComponent implements OnInit {
       undefined, undefined, null, null, []).subscribe(
       {
         next: value => {
-          this.events = value.results;
+          this.events = value;
           this.eventsAreLoading = false;
         },
         error: err => {
@@ -103,6 +124,23 @@ export class MyEventsComponent implements OnInit {
         }
       }
     );
+  }
+
+  onSelectSpecificPage(p: number) {
+    if(this.actualPage != p) {
+      this.actualPage = p;
+      this.searchEvents();
+    }
+  }
+
+  onSelectNextPage() {
+    this.actualPage = this.actualPage + 1;
+    this.searchEvents();
+  }
+
+  onSelectPreviousPage() {
+    this.actualPage = this.actualPage - 1;
+    this.searchEvents();
   }
 
   onSeeEvent(eventId: string) {

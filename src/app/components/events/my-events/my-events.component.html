@@ -6,7 +6,7 @@
     <span class="page-selector" (click)="onSelectPage()"
           [class.selected-page]="isMyCreatedEventsPageSelected">Creados por tí</span>
   </div>
-  <div class="events-container mt-3 ps-3 pe-3" [class.overflow-y-auto]="events.length > 1">
+  <div class="events-container mt-3 ps-3 pe-3" [class.overflow-y-auto]="events.results.length > 1">
     @if (eventsAreLoading) {
       <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <div class="spinner-border" role="status">
@@ -14,7 +14,7 @@
         </div>
       </div>
     } @else {
-      @if (events.length < 1) {
+      @if (events.results.length < 1) {
         <div class="d-flex flex-column justify-content-center align-items-center">
           <i class="bi bi-calendar-x" style="font-size: 4rem"></i>
           @if (isMyCreatedEventsPageSelected) {
@@ -30,10 +30,34 @@
       } @else {
         <!-- TODO: Add button to reload the shown events -->
         <!-- TODO: Add Form to filter events -->
-      }
-
-      @for (event of events; track events) {
-        <rr-event-resume-card [eventResume]="event" (onSeeEvent)="onSeeEvent($event)"/>
+        <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3">
+          @for (event of events.results; track event.eventId) {
+            <div class="col-12 d-flex justify-content-center">
+              <rr-event-resume-card [eventResume]="event" (onSeeEvent)="onSeeEvent($event)"/>
+            </div>
+          }
+          <div class="col-12">
+            <ngb-pagination class="d-flex justify-content-center" [pageSize]="events.pageSize"
+                            [collectionSize]="events.totalElements"
+                            [(page)]="actualPage" [directionLinks]="true">
+              <ng-template ngbPaginationPrevious>
+                <span (click)="onSelectPreviousPage()">&laquo;</span>
+              </ng-template>
+              <ng-template ngbPaginationPages let-page let-pages="pages">
+                @if (pages.length > 0) {
+                  @for (p of pages; track p) {
+                    <li class="page-item">
+                      <a class="page-link" (click)="onSelectSpecificPage(p)">{{ p }}</a>
+                    </li>
+                  }
+                }
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                <span (click)="onSelectNextPage()">&raquo;</span>
+              </ng-template>
+            </ngb-pagination>
+          </div>
+        </div>
       }
     }
   </div>
