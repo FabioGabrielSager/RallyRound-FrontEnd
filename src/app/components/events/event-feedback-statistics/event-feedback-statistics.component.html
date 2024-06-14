@@ -1,0 +1,105 @@
+<div class="mt-3 h-100">
+  <h1 class="text-bold rr-dark-purple-text">Feedback recibido</h1>
+  <div class="row row-gap-3">
+    <div class="col-12">
+      <label>
+        Cantidad de participantes que enviaron feedback
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2">
+          {{ eventFeedbackResume.feedbackCount }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label>
+        Satisfacción general
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2">
+          {{ eventFeedbackResume.overallSatisfaction }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label>
+        Organización
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2">
+          {{ eventFeedbackResume.organizationRating }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label>
+        Coordinadores
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2">
+          {{ eventFeedbackResume.coordinatorsRating }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label>
+        Calidad del contenido
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2">
+          {{ eventFeedbackResume.contentQualityRating }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label>
+        Relación calidad/precio
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2">
+          {{ eventFeedbackResume.valueForMoneyRating }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label>
+        Calificación del lugar en el que se llevo a cabo
+        <span
+          class="border rr-border-primary-color rr-bg-secondary rounded-2 pe-2 ps-2 ">
+          {{ eventFeedbackResume.venueRating }}
+        </span>
+      </label>
+
+    </div>
+    <div class="col-12">
+      <label class="mt-1">Comentarios (opcional)</label>
+      <div class="p-3 border rr-border-primary-color rounded-2">
+        @for (comment of eventFeedbackResume.comments; track comment.participantResume.id) {
+          <div class="d-flex w-100 mb-2">
+            <div>
+              <div class="guest me-1">
+                @if (comment.participantResume.base64encodedProfileImage != null) {
+                  <img [src]="'data:image/*;base64, ' + comment.participantResume.base64encodedProfileImage" alt="foto-invitado">
+                } @else {
+                  <div class="guest-name-container pe-1 ps-1">
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <span>{{comment.participantResume.name}}</span>
+              <div class="comment-container rounded-2 p-2">
+                {{ comment.comment }}
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="h-100 p-3 d-flex justify-content-center align-items-center flex-column">
+            <i class="bi bi-envelope-fill" style="font-size: 4rem"></i>
+            <h5 class="text-bold text-center">Aún no se recibido ningún comentario en este evento.</h5>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

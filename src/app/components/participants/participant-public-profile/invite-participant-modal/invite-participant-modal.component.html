@@ -1,0 +1,18 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Buscar usuario.</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+   <rr-user-public-profile [userId]="participant.id">
+     <div class="col-12">
+       <button class="btn rr-btn w-100 d-flex align-items-center justify-content-between" (click)="onInviteUser()">
+         <span class="flex-grow-1">Invitar a evento</span>
+         <i class="bi bi-send"></i></button>
+     </div>
+   </rr-user-public-profile>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('cancel click')">Cancelar</button>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Buscar usuario.</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="position-relative">
+      <input type="text" class="form-control rr-input" placeholder="ej. nombre apellido" [(ngModel)]="query"
+             (input)="onInputValueChanges()" [ngClass]="results.length > 0 ? 'no-rounded-bottom-corners'
+                                                              : 'rounded-bottom-corners'">
+      <rr-search-participant-result-list (onSelectedResult)="onClickSearchResult($event)"
+                              [resultsList]="results"/>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('cancel click')">Cancelar</button>
+  </div>
+</div>

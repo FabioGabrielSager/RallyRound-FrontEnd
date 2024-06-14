@@ -64,11 +64,14 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
   protected readonly EventInscriptionStatus = EventInscriptionStatus;
 
   ngOnInit(): void {
-    this.subs.add(
-      this.route.params.subscribe((params: Params) => {
-        this.eventId = params['id'];
-      })
-    );
+    if(!this.eventId) {
+      this.subs.add(
+        this.route.params.subscribe((params: Params) => {
+          this.eventId = params['id'];
+        })
+      );
+    }
+
 
     if(this.event == null && this.eventId != "") {
       this.subs.add(

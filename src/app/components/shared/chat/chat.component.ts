@@ -23,6 +23,7 @@ import {IMessage} from "@stomp/rx-stomp";
 export class ChatComponent implements OnInit, OnDestroy {
   chat: ChatMessages = { chatId: "", messages: [] } as ChatMessages;
   @Input() chatId: string = "";
+  @Input() hideMsgSendingControls: boolean = false;
   messageToSend: string = "";
   private lastSentMessageId: string = "";
   private toastService: ToastService = inject(ToastService);
@@ -48,14 +49,18 @@ export class ChatComponent implements OnInit, OnDestroy {
               return 0;
             })
             this.isChatLoaded = true;
-            this.chatService.connectToEventChat(this.chatId).subscribe({
-                next: (message: IMessage) => {
-                  const chatMessage: ChatMessage = JSON.parse(message.body);
-                  chatMessage.submittedByRequester = this.lastSentMessageId === chatMessage.id;
-                  this.chat.messages.push(chatMessage);
-                }
-              }
-            );
+            if(!this.hideMsgSendingControls) {
+              this.subs.add(
+                this.chatService.connectToEventChat(this.chatId).subscribe({
+                    next: (message: IMessage) => {
+                      const chatMessage: ChatMessage = JSON.parse(message.body);
+                      chatMessage.submittedByRequester = this.lastSentMessageId === chatMessage.id;
+                      this.chat.messages.push(chatMessage);
+                    }
+                  }
+                )
+              );
+            }
           },
           error: err => {
             this.toastService.show("Hubo un error al intentar recuperar los mensajes de este chat, " +

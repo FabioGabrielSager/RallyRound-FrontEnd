@@ -12,6 +12,7 @@ import {EventResponseForEventCreators} from "../../models/event/eventResponseFor
 import {EventResponseForParticipants} from "../../models/event/eventResponseForParticipants";
 import {EventFeedbackRequest} from "../../models/event/eventFeedbackRequest";
 import {EventModificationRequest} from "../../models/event/eventModificationRequest";
+import {EventFeedbackStatistics} from "../../models/event/eventFeedbackStatistics";
 
 @Injectable({
   providedIn: 'root'
@@ -284,5 +285,10 @@ export class EventService {
 
   sendEventFeedback(request: EventFeedbackRequest): Observable<any> {
     return this.httpClient.post(this.baseUrlEventEndpoint + "/feedback/", request);
+  }
+
+  getEventFeedbackStatistics(eventId: string): Observable<EventFeedbackStatistics> {
+    return this.httpClient
+      .get<EventFeedbackStatistics>(`${this.baseUrlParticipantEndpoint}/events/${eventId}/created/feedback`)
   }
 }

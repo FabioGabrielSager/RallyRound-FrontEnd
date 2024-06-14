@@ -1,27 +1,39 @@
 @if (isEventLoaded$.value) {
   <div class="main-container container d-flex flex-column  align-items-center rr-black-text
              mt-3 pb-5">
-    @if (event.state != EventState.CANCELED && event.state != EventState.FINALIZED &&
-      (event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED || showAsACreatorView)) {
-      <div class="pages-controls w-100 d-flex justify-content-around column-gap-5">
-        <span class="page-selector" (click)="onSelectPage()"
-          [class.selected-page]="!isChatPageSelected">Detalles del evento</span>
-        <span class="page-selector" (click)="onSelectPage()"
-              [class.selected-page]="isChatPageSelected">Chat</span>
+    @if (event.eventInscriptionStatus === EventInscriptionStatus.ACCEPTED || showAsACreatorView) {
+      <div class="pages-controls w-100 d-flex justify-content-around column-gap-5 flex-wrap">
+        <span class="page-selector" (click)="onSelectPage('eventDetails')"
+              [class.selected-page]="selectedPage === 'eventDetails'">Detalles del evento</span>
+        <span class="page-selector" (click)="onSelectPage('chat')"
+              [class.selected-page]="selectedPage === 'chat'">Chat</span>
+        @if (showAsACreatorView && event.state === EventState.FINALIZED) {
+          <span class="page-selector" (click)="onSelectPage('eventFeedback')"
+                [class.selected-page]="selectedPage === 'eventFeedback'">Feedback del evento</span>
+        }
       </div>
-      @if (!isChatPageSelected) {
+
+      @if (selectedPage === "eventDetails") {
         <div class="overflow-y-auto">
-          @if(showAsACreatorView) {
+          @if (showAsACreatorView) {
             <rr-my-created-event [event]="event"/>
           } @else {
             <rr-event-details-component [event]="event"/>
           }
         </div>
       }
-        <div class="mt-1 pb-2 w-100 start-0 top-0 z-3 h-100"
-          [ngClass]="!isChatPageSelected ? 'invisible position-absolute' : 'position-static visible'">
-          <rr-chat [chatId]="event.chatId"/>
+      <div class="mt-1 pb-2 w-100 start-0 top-0 z-3 h-100"
+           [ngClass]="selectedPage === 'chat' ? 'position-static visible' : 'invisible position-fixed'">
+        <rr-chat [chatId]="event.chatId"
+                 [hideMsgSendingControls]="event.state == EventState.CANCELED
+                   || event.state == EventState.FINALIZED"/>
+      </div>
+      @if (eventFeedbackResume) {
+        <div class="mt-1 pb-2 w-100 z-3 h-100"
+             [ngClass]="selectedPage === 'eventFeedback' ? 'position-static visible' : 'invisible position-fixed'">
+          <rr-event-feedback-statistics [eventFeedbackResume]="eventFeedbackResume"/>
         </div>
+      }
     } @else {
       <rr-event-details-component [event]="event"/>
     }

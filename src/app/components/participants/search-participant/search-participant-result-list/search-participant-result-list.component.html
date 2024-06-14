@@ -1,0 +1,20 @@
+@if(resultsList.length > 0) {
+  <div class="search-results-container position-absolute">
+    @for (participantResume of resultsList; track participantResume.id; let index = $index) {
+      <div class="search-result d-block ps-3 pe-3 pb-1 pt-1 d-flex align-items-center"
+            [ngClass]="index != resultsList.length-1
+                                ? 'search-result-border-bottom' : 'rounded-bottom-corners'"
+            (click)="onClickSearchResult(index)">
+        <div class="guest me-1">
+          @if (participantResume.base64encodedProfileImage != null) {
+            <img [src]="'data:image/*;base64, ' + participantResume.base64encodedProfileImage" alt="foto-invitado">
+          } @else {
+            <div class="guest-name-container pe-1 ps-1">
+            </div>
+          }
+        </div>
+        <span>{{ participantResume.name }}, {{ participantResume.lastName }}</span>
+      </div>
+    }
+  </div>
+}

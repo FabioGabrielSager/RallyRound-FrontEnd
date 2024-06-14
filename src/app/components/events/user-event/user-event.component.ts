@@ -12,6 +12,8 @@ import {MyCreatedEventComponent} from "../my-created-event/my-created-event.comp
 import {browserRefresh} from "../../../app.component";
 import {EventResponseForParticipants} from "../../../models/event/eventResponseForParticipants";
 import {EventState} from "../../../models/event/eventState";
+import {EventFeedbackStatistics} from "../../../models/event/eventFeedbackStatistics";
+import {EventFeedbackStatisticsComponent} from "../event-feedback-statistics/event-feedback-statistics.component";
 
 @Component({
   selector: 'rr-user-event',
@@ -20,7 +22,8 @@ import {EventState} from "../../../models/event/eventState";
     EventDetailsComponent,
     ChatComponent,
     MyCreatedEventComponent,
-    NgClass
+    NgClass,
+    EventFeedbackStatisticsComponent
   ],
   templateUrl: './user-event.component.html',
   styleUrl: './user-event.component.css'
@@ -34,7 +37,8 @@ export class UserEventComponent implements OnInit, OnDestroy {
 
   private eventId: string = "";
   event: EventResponseForParticipants = {} as EventResponseForParticipants;
-  isChatPageSelected: boolean = false;
+  eventFeedbackResume: EventFeedbackStatistics | null = null;
+  selectedPage: string = "eventDetails";
   showAsACreatorView: boolean = false;
   protected readonly EventInscriptionStatus = EventInscriptionStatus;
   isEventLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -96,14 +100,24 @@ export class UserEventComponent implements OnInit, OnDestroy {
         }
       }
     }
+
+    if(this.showAsACreatorView) {
+      this.subs.add(this.eventService.getEventFeedbackStatistics(this.eventId).subscribe({
+        next: value => this.eventFeedbackResume = value,
+        error: err => {
+          this.toastService.show("Hubo un error al intentar recuperar el feedback del evento.", "bg-danger");
+          console.error(err);
+        }
+      }))
+    }
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  onSelectPage() {
-    this.isChatPageSelected = !this.isChatPageSelected;
+  onSelectPage(selectedPage: string) {
+    this.selectedPage = selectedPage;
   }
 
   protected readonly EventState = EventState;

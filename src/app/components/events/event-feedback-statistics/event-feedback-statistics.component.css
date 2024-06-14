@@ -1,0 +1,23 @@
+label {
+  font-weight: bold;
+}
+
+.comment-container {
+  background-color: #E0C276;
+}
+
+
+.guest {
+  width: 3rem;
+  height: 3rem;
+line-height: 3rem;
+}
+
+.guest img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.guest:hover {
+  transform: none;
+}
