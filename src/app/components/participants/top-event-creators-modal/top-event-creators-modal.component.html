@@ -1,0 +1,53 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Top creadores de eventos.</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex mb-3 w-50">
+      <select name="month" id="month" class="form-select rr-input" (change)="loadTop()" [(ngModel)]="selectedMonth">
+        <option [value]="0">Selecciona el mes</option>
+        <option value='1'>Enero</option>
+        <option value='2'>Febrero</option>
+        <option value='3'>Marzo</option>
+        <option value='4'>Abril</option>
+        <option value='5'>Mayo</option>
+        <option value='6'>Junio</option>
+        <option value='7'>Julio</option>
+        <option value='8'>Agosto</option>
+        <option value='9'>Septiembre</option>
+        <option value='10'>Octubre</option>
+        <option value='11'>Noviembre</option>
+        <option value='12'>Diciembre</option>
+      </select>
+    </div>
+    <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Creador</th>
+        <th scope="col">Eventos finalizados</th>
+      </tr>
+      </thead>
+      <tbody>
+        @if (isTopInitialized) {
+          @for (topCreator of topEventCreators.eventCreators; track topCreator.eventCreator.id) {
+            <tr (click)="onClickCreator(topCreator.eventCreator.id)">
+              <td>
+                {{ $index + 1 }}
+              </td>
+              <td>
+                <span>{{ topCreator.eventCreator.name }}</span>
+              </td>
+              <td>
+                <span>{{ topCreator.finalizedEventsCount }}</span>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

@@ -22,6 +22,9 @@
         <button class="btn rr-btn w-100"
                 [routerLink]="['/events/', { outlets: { events: ['myevents']}}]">Ver mis eventos</button>
       </div>
+      <div class="col">
+        <button class="btn rr-btn w-100" (click)="onClickTopCreators()">Top creadores de eventos</button>
+      </div>
     </div>
   </div>
 </div>

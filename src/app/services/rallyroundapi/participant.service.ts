@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../enviroment/enviroment";
 import {map, Observable, tap} from "rxjs";
 import {CreateEventInscriptionResponse} from "../../models/event/createEventInscriptionResponse";
@@ -10,6 +10,7 @@ import {ReportResponse} from "../../models/user/participant/report/reportRespons
 import {ParticipantPersonalDataDto} from "../../models/user/participant/participantPersonalDataDto";
 import {ParticipantModificationRequest} from "../../models/user/participant/participantModificationRequest";
 import {SearchedParticipantResult} from "../../models/user/participant/searchedParticipantResult";
+import {TopEventCreators} from "../../models/user/participant/topEventCreators";
 
 @Injectable({
   providedIn: 'root'
@@ -87,5 +88,16 @@ export class ParticipantService {
 
   inviteParticipantToEvent(eventId: string, participantId: string) {
     return this.httpClient.post(`${this.baseUrl}/event/${eventId}/created/invite/${participantId}`, {});
+  }
+
+  getTopFiveEventCreators(month: number): Observable<TopEventCreators> {
+    let baseParams: HttpParams = new HttpParams();
+
+    if(month) {
+      baseParams = baseParams.append("month", month);
+    }
+
+    return this.httpClient.get<TopEventCreators>(this.baseUrl + "/top/five/event-creators",
+      { params: baseParams });
   }
 }

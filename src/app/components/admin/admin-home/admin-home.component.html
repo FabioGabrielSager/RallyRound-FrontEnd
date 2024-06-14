@@ -11,7 +11,8 @@
     <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
     <div class="row row-cols-1 gy-1 mt-2">
       <div class="col" *hasPrivilege="'OVER_STATISTICS'">
-        <button class="btn rr-btn w-100 d-flex justify-content-between align-items-center">
+        <button [routerLink]="['/admin/', 'actions', {outlets: {admin: ['statistics']}}]"
+          class="btn rr-btn w-100 d-flex justify-content-between align-items-center">
           <span class="flex-grow-1 text-center">Estadísticas</span>
           <i class="bi bi-graph-up"></i>
         </button>

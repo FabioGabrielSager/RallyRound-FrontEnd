@@ -1,0 +1,13 @@
+<div class="container-fluid vh-100 d-flex justify-content-center">
+  <div id="menu-container" class="align-self-center">
+    <h1 class="text-bold rr-dark-purple-text text-center">Estadísticas</h1>
+    <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
+    <div class="row row-cols-1 gy-1 mt-2">
+      <div class="col" *hasPrivilege="'GENERATE_STATISTICS'">
+        <button class="btn rr-btn w-100" (click)="onClickTopCreators()">
+          Ver top 5 creadores por mes.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

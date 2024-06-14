@@ -32,6 +32,7 @@ import {RegisteredAdminsComponent} from "./components/admin/registered-admins/re
 import {AdminDetailsComponent} from "./components/admin/admin-details/admin-details.component";
 import {ModifyEventComponent} from "./components/events/modify-event/modify-event.component";
 import {EventDetailsComponent} from "./components/events/event-details-component/event-details.component";
+import {AdminStatisticsMenuComponent} from "./components/admin/admin-statistics-menu/admin-statistics-menu.component";
 
 export const routes: Routes = [
   {
@@ -49,6 +50,13 @@ export const routes: Routes = [
               {path: 'admin/register', component: RegisterAdminComponent},
               {path: 'admins', component: RegisteredAdminsComponent},
               {path: 'admin/:adminId', component: AdminDetailsComponent}
+            ]
+          },
+          {
+            path: 'statistics',
+            outlet: 'admin',
+            children: [
+              {path: '', component: AdminStatisticsMenuComponent}
             ]
           }
         ]
