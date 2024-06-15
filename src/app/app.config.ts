@@ -6,6 +6,7 @@ import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {jwtInterceptorInterceptor} from "./services/auth/interceptors/jwt-interceptor.interceptor";
 import {RxStompService} from "./services/rxstomp/rx-stomp.service";
 import {rxStompServiceFactory} from "./services/rxstomp/rx-stomp-service-factory";
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([jwtInterceptorInterceptor])
     ),
-    { provide: RxStompService, useFactory: rxStompServiceFactory }
+    { provide: RxStompService, useFactory: rxStompServiceFactory }, provideCharts(withDefaultRegisterables())
   ]
 };
