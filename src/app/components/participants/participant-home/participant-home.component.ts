@@ -15,6 +15,9 @@ import {
 } from "../../../models/user/participant/notification/participantEventNotificationDto";
 import {ParticipantNotificationService} from "../../../services/rallyroundapi/participant-notification.service";
 import {TopEventCreatorsModalComponent} from "../top-event-creators-modal/top-event-creators-modal.component";
+import {
+  EventsForActivityStatisticsModalComponent
+} from "../../events/events-for-activity-statistics-modal/events-for-activity-statistics-modal.component";
 
 @Component({
   selector: 'rr-participant-home',
@@ -151,5 +154,9 @@ export class ParticipantHomeComponent implements OnInit, OnDestroy {
 
   onClickTopCreators() {
     this.modalService.open(TopEventCreatorsModalComponent, {centered: true, size: "lg"})
+  }
+
+  onClickEventTrend() {
+    this.modalService.open(EventsForActivityStatisticsModalComponent, {size: "xl", centered: true})
   }
 }

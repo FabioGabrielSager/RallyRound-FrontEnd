@@ -1,0 +1,60 @@
+<div class="mb-3 p-2">
+  <div class="d-flex justify-content-start column-gap-2">
+    <div #dateDropdown="ngbDropdown" ngbDropdown container="body">
+      <button type="button" class="btn border rr-border-primary-color" ngbDropdownToggle>
+        Tipo de inscripción
+      </button>
+      <div ngbDropdownMenu class="rr-bg-primary">
+        <div class="px-4 py-3">
+          <div class="form-check form-check">
+            <input class="form-check-input rr-radio" type="radio" value="both"
+                   name="paidUnpaid" id="paid-and-unpaid-option" [(ngModel)]="inscriptionFeeType" (change)="loadData()">
+            <label class="form-check-label" for="paid-and-unpaid-option">
+              Ambas
+            </label>
+          </div>
+          <div class="form-check form-check">
+            <input class="form-check-input rr-radio" type="radio" value="unpaid"
+                   name="paidUnpaid" id="unpaid-option" [(ngModel)]="inscriptionFeeType" (change)="loadData()">
+            <label class="form-check-label" for="unpaid-option">
+              No paga
+            </label>
+          </div>
+          <div class="form-check form-check">
+            <input class="form-check-input rr-radio" type="radio" value="paid"
+                   name="paidUnpaid" id="paid-option" [(ngModel)]="inscriptionFeeType" (change)="loadData()">
+            <label class="form-check-label" for="paid-option">
+              Paga
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <select name="month" id="month" class="form-select rr-input" (change)="loadData()" [(ngModel)]="selectedMonth">
+      <option [value]="0">Selecciona el mes</option>
+      <option value='1'>Enero</option>
+      <option value='2'>Febrero</option>
+      <option value='3'>Marzo</option>
+      <option value='4'>Abril</option>
+      <option value='5'>Mayo</option>
+      <option value='6'>Junio</option>
+      <option value='7'>Julio</option>
+      <option value='8'>Agosto</option>
+      <option value='9'>Septiembre</option>
+      <option value='10'>Octubre</option>
+      <option value='11'>Noviembre</option>
+      <option value='12'>Diciembre</option>
+    </select>
+  </div>
+</div>
+
+@if(chartDataSet.datasets.length > 0) {
+  <div class="p-2">
+    <div class="w-100">
+      <canvas class="rounded-3" #canvas baseChart [data]="chartDataSet" [type]="'bar'" [plugins]="chartPlugins"></canvas>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary m-1" (click)="onDownloadPdf()" *hasPrivilege="'GENERATE_STATISTICS'">Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+}
