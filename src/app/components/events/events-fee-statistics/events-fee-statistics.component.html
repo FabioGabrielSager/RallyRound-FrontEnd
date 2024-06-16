@@ -1,0 +1,19 @@
+<div class="mb-3 p-2">
+  <div class="d-flex justify-content-start column-gap-2">
+    <label for="dateFrom">Desde</label>
+    <input type="date" id="dateFrom" class="form-control rr-input" (change)="loadData()" [(ngModel)]="dateFrom">
+    <label for="dateTo">Hasta</label>
+    <input type="date" id="dateTo" class="form-control rr-input" (change)="loadData()" [(ngModel)]="dateTo">
+  </div>
+</div>
+
+@if(chartDataSet.datasets.length > 0) {
+  <div class="p-2">
+    <div class="w-100">
+      <canvas class="rounded-3" #canvas baseChart [data]="chartDataSet" [type]="'bar'" [plugins]="chartPlugins"></canvas>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary m-1" (click)="onDownloadPdf()" *hasPrivilege="'GENERATE_STATISTICS'">Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+}

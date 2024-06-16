@@ -13,6 +13,11 @@
           Ver top 5 creadores por mes.
         </button>
       </div>
+      <div class="col" *hasPrivilege="'GENERATE_STATISTICS'">
+        <button class="btn rr-btn w-100" (click)="onClickEventFeeStats()">
+          Ver resumen de eventos pagos y no pagos.
+        </button>
+      </div>
     </div>
   </div>
 </div>

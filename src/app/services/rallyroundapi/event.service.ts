@@ -13,6 +13,7 @@ import {EventResponseForParticipants} from "../../models/event/eventResponseForP
 import {EventFeedbackRequest} from "../../models/event/eventFeedbackRequest";
 import {EventModificationRequest} from "../../models/event/eventModificationRequest";
 import {EventFeedbackStatistics} from "../../models/event/eventFeedbackStatistics";
+import {EventsFeeSummary} from "../../models/event/EventsFeeSummary";
 
 @Injectable({
   providedIn: 'root'
@@ -290,5 +291,13 @@ export class EventService {
   getEventFeedbackStatistics(eventId: string): Observable<EventFeedbackStatistics> {
     return this.httpClient
       .get<EventFeedbackStatistics>(`${this.baseUrlParticipantEndpoint}/events/${eventId}/created/feedback`)
+  }
+
+  getEventsFeeStats(dateFrom: string, dateTo: string) {
+    let baseParams = new HttpParams();
+    baseParams = baseParams.append("dateFrom", dateFrom);
+    baseParams = baseParams.append("dateTo", dateTo);
+
+    return this.httpClient.get<EventsFeeSummary>(this.baseUrlEventEndpoint + "/fee-stats", { params: baseParams });
   }
 }

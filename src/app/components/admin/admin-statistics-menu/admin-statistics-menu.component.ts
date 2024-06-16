@@ -7,6 +7,9 @@ import {
 import {
   EventsForActivityStatisticsModalComponent
 } from "../../events/events-for-activity-statistics-modal/events-for-activity-statistics-modal.component";
+import {
+  EventsFeeStatisticsModalComponent
+} from "../../events/events-fee-statistics-modal/events-fee-statistics-modal.component";
 
 @Component({
   selector: 'rr-admin-statistics-menu',
@@ -26,5 +29,9 @@ export class AdminStatisticsMenuComponent {
 
   onClickEventTrend() {
     this.modalService.open(EventsForActivityStatisticsModalComponent, {size: "xl", centered: true})
+  }
+
+  onClickEventFeeStats() {
+    this.modalService.open(EventsFeeStatisticsModalComponent, {size: "xl", centered: true})
   }
 }
