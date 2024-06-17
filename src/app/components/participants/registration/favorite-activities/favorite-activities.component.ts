@@ -123,27 +123,8 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
     }
 
     this.authService.setParticipantRegistrationRequestActivities(userFavoritesActivities);
-    this.subs.add(
-      this.authService.sendRegistrationRequest().subscribe(
-        {
-          next: value => {
-            this.router.navigate(['/participant/register/',
-                {
-                  outlets: {
-                    registration: ['confirmEmail', {userEmail: value.userEmail}]
-                  }
-                }
-              ]
-            );
-          },
-          error: err => {
-            this.toastService.show("Hubo un error al enviar la solicitud de registro, por favor inténtelo más tarde.",
-              "bg-danger");
-            console.error(err);
-          }
-        }
-      )
-    );
+    this.router.navigate(['/participant/register/',
+        {outlets: {registration: ['terms-and-conditions']}}]);
   }
 
   onClickSearchResult($event: any, i: number) {

@@ -33,6 +33,9 @@ import {AdminDetailsComponent} from "./components/admin/admin-details/admin-deta
 import {ModifyEventComponent} from "./components/events/modify-event/modify-event.component";
 import {EventDetailsComponent} from "./components/events/event-details-component/event-details.component";
 import {AdminStatisticsMenuComponent} from "./components/admin/admin-statistics-menu/admin-statistics-menu.component";
+import {
+  TermsAndConditionsComponent
+} from "./components/participants/registration/terms-and-conditions/terms-and-conditions.component";
 
 export const routes: Routes = [
   {
@@ -77,6 +80,7 @@ export const routes: Routes = [
           {path: 'personalInfo', component: PersonalInfoComponent, outlet: 'registration'},
           {path: 'photo', component: ProfilePhotoComponent, outlet: 'registration'},
           {path: 'activities', component: FavoriteActivitiesComponent, outlet: 'registration'},
+          {path: 'terms-and-conditions', component: TermsAndConditionsComponent, outlet: 'registration'},
           {path: 'confirmEmail', component: EmailConfirmationComponent, outlet: 'registration'}
         ]
       },

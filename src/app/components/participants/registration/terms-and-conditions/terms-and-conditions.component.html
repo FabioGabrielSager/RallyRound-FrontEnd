@@ -1,0 +1,9 @@
+<div class="container vh-100 overflow-y-hidden d-flex flex-column justify-content-center rr-black-text">
+  @if(termsAndConditions.content.length > 0) {
+    <div [innerHTML]="termsAndConditions.content" style="max-height: 600px" class="overflow-y-auto"></div>
+   <div class="d-flex column-gap-1 justify-content-end mt-3">
+     <button class="btn btn-danger" (click)="onClickReject()">Rechazar</button>
+     <button class="btn rr-btn" (click)="onClickAccept()">Aceptar</button>
+   </div>
+  }
+</div>
