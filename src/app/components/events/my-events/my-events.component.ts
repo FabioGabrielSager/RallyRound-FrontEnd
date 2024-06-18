@@ -19,6 +19,9 @@ import {SearchResultsListComponent} from "../../shared/search-results-list/searc
 import {NgClass} from "@angular/common";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {EventsResumesPage} from "../../../models/event/EventsResumesPage";
+import {
+  CreatedEventsInscriptionTrendStatsModalComponent
+} from "../created-events-inscription-trend-stats-modal/created-events-inscription-trend-stats-modal.component";
 
 @Component({
   selector: 'rr-my-events',
@@ -217,5 +220,9 @@ export class MyEventsComponent implements OnInit {
         }
       })
     );
+  }
+
+  onClickInscriptionsTrend() {
+    this.modalService.open(CreatedEventsInscriptionTrendStatsModalComponent, {size: "xl"})
   }
 }

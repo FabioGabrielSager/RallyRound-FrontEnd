@@ -14,6 +14,7 @@ import {EventFeedbackRequest} from "../../models/event/eventFeedbackRequest";
 import {EventModificationRequest} from "../../models/event/eventModificationRequest";
 import {EventFeedbackStatistics} from "../../models/event/eventFeedbackStatistics";
 import {EventsFeeSummary} from "../../models/event/EventsFeeSummary";
+import {EventInscriptionTrendByMonthAndYear} from "../../models/event/eventInscriptionTrendByMonthAndYear";
 
 @Injectable({
   providedIn: 'root'
@@ -299,5 +300,21 @@ export class EventService {
     baseParams = baseParams.append("dateTo", dateTo);
 
     return this.httpClient.get<EventsFeeSummary>(this.baseUrlEventEndpoint + "/fee-stats", { params: baseParams });
+  }
+
+  getCreatedEventInscriptionTrend(month: number, year: number | undefined) {
+    let baseParams = new HttpParams();
+
+    if(month) {
+      baseParams = baseParams.append("month", month);
+    }
+
+    if(year) {
+      baseParams = baseParams.append("year", year);
+    }
+
+    return this.httpClient.get<EventInscriptionTrendByMonthAndYear>(
+        this.baseUrlParticipantEndpoint + "/events/created/inscription-trends",
+        {params: baseParams});
   }
 }

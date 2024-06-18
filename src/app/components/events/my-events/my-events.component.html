@@ -6,7 +6,7 @@
     <span class="page-selector" (click)="onSelectPage()"
           [class.selected-page]="isMyCreatedEventsPageSelected">Creados por tí</span>
   </div>
-  <div class="events-container mt-3 ps-3 pe-3" [class.overflow-y-auto]="events.results.length > 1">
+  <div class="events-container mt-3 ps-3 pe-3" [class.overflow-y-auto]="events && events.results && events.results.length > 1">
     @if (eventsAreLoading) {
       <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <div class="spinner-border" role="status">
@@ -30,10 +30,15 @@
       } @else {
         <!-- TODO: Add button to reload the shown events -->
         <!-- TODO: Add Form to filter events -->
+        @if (isMyCreatedEventsPageSelected) {
+        <div class="d-flex justify-content-center m-2">
+          <button class="btn rr-btn" (click)="onClickInscriptionsTrend()">Ver tendencias de inscripción a mís eventos</button>
+        </div>
+        }
         <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3">
           @for (event of events.results; track event.eventId) {
-            <div class="col-12 d-flex justify-content-center">
-              <rr-event-resume-card [eventResume]="event" (onSeeEvent)="onSeeEvent($event)"/>
+            <div class="col-7 d-flex justify-content-center">
+                <rr-event-resume-card class="w-100" [eventResume]="event" (onSeeEvent)="onSeeEvent($event)"/>
             </div>
           }
           <div class="col-12">
