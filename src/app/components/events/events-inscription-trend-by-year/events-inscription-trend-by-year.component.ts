@@ -1,32 +1,27 @@
 import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
-import {FormsModule} from "@angular/forms";
-import {HasPrivilegeDirective} from "../../../directive/has-privilege.directive";
-import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {EventService} from "../../../services/rallyroundapi/event.service";
 import {DatePipe} from "@angular/common";
 import {Subscription} from "rxjs";
 import {ChartData, ChartDataset, Plugin} from "chart.js";
 import {customBackgroundColor} from "../../../utils/chartjs-plugins";
-import {EventService} from "../../../services/rallyroundapi/event.service";
 import jsPDF from "jspdf";
 import {numberToMonthSpanishName} from "../../../utils/NumberToMonthSpanishName";
 
 @Component({
-  selector: 'rr-created-events-inscription-trend-stats',
+  selector: 'rr-events-inscription-trend-by-year',
   standalone: true,
-    imports: [
-        BaseChartDirective,
-        FormsModule,
-        HasPrivilegeDirective,
-        NgbDropdown,
-        NgbDropdownMenu,
-        NgbDropdownToggle
-    ],
+  imports: [
+    BaseChartDirective,
+    ReactiveFormsModule,
+    FormsModule
+  ],
   providers: [DatePipe],
-  templateUrl: './created-events-inscription-trend-stats.component.html',
-  styleUrl: './created-events-inscription-trend-stats.component.css'
+  templateUrl: './events-inscription-trend-by-year.component.html',
+  styleUrl: './events-inscription-trend-by-year.component.css'
 })
-export class CreatedEventsInscriptionTrendStatsComponent implements OnInit, OnDestroy {
+export class EventsInscriptionTrendByYearComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private datePipe: DatePipe = inject(DatePipe);
   private subs: Subscription = new Subscription();
@@ -35,10 +30,9 @@ export class CreatedEventsInscriptionTrendStatsComponent implements OnInit, OnDe
   canvas!: ElementRef<HTMLCanvasElement>;
   chartPlugins: Plugin[] = [customBackgroundColor];
 
-  selectedMonth: number = 0;
   selectedYear: number = new Date().getFullYear();
 
-  chartDataSet: ChartData<'bar'> = {
+  chartDataSet: ChartData<'line'> = {
     labels: [],
     datasets: []
   };
@@ -56,36 +50,36 @@ export class CreatedEventsInscriptionTrendStatsComponent implements OnInit, OnDe
 
   loadData() {
     this.subs.add(
-      this.eventService.getCreatedEventInscriptionTrend(this.selectedMonth, this.selectedYear).subscribe({
+      this.eventService.getEventsInscriptionTrendByYear(this.selectedYear).subscribe({
         next: statistics => {
           this.chartDataSet = {
             labels: [],
             datasets: []
           };
-          const inscriptionsCountDataSet: ChartDataset<'bar'> = {
+          const inscriptionsCountDataSet: ChartDataset<'line'> = {
             data: [],
             label: "Inscripciones totales",
           }
-          const incompleteInscriptionsCountDataSet: ChartDataset<'bar'> = {
+          const incompleteInscriptionsCountDataSet: ChartDataset<'line'> = {
             data: [],
             label: "Inscripciones incompletas",
           }
-          const canceledInscriptionsCountDataSet: ChartDataset<'bar'> = {
+          const canceledInscriptionsCountDataSet: ChartDataset<'line'> = {
             data: [],
             label: "Inscripciones canceladas",
           }
-          const abandonmentCountDataSet: ChartDataset<'bar'> = {
+          const abandonmentCountDataSet: ChartDataset<'line'> = {
             data: [],
             label: "Abandonos de evento",
           }
 
-          statistics.results.forEach(eventData => {
+          statistics.trends.forEach(trendsByMonth => {
             // @ts-ignore
-            this.chartDataSet.labels.push(eventData.eventActivity + " " + eventData.eventDate);
-            inscriptionsCountDataSet.data.push(eventData.trend.inscriptionsCount);
-            incompleteInscriptionsCountDataSet.data.push(eventData.trend.incompleteInscriptionsCount);
-            canceledInscriptionsCountDataSet.data.push(eventData.trend.canceledInscriptionCount);
-            abandonmentCountDataSet.data.push(eventData.trend.abandonmentCount);
+            this.chartDataSet.labels.push(numberToMonthSpanishName(trendsByMonth.month));
+            inscriptionsCountDataSet.data.push(trendsByMonth.trends.inscriptionsCount);
+            incompleteInscriptionsCountDataSet.data.push(trendsByMonth.trends.incompleteInscriptionsCount);
+            canceledInscriptionsCountDataSet.data.push(trendsByMonth.trends.canceledInscriptionCount);
+            abandonmentCountDataSet.data.push(trendsByMonth.trends.abandonmentCount);
           });
 
           this.chartDataSet.datasets.push(inscriptionsCountDataSet, incompleteInscriptionsCountDataSet,
@@ -101,16 +95,14 @@ export class CreatedEventsInscriptionTrendStatsComponent implements OnInit, OnDe
   onDownloadPdf() {
     const currentDate: Date = new Date();
     const canvasImage = this.canvas.nativeElement.toDataURL("image/jpeg", 1.0);
-    const month = numberToMonthSpanishName(this.selectedMonth === 0 ?
-      currentDate.getMonth()+1 : this.selectedMonth);
 
     let pdf = new jsPDF({
       orientation: "landscape"
     });
     pdf.setFontSize(16);
-    pdf.text("Mis eventos - Tendencias de inscripción.", 15, 15);
+    pdf.text("Eventos - Tendencias de inscripción.", 15, 15);
     pdf.text("Fecha de generación: " + this.datePipe.transform(currentDate, "d/MM/y, h:mm a"), 150, 15);
-    pdf.text(`Mes: ${month} Año: ${this.selectedYear}`, 15, 22);
+    pdf.text(`Año: ${this.selectedYear}`, 15, 22);
     pdf.addImage(canvasImage, 'JPEG', 15, 30, 280, 150);
     pdf.save("eventos-tendencias-de-inscripción.pdf");
   }

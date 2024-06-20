@@ -10,6 +10,9 @@ import {
 import {
   EventsFeeStatisticsModalComponent
 } from "../../events/events-fee-statistics-modal/events-fee-statistics-modal.component";
+import {
+  EventsInscriptionTrendByYearModalComponent
+} from "../../events/events-inscription-trend-by-year-modal/events-inscription-trend-by-year-modal.component";
 
 @Component({
   selector: 'rr-admin-statistics-menu',
@@ -33,5 +36,9 @@ export class AdminStatisticsMenuComponent {
 
   onClickEventFeeStats() {
     this.modalService.open(EventsFeeStatisticsModalComponent, {size: "xl", centered: true})
+  }
+
+  onClickInscriptionTrend() {
+    this.modalService.open(EventsInscriptionTrendByYearModalComponent, {size: "xl", centered: true})
   }
 }

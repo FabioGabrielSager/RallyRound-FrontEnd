@@ -15,6 +15,7 @@ import {EventModificationRequest} from "../../models/event/eventModificationRequ
 import {EventFeedbackStatistics} from "../../models/event/eventFeedbackStatistics";
 import {EventsFeeSummary} from "../../models/event/EventsFeeSummary";
 import {EventInscriptionTrendByMonthAndYear} from "../../models/event/eventInscriptionTrendByMonthAndYear";
+import {EventInscriptionTrendByYear} from "../../models/event/eventInscriptionTrendByYear";
 
 @Injectable({
   providedIn: 'root'
@@ -316,5 +317,9 @@ export class EventService {
     return this.httpClient.get<EventInscriptionTrendByMonthAndYear>(
         this.baseUrlParticipantEndpoint + "/events/created/inscription-trends",
         {params: baseParams});
+  }
+
+  getEventsInscriptionTrendByYear(year: number) {
+    return this.httpClient.get<EventInscriptionTrendByYear>(this.baseUrlEventEndpoint + "/inscription-trend/" + year);
   }
 }

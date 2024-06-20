@@ -1,0 +1,16 @@
+<div class="mb-3 p-2">
+  <div class="d-flex justify-content-start column-gap-2">
+    <input type="number" id="year" class="form-control rr-input" (change)="loadData()" [(ngModel)]="selectedYear">
+  </div>
+</div>
+
+@if(chartDataSet.datasets.length > 0) {
+  <div class="p-2">
+    <div class="w-100">
+      <canvas class="rounded-3" #canvas baseChart [data]="chartDataSet" [type]="'line'" [plugins]="chartPlugins"></canvas>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary m-1" (click)="onDownloadPdf()">Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+}
