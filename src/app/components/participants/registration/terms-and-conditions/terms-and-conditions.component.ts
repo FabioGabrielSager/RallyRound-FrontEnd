@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {CdkDrag, CdkDragHandle, CdkDropList} from "@angular/cdk/drag-drop";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SearchResultsListComponent} from "../../../shared/search-results-list/search-results-list.component";
@@ -30,6 +30,8 @@ export class TermsAndConditionsComponent implements OnInit, OnDestroy {
   private router: Router = inject(Router);
   private subs: Subscription = new Subscription();
   termsAndConditions: DocumentDto = { title:"", content:"", contentType:"" } as DocumentDto;
+
+  @Input() showAcceptAndDenyButtons: boolean = true;
 
   ngOnInit(): void {
     this.subs.add(
