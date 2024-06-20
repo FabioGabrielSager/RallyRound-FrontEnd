@@ -1,0 +1,18 @@
+<div class="p-4">
+  <h1 class="mb-3">Preguntas frecuentes.</h1>
+  @for (faq of faqs; track faq.faq) {
+    <div class="faq-container mb-3" (click)="answer.toggle()">
+      <div class="d-flex">
+        <i class="bi"
+           style="font-size: 1.8rem;"
+           [ngClass]="!faq.isCollapsed ? 'bi-caret-down' : 'bi-caret-right'"></i>
+        <h2 class="rr-dark-purple-text"> {{ faq.faq.question }} </h2>
+      </div>
+      <div style="padding-left: 30px">
+        <p class="rr-bg-secondary rounded-2 ps-3 pe-1" #answer="ngbCollapse" [(ngbCollapse)]="faq.isCollapsed">
+          {{ faq.faq.answer }}
+        </p>
+      </div>
+    </div>
+  }
+</div>
