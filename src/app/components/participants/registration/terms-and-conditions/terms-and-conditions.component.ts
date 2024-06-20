@@ -51,6 +51,7 @@ export class TermsAndConditionsComponent implements OnInit, OnDestroy {
   }
 
   onClickAccept() {
+    this.authService.setHasAcceptedTermsAndConditions(true);
     this.subs.add(
       this.authService.sendRegistrationRequest().subscribe(
         {

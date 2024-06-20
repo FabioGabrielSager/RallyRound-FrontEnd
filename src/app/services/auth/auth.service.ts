@@ -42,6 +42,10 @@ export class AuthService {
     this.participantRegistrationRequest.favoritesActivities = activities;
   }
 
+  setHasAcceptedTermsAndConditions(value: boolean) {
+    this.participantRegistrationRequest.hasAcceptedTermsAndConditions = value;
+  }
+
   sendRegistrationRequest(): Observable<ParticipantRegistrationResponse> {
     const formData = new FormData();
     formData.append('participantData', JSON.stringify(this.participantRegistrationRequest));
