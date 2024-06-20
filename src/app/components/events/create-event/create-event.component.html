@@ -164,9 +164,7 @@
           }
         </div>
         @if (addHourButtonWasTouched && hours.length === 0 && !addingHour) {
-          @if (form.controls['duration'].hasError('required')) {
-            <span class="error-text">Debe añadir aunque sea un horario de inicio.</span>
-          }
+          <span class="error-text">Debe añadir aunque sea un horario de inicio.</span>
         }
       </div>
     </div>
