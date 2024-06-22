@@ -8,6 +8,7 @@ import {ParticipantRegistrationResponse} from "../../models/user/auth/participan
 import {AuthResponse} from "../../models/user/auth/AuthResponse";
 import {ConfirmParticipantRegistrationRequest} from "../../models/user/auth/confirmParticipantRegistrationRequest";
 import {LoginRequest} from "../../models/user/auth/loginRequest";
+import {PasswordChangeRequest} from "../../models/user/participant/passwordChangeRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -111,6 +112,23 @@ export class AuthService {
         catchError((err) => {
           console.log(err)
           return of(false)
+        })
+      );
+  }
+
+  changePassword(request: PasswordChangeRequest): Observable<AuthResponse> {
+    return this.httpClient.patch<AuthResponse>(this.baseUrl + "/password/change/", request)
+      .pipe(
+        tap(authResponse => {
+          sessionStorage.setItem("token", authResponse.token);
+          sessionStorage.setItem("privileges", JSON.stringify(authResponse.privileges));
+          sessionStorage.setItem("notificationTrayId", authResponse.notificationTrayId);
+          this.currentUserLoginOnToken.next(authResponse.token);
+          this.currentUserLoginOnPrivileges.next(authResponse.privileges);
+          if(authResponse.notificationTrayId) {
+            this.currentUserLoginOnNotificationTrayId.next(authResponse.notificationTrayId);
+          }
+          this.currentUserLoginOn.next(true);
         })
       );
   }

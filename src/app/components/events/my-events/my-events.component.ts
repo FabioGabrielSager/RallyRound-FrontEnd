@@ -191,6 +191,7 @@ export class MyEventsComponent implements OnInit {
   }
 
   searchEvents() {
+    // TODO: IMPLEMENT PAGINATION.
     if(!this.isMyCreatedEventsPageSelected) {
       this.getMyEvents(this.filtersForm.controls["activity"].value, this.selectedPlace?.address.neighborhood,
         this.selectedPlace?.address.locality, this.selectedPlace?.address.adminDistrict2,

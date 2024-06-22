@@ -21,6 +21,7 @@ import {CropperModalResult, ImageCropperModalComponent} from "../../shared/image
 import {DomSanitizer} from "@angular/platform-browser";
 import {FavoriteActivitiesModalComponent} from "../favorite-activities-modal/favorite-activities-modal.component";
 import {arraysEqual} from "../../../utils/arrays-utils";
+import {ChangePasswordModalComponent} from "../../shared/change-password-modal/change-password-modal.component";
 
 @Component({
   selector: 'rr-participant-account-details',
@@ -416,5 +417,9 @@ export class ParticipantAccountDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.subs.add(modal.closed.subscribe( () => this.deleteConfirmationForm.reset() ))
+  }
+
+  onChangePassword() {
+    this.modalService.open(ChangePasswordModalComponent, {centered: true});
   }
 }
