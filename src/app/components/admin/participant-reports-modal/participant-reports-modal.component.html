@@ -1,0 +1,74 @@
+<div class="rr-bg-secondary rounded-2">
+  <div class="modal-header">
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <h4 class="text-bold rr-dark-purple-text">Reportes de: {{ participant.name }}</h4>
+    <h6 class="text-bold rr-dark-purple-text">ID: {{ participant.id }}</h6>
+    <div class="overflow-x-auto">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Motivo</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Como creador de eventos</th>
+          <th scope="col">Numero</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (r of reportsPage.reports; track r) {
+            <tr>
+              <td>
+                {{ $index + 1 }}
+              </td>
+              <td>
+                <span>{{ reportMotivesMessages[r.reportMotive] }}</span>
+              </td>
+              <td>
+                <span>{{ r.description }}</span>
+              </td>
+              <td>
+                <span>{{ r.asEventCreator ? "SI" : "NO" }}</span>
+              </td>
+              <td>
+                <span> {{ r.reportNumber }} </span>
+              </td>
+              <td>
+                <span> {{ r.reportDateTime }} </span>
+              </td>
+              <td>
+                <button class="btn btn-danger" (click)="onDeleteReport(r.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination class="d-flex justify-content-center" [pageSize]="reportsPage.pageSize"
+                    [collectionSize]="reportsPage.totalElements"
+                    [(page)]="actualPage" [directionLinks]="true">
+      <ng-template ngbPaginationPrevious>
+        <span (click)="onSelectPreviousPage()">&laquo;</span>
+      </ng-template>
+      <ng-template ngbPaginationPages let-page let-pages="pages">
+        @if (pages.length > 0) {
+          @for (p of pages; track p) {
+            <li class="page-item">
+              <a class="page-link" (click)="onSelectSpecificPage(p)">{{ p }}</a>
+            </li>
+          }
+        }
+      </ng-template>
+      <ng-template ngbPaginationNext>
+        <span (click)="onSelectNextPage()">&raquo;</span>
+      </ng-template>
+    </ngb-pagination>
+  </div>
+</div>
+
+

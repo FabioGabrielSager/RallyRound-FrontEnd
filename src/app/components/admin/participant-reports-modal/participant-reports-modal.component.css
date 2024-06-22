@@ -1,0 +1,10 @@
+table {
+  /*border-collapse:separate;*/
+  /*!*border:solid var(--rr-secondary) 5px;*!*/
+  /*border-radius:6px;*/
+  border-color: var(--primary-border);
+}
+
+table > :not(caption) > * > * {
+  background-color: var(--rr-secondary);
+}

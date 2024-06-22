@@ -15,6 +15,12 @@
           Ver administradores registrados
         </button>
       </div>
+      <div class="col" *hasPrivilege="'OVER_USERS'"
+           [routerLink]="['/admin/', 'actions', {outlets: {admin: ['users','participants','reports']}}]">
+        <button class="btn rr-btn w-100">
+          Ver participantes reportados.
+        </button>
+      </div>
     </div>
   </div>
 </div>

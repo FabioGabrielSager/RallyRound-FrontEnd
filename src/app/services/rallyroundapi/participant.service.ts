@@ -11,6 +11,8 @@ import {ParticipantPersonalDataDto} from "../../models/user/participant/particip
 import {ParticipantModificationRequest} from "../../models/user/participant/participantModificationRequest";
 import {SearchedParticipantResult} from "../../models/user/participant/searchedParticipantResult";
 import {TopEventCreators} from "../../models/user/participant/topEventCreators";
+import {ReportedParticipantPage} from "../../models/user/participant/report/reportedParticipantPage";
+import {ParticipantReportsPage} from "../../models/user/participant/report/participantReportsPage";
 
 @Injectable({
   providedIn: 'root'
@@ -99,5 +101,18 @@ export class ParticipantService {
 
     return this.httpClient.get<TopEventCreators>(this.baseUrl + "/top/five/event-creators",
       { params: baseParams });
+  }
+
+  getReportedParticipants(page: number): Observable<ReportedParticipantPage> {
+    return this.httpClient
+      .get<ReportedParticipantPage>(this.baseUrl + "/report/participants/", { params: { "page": page } });
+  }
+
+  getParticipantReports(participantId: string, page: number): Observable<ParticipantReportsPage> {
+    return this.httpClient.get<ParticipantReportsPage>(this.baseUrl + `/reports/${participantId}`, {params: { "page": page }});
+  }
+
+  deleteParticipantReport(reportId: string) {
+    return this.httpClient.delete(this.baseUrl + `/report/delete/${reportId}`);
   }
 }

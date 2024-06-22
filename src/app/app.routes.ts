@@ -36,6 +36,7 @@ import {AdminStatisticsMenuComponent} from "./components/admin/admin-statistics-
 import {
   TermsAndConditionsComponent
 } from "./components/participants/registration/terms-and-conditions/terms-and-conditions.component";
+import {ReportedParticipantsComponent} from "./components/admin/reported-participants/reported-participants.component";
 
 export const routes: Routes = [
   {
@@ -52,7 +53,8 @@ export const routes: Routes = [
               {path: '', component: OverUsersActionsMenuComponent},
               {path: 'admin/register', component: RegisterAdminComponent},
               {path: 'admins', component: RegisteredAdminsComponent},
-              {path: 'admin/:adminId', component: AdminDetailsComponent}
+              {path: 'admin/:adminId', component: AdminDetailsComponent},
+              {path: 'participants/reports', component: ReportedParticipantsComponent}
             ]
           },
           {

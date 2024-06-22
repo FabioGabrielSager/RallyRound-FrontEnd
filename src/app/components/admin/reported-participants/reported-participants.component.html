@@ -1,0 +1,53 @@
+<div class="container mt-3">
+  <h1 class="rr-dark-purple-text">Participantes Reportados</h1>
+  <div class="overflow-x-auto">
+    <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Reportes como participante</th>
+        <th scope="col">Reportes como creador de eventos</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (p of reportedParticipantsPage.reportedParticipants; track p.participant.id) {
+          <tr (click)="onClickParticipant(p.participant)">
+            <td>
+              {{ $index + 1 }}
+            </td>
+            <td>
+              <span>{{ p.participant.name }}</span>
+            </td>
+            <td>
+              <span>{{ p.asParticipantReportsCount }}</span>
+            </td>
+            <td>
+              <span>{{ p.asEventCreatorReportsCount }}</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <ngb-pagination class="d-flex justify-content-center" [pageSize]="reportedParticipantsPage.pageSize"
+                  [collectionSize]="reportedParticipantsPage.totalElements"
+                  [(page)]="actualPage" [directionLinks]="true">
+    <ng-template ngbPaginationPrevious>
+      <span (click)="onSelectPreviousPage()">&laquo;</span>
+    </ng-template>
+    <ng-template ngbPaginationPages let-page let-pages="pages">
+      @if (pages.length > 0) {
+        @for (p of pages; track p) {
+          <li class="page-item">
+            <a class="page-link" (click)="onSelectSpecificPage(p)">{{ p }}</a>
+          </li>
+        }
+      }
+    </ng-template>
+    <ng-template ngbPaginationNext>
+      <span (click)="onSelectNextPage()">&raquo;</span>
+    </ng-template>
+  </ngb-pagination>
+</div>
