@@ -13,6 +13,7 @@ import {EventService} from "../../../services/rallyroundapi/event.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {formatDate, Location, NgClass} from "@angular/common";
 import {EventDurationUnit} from "../../../models/event/eventDurationUnit";
+import {isEventStarTimeValid} from "../../../validators/isEventStarTimeValid";
 
 @Component({
   selector: 'rr-modify-event',
@@ -76,6 +77,7 @@ export class ModifyEventComponent implements OnInit, OnDestroy {
       this.eventService.getCurrentUserCreatedEvent(this.eventId).subscribe({
         next: event => {
           this.eventData = event;
+          this.participantsCount = event.participantsLimit;
           this.eventData.address = new AddressEntity(event.address.__type, event.address.address);
           this.eventDataHasBeenLoaded$.next(true);
         },
@@ -453,12 +455,15 @@ export class ModifyEventComponent implements OnInit, OnDestroy {
 
   onAddNewHour(hourInput: HTMLInputElement) {
     if (!this.hours.some(hour => hour === hourInput.value) && hourInput.value !== '') {
-      this.hours.push(hourInput.value);
-      hourInput.value = '';
-      if (this.hours.length != 1) {
-        this.form.controls['selectedHour'].setValue(undefined);
+      if(isEventStarTimeValid(this.form.controls["date"].value, hourInput.value)) {
+        this.hours.push(hourInput.value);
+        hourInput.value = '';
+        if(this.hours.length != 1){
+          this.form.controls['selectedHour'].setValue(undefined);
+        }
+      } else {
+        this.toastService.show("Los horarios de inicio deben ser establecidos con 4 horas de antelación mínimamente.", "bg-danger");
       }
-
       this.wereEventStartingHoursModified();
     }
   }
@@ -488,6 +493,13 @@ export class ModifyEventComponent implements OnInit, OnDestroy {
       this.form.markAllAsTouched();
       this.addHourButtonWasTouched = true;
       return;
+    }
+
+    for (let i=0; i < this.hours.length; i++ ) {
+      if(!isEventStarTimeValid(this.form.controls["date"].value, this.hours[i])) {
+        this.toastService.show(`El horario de inicio ${this.hours[i]} ya no es valido`, "bg-danger");
+        return;
+      }
     }
 
     if(this.eventStartingHoursWereModified || this.eventDataModifiedFieldCount > 0) {

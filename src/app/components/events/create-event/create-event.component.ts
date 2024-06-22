@@ -11,6 +11,7 @@ import {ToastService} from "../../../services/toast.service";
 import {EventService} from "../../../services/rallyroundapi/event.service";
 import {CreateEventRequest} from "../../../models/event/createEventRequest";
 import {Router} from "@angular/router";
+import {isEventStarTimeValid} from "../../../validators/isEventStarTimeValid";
 
 @Component({
   selector: 'rr-create-event',
@@ -240,10 +241,14 @@ export class CreateEventComponent implements OnInit {
 
   onAddNewHour(hourInput: HTMLInputElement) {
     if(!this.hours.some(hour => hour === hourInput.value) && hourInput.value !== '') {
-      this.hours.push(hourInput.value);
-      hourInput.value = '';
-      if(this.hours.length != 1){
-        this.form.controls['selectedHour'].setValue(undefined);
+      if(isEventStarTimeValid(this.form.controls["date"].value, hourInput.value)) {
+        this.hours.push(hourInput.value);
+        hourInput.value = '';
+        if(this.hours.length != 1){
+          this.form.controls['selectedHour'].setValue(undefined);
+        }
+      } else {
+        this.toastService.show("Los horarios de inicio deben ser establecidos con 4 horas de antelación mínimamente.", "bg-danger");
       }
     }
   }
@@ -267,6 +272,13 @@ export class CreateEventComponent implements OnInit {
       this.form.markAllAsTouched();
       this.addHourButtonWasTouched = true;
       return;
+    }
+
+    for (let i=0; i < this.hours.length; i++ ) {
+      if(!isEventStarTimeValid(this.form.controls["date"].value, this.hours[i])) {
+        this.toastService.show(`El horario de inicio ${this.hours[i]} ya no es valido`, "bg-danger");
+        return;
+      }
     }
 
     const { description,
