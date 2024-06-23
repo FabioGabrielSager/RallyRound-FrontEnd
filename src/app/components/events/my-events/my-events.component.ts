@@ -63,7 +63,7 @@ export class MyEventsComponent implements OnInit {
   isMyCreatedEventsPageSelected: boolean = false;
   eventsAreLoading: boolean = false;
   events!: EventsResumesPage;
-  actualPage: number = 0;
+  actualPage: number = 1;
   filtersForm!: FormGroup;
   private fb: FormBuilder = inject(FormBuilder);
 
@@ -81,9 +81,9 @@ export class MyEventsComponent implements OnInit {
   ngOnInit(): void {
     this.filtersForm = this.fb.group({
       activity: [],
-      location: [''],
+      location: [""],
       dateFrom: [new Date().toISOString().split('T')[0]],
-      dateTo: [ new Date().toISOString().split('T')[0]],
+      dateTo: [""],
     });
 
     // Activities autosuggestion
@@ -191,7 +191,6 @@ export class MyEventsComponent implements OnInit {
   }
 
   searchEvents() {
-    // TODO: IMPLEMENT PAGINATION.
     if(!this.isMyCreatedEventsPageSelected) {
       this.getMyEvents(this.filtersForm.controls["activity"].value, this.selectedPlace?.address.neighborhood,
         this.selectedPlace?.address.locality, this.selectedPlace?.address.adminDistrict2,
@@ -205,8 +204,6 @@ export class MyEventsComponent implements OnInit {
         this.filtersForm.controls["dateTo"].value
       );
     }
-
-    this.actualPage = this.events.page;
   }
 
   private getMyEvents(activity: string | undefined, neighborhood: string | undefined,
@@ -216,7 +213,7 @@ export class MyEventsComponent implements OnInit {
     this.eventsAreLoading = true;
     this.eventService.getCurrentUserParticipatingEvents(null, null, null,
       activity, neighborhood, locality,
-      adminSubdistrict, adminDistrict, dateFrom, dateTo, []).subscribe(
+      adminSubdistrict, adminDistrict, dateFrom, dateTo, [], this.actualPage).subscribe(
       {
         next: value => {
           this.events = value;
@@ -236,7 +233,7 @@ export class MyEventsComponent implements OnInit {
     // TODO: Add the required filters for this parameters
     this.eventsAreLoading = true;
     this.eventService.getCurrentUserCreatedEvents(activity, neighborhood, locality,
-      adminSubdistrict, adminDistrict, dateFrom, dateTo, []).subscribe(
+      adminSubdistrict, adminDistrict, dateFrom, dateTo, [], this.actualPage).subscribe(
       {
         next: value => {
           this.events = value;
@@ -251,20 +248,10 @@ export class MyEventsComponent implements OnInit {
   }
 
   onSelectSpecificPage(p: number) {
-    if(this.actualPage != p) {
+    if (this.actualPage != p) {
       this.actualPage = p;
       this.searchEvents();
     }
-  }
-
-  onSelectNextPage() {
-    this.actualPage = this.actualPage + 1;
-    this.searchEvents();
-  }
-
-  onSelectPreviousPage() {
-    this.actualPage = this.actualPage - 1;
-    this.searchEvents();
   }
 
   onSeeEvent(eventId: string) {

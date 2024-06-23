@@ -185,7 +185,7 @@ export class EventService {
   getCurrentUserParticipatingEvents(createdAt: Date | null, status: EventInscriptionStatus | null,
                                     paymentStatus: MPPaymentStatus | null, activity: string | undefined, neighborhood: string | undefined,
                                     locality: string | undefined, adminSubdistrict: string | undefined, adminDistrict: string | undefined,
-                                    dateFrom: string | null, dateTo: string | null, hours: string[]):
+                                    dateFrom: string | null, dateTo: string | null, hours: string[], page: number):
     Observable<EventsResumesPage> {
     let baseParams: HttpParams = new HttpParams();
 
@@ -222,13 +222,15 @@ export class EventService {
     if (hours.length > 0)
       baseParams = baseParams.append('hours', hours.join(','));
 
+    baseParams = baseParams.append('page', page);
+
     return this.httpClient.get<EventsResumesPage>(`${this.baseUrlParticipantEndpoint}/events/singedup`,
       {params: baseParams});
   }
 
   getCurrentUserCreatedEvents(activity: string | undefined, neighborhood: string | undefined, locality: string | undefined,
                               adminSubdistrict: string | undefined, adminDistrict: string | undefined, dateFrom: string | null,
-                              dateTo: string | null, hours: string[]): Observable<EventsResumesPage> {
+                              dateTo: string | null, hours: string[], page: number): Observable<EventsResumesPage> {
     let baseParams: HttpParams = new HttpParams();
 
     if (activity)
@@ -254,6 +256,8 @@ export class EventService {
 
     if (hours.length > 0)
       baseParams = baseParams.append('hours', hours.join(','));
+
+    baseParams = baseParams.append('page', page);
 
     return this.httpClient.get<EventsResumesPage>(`${this.baseUrlParticipantEndpoint}/events/created`,
       {params: baseParams});

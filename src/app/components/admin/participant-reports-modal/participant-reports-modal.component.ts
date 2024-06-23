@@ -52,16 +52,6 @@ export class ParticipantReportsModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelectNextPage() {
-    this.actualPage = this.actualPage + 1;
-    this.getParticipantReports();
-  }
-
-  onSelectPreviousPage() {
-    this.actualPage = this.actualPage - 1;
-    this.getParticipantReports();
-  }
-
   onDeleteReport(reportId: string) {
     this.subs.add(
       this.participantService.deleteParticipantReport(reportId).subscribe(

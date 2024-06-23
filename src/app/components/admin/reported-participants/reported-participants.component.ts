@@ -51,16 +51,6 @@ export class ReportedParticipantsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelectNextPage() {
-    this.actualPage = this.actualPage + 1;
-    this.searchReportedParticipants();
-  }
-
-  onSelectPreviousPage() {
-    this.actualPage = this.actualPage - 1;
-    this.searchReportedParticipants();
-  }
-
   onClickParticipant(participant: ParticipantResume) {
     const modal = this.modalService.open(ParticipantReportsModalComponent, {size: "xl"});
     modal.componentInstance.participant = participant;

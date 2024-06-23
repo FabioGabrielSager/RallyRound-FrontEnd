@@ -220,16 +220,6 @@ export class EventSearchComponent implements OnInit{
     }
   }
 
-  onSelectNextPage() {
-    this.actualPage = this.actualPage + 1;
-    this.searchEvents();
-  }
-
-  onSelectPreviousPage() {
-    this.actualPage = this.actualPage - 1;
-    this.searchEvents();
-  }
-
   private searchEvents() {
     const address = this.selectedPlace != null ? this.selectedPlace.address :
       {} as Address;
