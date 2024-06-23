@@ -13,6 +13,9 @@ import {SearchedParticipantResult} from "../../models/user/participant/searchedP
 import {TopEventCreators} from "../../models/user/participant/topEventCreators";
 import {ReportedParticipantPage} from "../../models/user/participant/report/reportedParticipantPage";
 import {ParticipantReportsPage} from "../../models/user/participant/report/participantReportsPage";
+import {
+  ReportsCountByMotiveAndYearAndMonth
+} from "../../models/user/participant/report/reportsCountByMotiveAndYearAndMonth";
 
 @Injectable({
   providedIn: 'root'
@@ -114,5 +117,19 @@ export class ParticipantService {
 
   deleteParticipantReport(reportId: string) {
     return this.httpClient.delete(this.baseUrl + `/report/delete/${reportId}`);
+  }
+
+  getReportsCount(year: number | undefined, month: number | undefined): Observable<ReportsCountByMotiveAndYearAndMonth> {
+    let baseParams: HttpParams = new HttpParams();
+
+    if(month) {
+      baseParams = baseParams.append("month", month);
+    }
+
+    if(year) {
+      baseParams = baseParams.append("year", year);
+    }
+
+    return this.httpClient.get<ReportsCountByMotiveAndYearAndMonth>(this.baseUrl + "/reports/count", {params: baseParams});
   }
 }

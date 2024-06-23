@@ -23,6 +23,11 @@
           Ver tendencias de inscripción a eventos.
         </button>
       </div>
+      <div class="col-7 d-flex justify-content-center" *hasPrivilege="'GENERATE_STATISTICS'">
+        <button class="btn rr-btn w-100" (click)="onClickUserReportsStats()">
+          Ver estadísticas de reportes de usuario.
+        </button>
+      </div>
     </div>
   </div>
 </div>
