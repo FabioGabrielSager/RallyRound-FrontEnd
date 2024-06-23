@@ -112,8 +112,8 @@
         <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3"
              style="max-height: 80vh" [(ngbCollapse)]="!isSearchFormCollapsed" #resultsContainer>
           @for (e of eventsResumesPage.results; track e) {
-            <div class="col-12 d-flex justify-content-center">
-              <rr-event-resume-card [eventResume]="e" (onSeeEvent)="onViewEventClick($event)"/>
+            <div class="col-7 d-flex justify-content-center">
+              <rr-event-resume-card class="w-100" [eventResume]="e" (onSeeEvent)="onViewEventClick($event)"/>
             </div>
           }
           <div class="col-12">
