@@ -4,6 +4,7 @@ import {MatchedActivities} from "../../models/common/MatchedActivities";
 import {Observable} from "rxjs";
 import {environment} from "../../../enviroment/enviroment";
 import {EventsForActivityByMonth} from "../../models/event/eventsForActivityByMonth";
+import {ActivityPage} from "../../models/activity/activityPage";
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,29 @@ export class RrActivityService {
     }
 
     return this.httpClient.get<EventsForActivityByMonth>(this.baseUrl + "/event-counts", {params: baseParams});
+  }
+
+  getActivities(name: string | undefined, enabled: boolean | undefined, page: number): Observable<ActivityPage> {
+    let baseParams = new HttpParams();
+
+    if(name) {
+      baseParams = baseParams.append("name", name);
+    }
+
+    if(enabled) {
+      baseParams = baseParams.append("enabled", enabled);
+    }
+
+    baseParams = baseParams.append("page", page);
+
+    return this.httpClient.get<ActivityPage>(this.baseUrl, {params: baseParams});
+  }
+
+  disableActivity(activityId: string) {
+    return this.httpClient.patch(this.baseUrl + `/${activityId}/disable`, {});
+  }
+
+  enableActivity(activityId: string) {
+    return this.httpClient.patch(this.baseUrl + `/${activityId}/enable`, {});
   }
 }

@@ -37,6 +37,8 @@ import {
   TermsAndConditionsComponent
 } from "./components/participants/registration/terms-and-conditions/terms-and-conditions.component";
 import {ReportedParticipantsComponent} from "./components/admin/reported-participants/reported-participants.component";
+import {ActivitiesComponent} from "./components/admin/activities/activities.component";
+import {AdminEventsMenuComponent} from "./components/admin/admin-events-menu/admin-events-menu.component";
 
 export const routes: Routes = [
   {
@@ -54,7 +56,7 @@ export const routes: Routes = [
               {path: 'admin/register', component: RegisterAdminComponent},
               {path: 'admins', component: RegisteredAdminsComponent},
               {path: 'admin/:adminId', component: AdminDetailsComponent},
-              {path: 'participants/reports', component: ReportedParticipantsComponent}
+              {path: 'participants/reports', component: ReportedParticipantsComponent},
             ]
           },
           {
@@ -62,6 +64,14 @@ export const routes: Routes = [
             outlet: 'admin',
             children: [
               {path: '', component: AdminStatisticsMenuComponent}
+            ]
+          },
+          {
+            path: 'events',
+            outlet: 'admin',
+            children: [
+              {path: '', component: AdminEventsMenuComponent},
+              {path: 'activities', component: ActivitiesComponent}
             ]
           }
         ]

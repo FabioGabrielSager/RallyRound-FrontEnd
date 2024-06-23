@@ -1,0 +1,77 @@
+<div class="container mt-3">
+  <h1 class="rr-dark-purple-text">Actividades</h1>
+
+  <form [formGroup]="filtersForm" class="overflow-x-auto p-2" (ngSubmit)="onSubmit()">
+    <div class="d-flex justify-content-start column-gap-2">
+      <input type="text" class="form-control rr-input" formControlName="name" placeholder="Nombre"
+             style="min-width: 90px">
+      <select class="form-select rr-input" formControlName="enabled">
+        <option value="" selected>Habilitadas y no habilitadas</option>
+        <option [value]="true" selected>Habilitadas</option>
+        <option [value]="false" selected>No habilitadas</option>
+      </select>
+    </div>
+    <button class="btn rr-btn mt-2" style="position: sticky; left: 0">Filtrar</button>
+  </form>
+
+  <div class="overflow-x-auto">
+    <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Habilitada</th>
+        <th scope="col">Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (act of activityPage.activities; track act.id) {
+          <tr>
+            <td>
+              {{ $index + 1 }}
+            </td>
+            <td>
+              {{ act.name }}
+            </td>
+            <td>
+              <div class="d-flex justify-content-center pe-5">
+                @if (act.enabled) {
+                  <i class="bi bi-check-circle text-success" style="font-size: 1.3rem"></i>
+                } @else {
+                  <i class="bi bi-x-circle text-danger" style="font-size: 1.3rem"></i>
+                }
+              </div>
+            </td>
+            <td>
+              @if(act.enabled) {
+                <button class="btn btn-danger" (click)="onDisableActivity(act.id)">Deshabilitar</button>
+              } @else {
+                <button class="btn btn-success" (click)="onEnableActivity(act.id)">Habilitar</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <ngb-pagination class="d-flex justify-content-center" [pageSize]="activityPage.pageSize"
+                  [collectionSize]="activityPage.totalElements"
+                  [(page)]="actualPage" [directionLinks]="true">
+    <ng-template ngbPaginationPrevious>
+      <span (click)="onSelectPreviousPage()">&laquo;</span>
+    </ng-template>
+    <ng-template ngbPaginationPages let-page let-pages="pages">
+      @if (pages.length > 0) {
+        @for (p of pages; track p) {
+          <li class="page-item">
+            <a class="page-link" (click)="onSelectSpecificPage(p)">{{ p }}</a>
+          </li>
+        }
+      }
+    </ng-template>
+    <ng-template ngbPaginationNext>
+      <span (click)="onSelectNextPage()">&raquo;</span>
+    </ng-template>
+  </ngb-pagination>
+</div>

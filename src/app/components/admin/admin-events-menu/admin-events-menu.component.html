@@ -1,0 +1,14 @@
+<div class="container-fluid vh-100 d-flex justify-content-center">
+  <div id="menu-container" class="align-self-center">
+    <h1 class="text-bold rr-dark-purple-text text-center">Eventos</h1>
+    <h3 class="rr-dark-purple-text text-center text-bold">¿Qué quieres hacer?</h3>
+    <div class="row row-cols-1 justify-content-center gy-1 mt-2">
+      <div class="col-7 d-flex justify-content-center">
+        <button class="btn rr-btn w-100"
+                [routerLink]="['/admin/', 'actions', {outlets: {admin: ['events','activities']}}]">
+          Ver actividades.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

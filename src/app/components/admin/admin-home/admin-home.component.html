@@ -25,7 +25,8 @@
         </button>
       </div>
       <div class="col" *hasPrivilege="'OVER_EVENTS'">
-        <button class="btn rr-btn w-100 d-flex justify-content-between align-items-center">
+        <button class="btn rr-btn w-100 d-flex justify-content-between align-items-center"
+                [routerLink]="['/admin/', 'actions', {outlets: {admin: ['events']}}]">
           <span class="flex-grow-1 text-center">Eventos</span>
           <i class="bi bi-calendar-event"></i>
         </button>
