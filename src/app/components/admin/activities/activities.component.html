@@ -57,21 +57,20 @@
 
   <ngb-pagination class="d-flex justify-content-center" [pageSize]="activityPage.pageSize"
                   [collectionSize]="activityPage.totalElements"
-                  [(page)]="actualPage" [directionLinks]="true">
-    <ng-template ngbPaginationPrevious>
-      <span (click)="onSelectPreviousPage()">&laquo;</span>
-    </ng-template>
+                  [page]="actualPage" [directionLinks]="false">
     <ng-template ngbPaginationPages let-page let-pages="pages">
       @if (pages.length > 0) {
         @for (p of pages; track p) {
           <li class="page-item">
-            <a class="page-link" (click)="onSelectSpecificPage(p)">{{ p }}</a>
+            <a class="page-link"
+               [class.text-bold]="actualPage == p"
+               [style.background-color]="actualPage == p ? '#d9941c' : ''"
+               (click)="onSelectSpecificPage(p)">
+              {{ p }}
+            </a>
           </li>
         }
       }
-    </ng-template>
-    <ng-template ngbPaginationNext>
-      <span (click)="onSelectNextPage()">&raquo;</span>
     </ng-template>
   </ngb-pagination>
 </div>

@@ -56,14 +56,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     if (this.actualPage != p) {
       this.actualPage = p;
     }
-  }
-
-  onSelectNextPage() {
-    this.actualPage = this.actualPage + 1;
-  }
-
-  onSelectPreviousPage() {
-    this.actualPage = this.actualPage - 1;
+    this.onSubmit();
   }
 
   private searchActivities(name: string | undefined, enabled: boolean | undefined) {
