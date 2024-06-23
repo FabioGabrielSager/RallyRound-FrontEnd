@@ -1,48 +1,48 @@
-<div class="container d-flex flex-column justify-content-center vh-100 align-items-center">
-  <h1 class="rr-dark-purple-text">Tus eventos</h1>
+<div class="container mt-5">
+  <div class="d-flex justify-content-center">
+    <h1 class="rr-dark-purple-text">Tus eventos</h1>
+  </div>
   <div class="pages-controls w-100 d-flex justify-content-around column-gap-5">
     <span class="page-selector" (click)="onSelectPage()"
           [class.selected-page]="!isMyCreatedEventsPageSelected">Participando</span>
     <span class="page-selector" (click)="onSelectPage()"
           [class.selected-page]="isMyCreatedEventsPageSelected">Creados por tí</span>
   </div>
-  <div class="events-container mt-3 ps-3 pe-3"
-       [class.overflow-y-auto]="events && events.results && events.results.length > 1">
-
-    <div [(ngbCollapse)]="isFiltersFormCollapsed" #collapsedForm="ngbCollapse">
-      <form [formGroup]="filtersForm" class="overflow-x-auto p-2">
-        <div class="d-flex justify-content-between column-gap-2">
-          <div #dateDropdown="ngbDropdown" ngbDropdown container="body">
-            <button type="button" class="btn border rr-border-primary-color" ngbDropdownToggle>
-              Fecha del evento
-            </button>
-            <div ngbDropdownMenu class="rr-bg-primary">
-              <div class="px-4 py-3">
-                <div class="mb-3">
-                  <label class="form-label align-self-center">Desde</label>
-                  <input type="date" class="form-control rr-input" formControlName="dateFrom"
-                         style="min-width: 150px">
+  <div class="overflow-x-auto mt-3">
+      <div [(ngbCollapse)]="isFiltersFormCollapsed" #collapsedForm="ngbCollapse">
+        <form [formGroup]="filtersForm" class="p-2">
+          <div class="d-flex justify-content-between column-gap-2">
+            <div #dateDropdown="ngbDropdown" ngbDropdown container="body">
+              <button type="button" class="btn border rr-border-primary-color" ngbDropdownToggle>
+                Fecha del evento
+              </button>
+              <div ngbDropdownMenu class="rr-bg-primary">
+                <div class="px-4 py-3">
+                  <div class="mb-3">
+                    <label class="form-label align-self-center">Desde</label>
+                    <input type="date" class="form-control rr-input" formControlName="dateFrom"
+                           style="min-width: 150px">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label align-self-center">Hasta</label>
+                    <input type="date" class="form-control rr-input" formControlName="dateTo" style="min-width: 150px">
+                  </div>
+                  <button type="button" class="btn rr-btn" (click)="dateDropdown.close()">Aceptar</button>
                 </div>
-                <div class="mb-3">
-                  <label class="form-label align-self-center">Hasta</label>
-                  <input type="date" class="form-control rr-input" formControlName="dateTo" style="min-width: 150px">
-                </div>
-                <button type="button" class="btn rr-btn" (click)="dateDropdown.close()">Aceptar</button>
               </div>
             </div>
-          </div>
-          <div class="position-relative">
-            <input type="text" class="form-control rr-input"
-                   name="activity" id="activity-input" placeholder="actividad"
-                   formControlName="activity"
-                   (blur)="onBlurActivityInput()"
-                   [value]="selectedActivity"
-                   aria-describedby="actividad"
-                   style="min-width: 100px">
-            <rr-search-results-list [resultsList]="suggestedActivities"
-                                    (onSelectedResult)="onClickActivitySearchResult($event)"/>
-          </div>
-          <div class="position-relative">
+            <div class="position-relative">
+              <input type="text" class="form-control rr-input"
+                     name="activity" id="activity-input" placeholder="actividad"
+                     formControlName="activity"
+                     (blur)="onBlurActivityInput()"
+                     [value]="selectedActivity"
+                     aria-describedby="actividad"
+                     style="min-width: 100px">
+              <rr-search-results-list [resultsList]="suggestedActivities"
+                                      (onSelectedResult)="onClickActivitySearchResult($event)"/>
+            </div>
+            <div class="position-relative">
                 <textarea type="text" class="form-control rr-input" name="location"
                           id="location-input" placeholder="Ej.: Provincia, departamento, localidad..."
                           formControlName="location" (blur)="onBlurLocationInput()" style="min-width: 500px"
@@ -50,23 +50,26 @@
                           ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
                           [class.is-invalid]="filtersForm.controls['location'].invalid
                           && (filtersForm.controls['location'].touched || filtersForm.controls['location'].dirty)"></textarea>
-            <rr-search-results-list [resultsList]="formattedNames"
-                                    (onSelectedResult)="onClickPlaceSearchResult($event)"/>
-            @if (filtersForm.controls['location'].value !== "" && selectedPlace == undefined) {
-              <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
-            }
+              <rr-search-results-list [resultsList]="formattedNames"
+                                      (onSelectedResult)="onClickPlaceSearchResult($event)"/>
+              @if (filtersForm.controls['location'].value !== "" && selectedPlace == undefined) {
+                <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
+              }
+            </div>
           </div>
-        </div>
-        <button class="btn rr-btn mt-2" (click)="searchEvents()" style="position: sticky; left: 100%">
-          <i class="bi bi-arrow-clockwise"></i>
-        </button>
-      </form>
+          <button class="btn rr-btn mt-2" (click)="searchEvents()" style="position: sticky; left: 100%">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </form>
     </div>
     <div (click)="collapsedForm.toggle()">
       <i class="bi"
          style="font-size: 1.8rem;"
          [ngClass]="isFiltersFormCollapsed ? 'bi-caret-down' : 'bi-caret-up'"></i>
     </div>
+  </div>
+  <div class="events-container mt-1 ps-3 pe-3"
+       [class.overflow-y-auto]="events && events.results && events.results.length > 1">
 
     @if (eventsAreLoading) {
       <div class="w-100 h-100 d-flex justify-content-center align-items-center">
