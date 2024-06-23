@@ -308,8 +308,12 @@ export class CreateEventComponent implements OnInit {
         this.router.navigate(['events', { outlets: { events: ['myevents', value.id]}}]);
       },
       error: err => {
-        this.toastService.show("Hubo un error al intentar crear el evento.", "bg-danger")
-        console.error(err)
+        if(err.status === 400 && String(err.error.message).includes("The selected activity is not enabled.")) {
+          this.toastService.show("La actividad seleccionada no esta disponible para crear eventos.", "bg-danger")
+        } else {
+          this.toastService.show("Hubo un error al intentar crear el evento.", "bg-danger")
+          console.error(err);
+        }
       }
     });
   }
