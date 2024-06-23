@@ -39,7 +39,11 @@
                   @if (h === event.selectedStartingHour) {
                     <i class="bi bi-check-circle text-success ms-1"></i>
                   }
-                  {{ getHourVotes(h) }}
+                  @if(event.startingHoursTimesVoted != null) {
+                    {{ getHourVotes(h) }}
+                  } @else {
+                    0
+                  }
                 </div>
               }
             } @else {
@@ -83,7 +87,7 @@
           track _) {
           <i class="bi bi-person"></i>
         }
-        <span> {{ event.eventParticipants.length }}/{{ event.participantsLimit }}</span>
+        <span> {{ event.eventCreatorIsParticipant ? event.eventParticipants.length : event.eventParticipants.length-1 }}/{{ event.participantsLimit }}</span>
       </div>
       <div class="col-12">
         <div class="d-flex align-items-center flex-wrap">
@@ -135,9 +139,11 @@
         </div>
       }
       @if(event.state === EventState.WAITING_FOR_PARTICIPANTS) {
-        <div class="col-12">
-          <button class="btn btn-success w-100" (click)="onClickModifyEvent()">Modificar</button>
-        </div>
+        @if(event.eventParticipants.length === 1) {
+          <div class="col-12">
+            <button class="btn btn-success w-100" (click)="onClickModifyEvent()">Modificar</button>
+          </div>
+        }
         <div class="col-12">
           <button class="btn btn-danger w-100" (click)="onClickCancelEvent()">Cancelar evento</button>
         </div>

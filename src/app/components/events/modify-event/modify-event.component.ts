@@ -510,8 +510,13 @@ export class ModifyEventComponent implements OnInit, OnDestroy {
             this.router.navigate(['events', { outlets: { events: ['myevents', value.id]}}]);
           },
           error: err => {
-            if(err.status === 400 && String(err.error.message).includes("The selected activity is not enabled.")) {
-              this.toastService.show("La actividad seleccionada no esta disponible para crear eventos.", "bg-danger")
+            if(err.status === 400) {
+              if( String(err.error.message).includes("The selected activity is not enabled.")) {
+                this.toastService.show("La actividad seleccionada no esta disponible para crear eventos.", "bg-danger")
+              }
+              if(String(err.error.message).includes("Only events that do not yet have participants can be modified.")) {
+                this.toastService.show("No puedes modificar un evento que ya cuenta con participantes.", "bg-danger")
+              }
             } else {
               this.toastService.show("Hubo un error al intentar modificar el evento.", "bg-danger")
               console.error(err);
