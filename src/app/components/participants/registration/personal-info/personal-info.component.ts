@@ -54,15 +54,25 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
     const today = new Date();
     this.birthdateControlInitialValue = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
 
+    let regRequest = this.authService.getParticipantRegistrationRequest();
+
+    if (regRequest.birthdate) {
+      this.birthdateControlInitialValue = new Date(regRequest.birthdate);
+    }
+
+    if (regRequest.place) {
+      this.selectedPlace = new Place(regRequest.place.__type, regRequest.place.address, regRequest.place.name);
+    }
+
     this.form = this.fb.group({
-      name: ["", [Validators.required]],
-      lastName: ["", [Validators.required]],
-      locality: ["", [Validators.required]],
+      name: [regRequest.name, [Validators.required]],
+      lastName: [regRequest.lastName, [Validators.required]],
+      locality: [this.selectedPlace?.getFormattedName(), [Validators.required]],
       birthdate: [formatDate(this.birthdateControlInitialValue, 'yyyy-MM-dd', 'en'),
         [Validators.required, minAgeValidator(18)]],
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(5)]],
-      confirmPassword: ["", [Validators.required]]
+      email: [regRequest.email, [Validators.required, Validators.email]],
+      password: [regRequest.password, [Validators.required, Validators.minLength(5)]],
+      confirmPassword: [regRequest.password, [Validators.required]]
     }, {validators: passwordMatchValidator});
 
     // Locations autosuggestion

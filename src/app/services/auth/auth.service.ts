@@ -47,6 +47,10 @@ export class AuthService {
     this.participantRegistrationRequest.hasAcceptedTermsAndConditions = value;
   }
 
+  getParticipantRegistrationRequest() {
+    return this.participantRegistrationRequest;
+  }
+
   sendRegistrationRequest(): Observable<ParticipantRegistrationResponse> {
     const formData = new FormData();
     formData.append('participantData', JSON.stringify(this.participantRegistrationRequest));
