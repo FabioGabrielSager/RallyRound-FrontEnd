@@ -22,6 +22,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {FavoriteActivitiesModalComponent} from "../favorite-activities-modal/favorite-activities-modal.component";
 import {arraysEqual} from "../../../utils/arrays-utils";
 import {ChangePasswordModalComponent} from "../../shared/change-password-modal/change-password-modal.component";
+import {FooterComponent} from "../../shared/footer/footer.component";
 
 @Component({
   selector: 'rr-participant-account-details',
@@ -30,7 +31,8 @@ import {ChangePasswordModalComponent} from "../../shared/change-password-modal/c
     ReactiveFormsModule,
     SearchResultsListComponent,
     NgClass,
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent
   ],
   templateUrl: './participant-account-details.component.html',
   styleUrl: './participant-account-details.component.css'

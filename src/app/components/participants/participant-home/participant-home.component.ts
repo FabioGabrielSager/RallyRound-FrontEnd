@@ -18,15 +18,13 @@ import {TopEventCreatorsModalComponent} from "../top-event-creators-modal/top-ev
 import {
   EventsForActivityStatisticsModalComponent
 } from "../../events/events-for-activity-statistics-modal/events-for-activity-statistics-modal.component";
-import {FooterComponent} from "../../shared/footer/footer.component";
 
 @Component({
   selector: 'rr-participant-home',
   standalone: true,
     imports: [
         NavbarComponent,
-        RouterLink,
-        FooterComponent
+        RouterLink
     ],
   templateUrl: './participant-home.component.html',
   styleUrl: './participant-home.component.css'
