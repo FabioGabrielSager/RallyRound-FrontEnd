@@ -1,3 +1,7 @@
 footer {
   background-color: #d9941c;
 }
+
+footer .link-primary:hover {
+  cursor: pointer;
+}
