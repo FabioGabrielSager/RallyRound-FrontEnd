@@ -101,12 +101,16 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="col-12" (click)="toggleCollapsedForm(collapsedForm)">
           @if (eventsResumesPage.results) {
-            <i class="bi" (click)="toggleCollapsedForm(collapsedForm)"
+            <i class="bi"
                style="font-size: 1.8rem;"
                [ngClass]="isSearchFormCollapsed ? 'bi-caret-down' : 'bi-caret-up'"></i>
           }
         </div>
+
       </div>
       @if (eventsResumesPage.results) {
         <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3"
