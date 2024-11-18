@@ -144,4 +144,10 @@ export class AuthService {
         })
       );
   }
+
+  clearRegistrationRequest() {
+      this.participantRegistrationRequest = new ParticipantRegistrarionRequest();
+
+      this.profilePhoto = null;
+  }
 }

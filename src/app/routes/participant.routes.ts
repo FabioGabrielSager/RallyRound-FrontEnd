@@ -16,6 +16,7 @@ import {
   EmailConfirmationComponent
 } from "../components/participants/registration/email-confirmation/email-confirmation.component";
 import {ParticipantHomeComponent} from "../components/participants/participant-home/participant-home.component";
+import {clearAuthCacheGuard} from "../guards/auth/clear-auth-cache.guard";
 
 export const PARTICIPANT_ROUTES: Routes = [
   {
@@ -30,7 +31,8 @@ export const PARTICIPANT_ROUTES: Routes = [
       {path: 'activities', component: FavoriteActivitiesComponent, outlet: 'registration'},
       {path: 'terms-and-conditions', component: TermsAndConditionsComponent, outlet: 'registration'},
       {path: 'confirmEmail', component: EmailConfirmationComponent, outlet: 'registration'}
-    ]
+    ],
+    canDeactivate: [clearAuthCacheGuard]
   },
   {path: 'home/:name', component: ParticipantHomeComponent, canActivate: [AuthGuard]},
   {path: 'home', redirectTo: 'home/', pathMatch: 'full'}
