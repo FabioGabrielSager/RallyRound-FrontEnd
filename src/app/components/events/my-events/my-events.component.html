@@ -4,13 +4,17 @@
     </div>
 
     <div class="pages-controls w-100 d-flex justify-content-around column-gap-5">
-<span class="page-selector" (click)="onSelectPage()"
-      [class.selected-page]="!isMyCreatedEventsPageSelected">Participando</span>
+        <span class="page-selector" (click)="onSelectPage()"
+            [class.selected-page]="!isMyCreatedEventsPageSelected"
+        >
+            Participando
+        </span>
+
         <span class="page-selector" (click)="onSelectPage()"
               [class.selected-page]="isMyCreatedEventsPageSelected">Creados por tí</span>
     </div>
 
-    <div class="overflow-x-auto mt-3">
+    <div class="overflow-x-auto mt-3 w-100">
         <div [(ngbCollapse)]="isFiltersFormCollapsed" #collapsedForm="ngbCollapse">
             <form [formGroup]="filtersForm" class="p-2">
                 <div class="d-flex justify-content-between column-gap-2">
@@ -60,7 +64,7 @@
                         }
                     </div>
                 </div>
-                <button class="btn rr-btn mt-2" (click)="searchEvents()" style="position: sticky; left: 100%">
+                <button class="btn rr-btn mt-2" (click)="searchEvents()" style="position: sticky; left: 0">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
             </form>
@@ -73,7 +77,9 @@
     </div>
 
     <div class="events-container mt-1 ps-3 pe-3"
-         [class.overflow-y-auto]="events && events.results && events.results.length > 1">
+         [class.overflow-y-auto]="events && events.results && events.results.length > 1"
+         style="max-height: 50vh"
+    >
 
         @if (eventsAreLoading) {
             <div class="w-100 h-100 d-flex justify-content-center align-items-center">
@@ -106,7 +112,7 @@
                 }
                 <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3">
                     @for (event of events.results; track event.eventId) {
-                        <div class="col-7 d-flex justify-content-center">
+                        <div class="col-12 d-flex justify-content-center">
                             <rr-event-resume-card class="w-100" [eventResume]="event"
                                                   (onSeeEvent)="onSeeEvent($event)"/>
                         </div>
