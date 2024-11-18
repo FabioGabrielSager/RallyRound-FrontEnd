@@ -1,64 +1,83 @@
 <div id="form-container" class="container d-flex flex-column justify-content-center rr-black-text">
-  <h3 class="rr-dark-purple-text text-bold">Tus actividades favoritas.</h3>
-  <span class="form-text mb-3" style="font-style: italic">
-    Con el botón <i class="bi bi-list rr-black-text"></i> puedes arrastrar las actividades
-    para ordenarlas desde las que más te gustas a las que menos.</span>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ng-container formArrayName="activities">
-      <div cdkDropList (cdkDropListDropped)="onDrop($event)">
-        @for (act of activitiesFormArray.controls; track act; let i = $index) {
-          <div [formGroupName]="i" class="mb-2" cdkDrag>
-            <div class="d-flex align-items-center">
-              <div class="w-100">
-                <div class="d-flex">
-                  <label class="align-self-center">{{ i + 1 }}.</label>
-                  <div class="w-100 position-relative">
-                    <div class="input-group">
-                      <input type="text" class="form-control rr-input border-end-0"
-                             placeholder="Ej.: Básquet, Música, Futbol, etc." [id]="i"
-                             [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners'
-                             : 'rounded-bottom-corners'"
-                             aria-describedby="actividad" formControlName="activity" (blur)="onBlur()">
-                      <button
-                        tabindex="-1"
-                        [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'"
-                        class="rr-drag-btn rr-border-primary-color border-start-0 pe-3" type="button"
-                        cdkDragHandle>
-                        <i class="bi bi-list rr-black-text" style="font-size: 1.5rem"></i>
-                      </button>
+    <h3 class="rr-dark-purple-text text-bold">Tus actividades favoritas.</h3>
+
+    <span class="form-text mb-3" style="font-style: italic">
+        Con el botón <i class="bi bi-list rr-black-text"></i> puedes arrastrar las actividades
+        para ordenarlas desde las que más te gustas a las que menos.
+    </span>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <ng-container formArrayName="activities">
+            <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+                @for (act of activitiesFormArray.controls; track act; let i = $index) {
+                    <div [formGroupName]="i" class="mb-2" cdkDrag>
+                        <div class="d-flex align-items-center">
+                            <div class="w-100">
+                                <div class="d-flex">
+                                    <label class="align-self-center">{{ i + 1 }}.</label>
+
+                                    <div class="w-100 position-relative">
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                class="form-control rr-input border-end-0"
+                                                placeholder="Ej.: Básquet, Música, Futbol, etc."
+                                                [id]="i"
+                                                [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners'
+                                                 : 'rounded-bottom-corners'"
+                                                aria-describedby="actividad" formControlName="activity"
+                                                (blur)="onBlur()"
+                                            >
+
+                                            <button
+                                                tabindex="-1"
+                                                [ngClass]="activitiesNames.length > 0 ? 'no-rounded-bottom-corners'
+                                                    : 'rounded-bottom-corners'"
+                                                class="rr-drag-btn rr-border-primary-color border-start-0 pe-3"
+                                                type="button"
+                                                cdkDragHandle
+                                            >
+
+                                            <i class="bi bi-list rr-black-text" style="font-size: 1.5rem"></i>
+                                            </button>
+                                        </div>
+
+                                        @if (actualFocusedActivityControlIndex === i) {
+                                            <rr-search-results-list
+                                                (onSelectedResult)="onClickSearchResult($event, i)"
+                                                [resultsList]="activitiesNames"
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (i != 0) {
+                                <button
+                                        class="bg-transparent border-0 d-inline-block delete-activity-btn"
+                                        (click)="deleteActivity(i)" type="button"
+                                >
+                                    <i class="bi bi-x-circle text-danger" style="font-size: 1.8rem"></i>
+                                </button>
+                            }
+                        </div>
+
+                        @if (isControlValid(activitiesFormArray.controls[i].get('activity'))) {
+                            <span class="error-text">Este campo es requerido.</span>
+                        }
                     </div>
-
-                    @if (actualFocusedActivityControlIndex === i) {
-                      <rr-search-results-list (onSelectedResult)="onClickSearchResult($event, i)"
-                                              [resultsList]="activitiesNames"/>
-                    }
-                  </div>
-                </div>
-              </div>
-              @if (i != 0) {
-                <button
-                  class="bg-transparent border-0 d-inline-block delete-activity-btn"
-                  (click)="deleteActivity(i)" type="button">
-                  <i class="bi bi-x-circle text-danger" style="font-size: 1.8rem"></i>
-                </button>
-              }
+                }
             </div>
+        </ng-container>
 
-            @if (activitiesFormArray.controls[i].get('activity')?.hasError('required')
-            && (activitiesFormArray.controls[i].get('activity')?.touched
-              || activitiesFormArray.controls[i].get('activity')?.dirty)) {
-              <span class="error-text">Este campo es requerido.</span>
-            }
-          </div>
+        <div class="text-end">
+            <button type="button" class="mt-4 btn rr-btn pe-5 ps-5" (click)="addActivity()">Añadir</button>
+        </div>
+
+        @if (form.hasError('duplicateActivities')) {
+            <span class="error-text">No puede indicar dos veces la misma actividad.</span>
         }
-      </div>
-    </ng-container>
-    <div class="text-end">
-      <button type="button" class="mt-4 btn rr-btn pe-5 ps-5" (click)="addActivity()">Añadir</button>
-    </div>
-    @if (form.hasError('duplicateActivities')) {
-      <span class="error-text">No puede indicar dos veces la misma actividad.</span>
-    }
-    <button type="submit" class="mt-4 btn rr-btn w-100">Siguiente</button>
-  </form>
+
+        <button type="submit" class="mb-1 mt-4 btn rr-btn w-100">Siguiente</button>
+    </form>
 </div>

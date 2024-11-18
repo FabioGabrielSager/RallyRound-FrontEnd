@@ -1,10 +1,14 @@
-@if(resultsList.length > 0) {
-  <div class="search-results-container position-absolute">
-    @for (a of resultsList; track a; let index = $index) {
-      <span class="search-result d-block ps-3 pe-3"
-            [ngClass]="index != resultsList.length-1
+@if (resultsList.length > 0) {
+    <div class="search-results-container position-absolute overflow-y-auto" style="max-height: 100px">
+        @for (a of resultsList; track a; let index = $index) {
+            <span
+                    class="search-result d-block ps-3 pe-3"
+                    [ngClass]="index != resultsList.length-1
                                 ? 'search-result-border-bottom' : 'rounded-bottom-corners'"
-            (click)="onClickSearchResult($event)">{{ a }}</span>
-    }
-  </div>
+                    (click)="onClickSearchResult($event)"
+            >
+                {{ a }}
+            </span>
+        }
+    </div>
 }

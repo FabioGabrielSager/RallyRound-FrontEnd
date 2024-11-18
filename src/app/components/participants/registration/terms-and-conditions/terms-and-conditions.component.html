@@ -1,8 +1,8 @@
-<div class="container vh-100 overflow-y-hidden d-flex flex-column justify-content-center rr-black-text">
+<div class="container overflow-y-hidden d-flex flex-column justify-content-center rr-black-text">
   @if(termsAndConditions.content.length > 0) {
-    <div [innerHTML]="termsAndConditions.content" style="max-height: 600px" class="overflow-y-auto"></div>
+    <div [innerHTML]="termsAndConditions.content" style="max-height: 80vh" class="overflow-y-auto"></div>
     @if(showAcceptAndDenyButtons) {
-      <div class="d-flex column-gap-1 justify-content-end mt-3">
+      <div class="d-flex column-gap-1 justify-content-end mb-3 mt-3">
         <button class="btn btn-danger" (click)="onClickReject()">Rechazar</button>
         <button class="btn rr-btn" (click)="onClickAccept()">Aceptar</button>
       </div>

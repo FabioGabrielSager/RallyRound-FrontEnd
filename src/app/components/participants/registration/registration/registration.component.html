@@ -1,7 +1,11 @@
 <rr-navbar [showBrand]="true" positionClasses="position-sticky sticky-top" backgroundColor="var(--rr-primary)"/>
-<div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center">
-  <h1 class="rr-dark-purple-text">Crear cuenta.</h1>
-  <div class="overflow-y-auto">
-    <router-outlet name="registration"/>
+
+<div style="height: 90vh" class="container-fluid d-flex flex-column justify-content-center align-items-center">
+  <div class="position-relative overflow-y-auto">
+      <div class="d-flex justify-content-center">
+          <h1 class="rr-dark-purple-text">Crear cuenta.</h1>
+      </div>
+
+      <router-outlet name="registration"/>
   </div>
 </div>

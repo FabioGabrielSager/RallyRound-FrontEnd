@@ -1,5 +1,13 @@
 import {Component, Inject, inject, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators, ɵGetProperty
+} from "@angular/forms";
 import {CdkDragDrop, DragDropModule, moveItemInArray} from "@angular/cdk/drag-drop";
 import {UserFavoriteActivity} from "../../../../models/user/participant/userFavoriteActivity";
 import {AuthService} from "../../../../services/auth/auth.service";
@@ -166,5 +174,9 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.activitiesNames = [];
     }, 200);
+  }
+
+  isControlValid(control: AbstractControl | null) {
+    return control && control.hasError('required') && (control.touched || control.dirty);
   }
 }
