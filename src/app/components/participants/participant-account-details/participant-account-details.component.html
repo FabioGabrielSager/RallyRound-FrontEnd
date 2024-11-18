@@ -1,215 +1,230 @@
-<rr-navbar [floatingNavbar]="true" [positionClasses]="'position-sticky sticky-top'"
-           [navBarItems]="navbarItems" itemsColor="var(--black-100)" itemsIconFontSize="1.5rem"
-           itemsTitleFontSize="1.1rem"/>
-@if(wasFormInitialized) {
-  <div class="container d-flex flex-column justify-content-center align-items-center rr-black-text mt-2 mb-2">
-    <h1 class="text-bold rr-dark-purple-text align-self-start">Tu cuenta</h1>
-    <form [formGroup]="form" class="row row-gap-3" (ngSubmit)="onSaveChanges()">
-      <div class="col-12 col-md-6">
-        <div class="d-flex justify-content-start column-gap-2">
-          <div class="d-flex flex-column align-items-center">
-            <div class="guest me-1 position-relative" (click)="addPhotoInput.click()"
-                 (mouseover)="onEditableContentMouseOver(photoPencil)"
-                 (mouseout)="onEditableContentMouseOut(photoPencil)">
-              @if (userData.base64encodedProfileImage != null && uploadedPhotoPreview == null) {
-                <img [src]="'data:image/*;base64, ' + userData.base64encodedProfileImage" alt="foto-invitado">
-              } @else if (uploadedPhotoPreview != null) {
-                <img [src]="uploadedPhotoPreview">
-              } @else {
-                <div class="guest-name-container pe-1 ps-1 position-absolute top-0"
-                     style="left: 28%">
-                  <i class="bi bi-pencil-fill rounded-5 p-2 text-white" style="font-size: 1.3rem"></i>
-                </div>
-              }
-              <div #photoPencil class="guest-name-container pe-1 ps-1 position-absolute top-0 invisible"
-                   style="left: 28%">
-                <i class="bi bi-pencil-fill rounded-5 p-2 text-white" style="font-size: 1.3rem"></i>
-              </div>
-              <input class="d-none" #addPhotoInput (change)="capturePhoto($event)" type="file" required>
+<rr-navbar
+        [floatingNavbar]="true"
+        [positionClasses]="'sticky-top'"
+        [navBarItems]="navbarItems"
+        itemsColor="var(--black-100)"
+        itemsIconFontSize="1.5rem"
+        itemsTitleFontSize="1.1rem"
+/>
+
+<div class="body">
+    <div class="container-fluid d-flex align-items-center">
+        @if (wasFormInitialized) {
+            <div class="container d-flex flex-column justify-content-center align-items-center rr-black-text mt-2 mb-2">
+                <h1 class="text-bold rr-dark-purple-text align-self-start">Tu cuenta</h1>
+
+                <form [formGroup]="form" class="row row-gap-3" (ngSubmit)="onSaveChanges()">
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex justify-content-start column-gap-2">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="guest me-1 position-relative" (click)="addPhotoInput.click()"
+                                     (mouseover)="onEditableContentMouseOver(photoPencil)"
+                                     (mouseout)="onEditableContentMouseOut(photoPencil)">
+                                    @if (userData.base64encodedProfileImage != null && uploadedPhotoPreview == null) {
+                                        <img [src]="'data:image/*;base64, ' + userData.base64encodedProfileImage"
+                                             alt="foto-invitado">
+                                    } @else if (uploadedPhotoPreview != null) {
+                                        <img [src]="uploadedPhotoPreview">
+                                    } @else {
+                                        <div class="guest-name-container pe-1 ps-1 position-absolute top-0"
+                                             style="left: 28%">
+                                            <i class="bi bi-pencil-fill rounded-5 p-2 text-white" style="font-size: 1.3rem"></i>
+                                        </div>
+                                    }
+                                    <div #photoPencil class="guest-name-container pe-1 ps-1 position-absolute top-0 invisible"
+                                         style="left: 28%">
+                                        <i class="bi bi-pencil-fill rounded-5 p-2 text-white" style="font-size: 1.3rem"></i>
+                                    </div>
+                                    <input class="d-none" #addPhotoInput (change)="capturePhoto($event)" type="file" required>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center w-100">
+                                <input type="text" class="form-control rr-input" name="name" id="name-input"
+                                       aria-describedby="nombre" formControlName="name">
+                                @if (form.controls['name'].hasError('required')
+                                && (form.controls['name'].touched || form.controls['name'].dirty)) {
+                                    <span class="error-text">Este campo es requerido.</span>
+                                }
+                                <input type="text" class="form-control rr-input mt-1" name="name" id="lastname-input"
+                                       aria-describedby="nombre" formControlName="lastName">
+                                @if (form.controls['lastName'].hasError('required')
+                                && (form.controls['lastName'].touched || form.controls['lastName'].dirty)) {
+                                    <span class="error-text">Este campo es requerido.</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex flex-column justify-content-center align-items-start mt-0 mt-md-2">
+                            <h5 class="rr-dark-purple-text text-bold">Reputación: </h5>
+                            @if (userData.reputationAsEventCreator) {
+                                <h6 class="rr-dark-purple-text">
+                                    Como creador de eventos:
+                                    {{ participantReputationMessages[userData.reputationAsEventCreator] }}
+                                </h6>
+                            }
+                            <h6 class="rr-dark-purple-text">
+                                Como participante de eventos:
+                                {{ participantReputationMessages[userData.reputationAsParticipant] }}
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="position-relative">
+                            <h5 class="rr-dark-purple-text text-bold">Localidad</h5>
+                            <textarea type="text" class="form-control rr-input" formControlName="locality" name="locality"
+                                      id="locality-input" placeholder="Ej.: Provincia, departamento, localidad..."
+                                      aria-describedby="localidad" [ngClass]="formattedNames.length > 0
+                ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
+                                      [class.is-invalid]="form.controls['locality'].invalid
+                && (form.controls['locality'].touched || form.controls['locality'].dirty)"
+                                      (blur)="onBlur()"></textarea>
+
+                            <rr-search-results-list (onSelectedResult)="onClickSearchResult($event)"
+                                                    [resultsList]="formattedNames"/>
+
+                            @if (form.controls['locality'].touched || form.controls['locality'].dirty) {
+                                <div class="invalid-feedback">
+                                    @if (form.controls['locality'].hasError('required')
+                                    && form.controls['locality'].value == "") {
+                                        <span class="error-text">Este campo es requerido.</span>
+                                    }
+                                    @if (selectedPlace == undefined) {
+                                        <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <h5 class="rr-dark-purple-text text-bold">Fecha de nacimiento</h5>
+                        <input type="date" class="form-control rr-input" formControlName="birthdate" name="birthdate"
+                               id="birthdate-input" aria-describedby="fecha de nacimiento"
+                               [class.is-invalid]="form.controls['birthdate'].invalid
+           && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)">
+
+                        @if (form.controls['birthdate'].invalid
+                        && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)) {
+                            <div class="invalid-feedback">
+                                @if (form.controls['birthdate'].hasError('required')) {
+                                    <span class="error-text">Este campo es requerido.</span>
+                                }
+                                @if (form.controls['birthdate'].hasError('minimumAge')) {
+                                    <span class="error-text">Debe ser mayor de edad para registrarse.</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <h5 class="rr-dark-purple-text text-bold">Email</h5>
+                        <span>{{ userData.email }}</span>
+                    </div>
+                    <div class="col-12" (click)="onClickActivitiesContainer()"
+                         (mouseover)="onEditableContentMouseOver(actsPencil)"
+                         (mouseout)="onEditableContentMouseOut(actsPencil)">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="rr-dark-purple-text text-bold">Actividades favoritas</h5>
+                            <div #actsPencil class="pe-1 ps-1 invisible">
+                                <i class="bi bi-pencil-fill rounded-5 p-2 rr-dark-purple-text" style="font-size: 1.3rem"></i>
+                            </div>
+                        </div>
+
+                        <ul class="list-group list-group-flush overflow-y-auto" style="max-height: 200px">
+                            @if (userModifiedData != null && userModifiedData.favoriteActivities != null && userModifiedData.favoriteActivities.length > 0) {
+                                @for (a of userModifiedData.favoriteActivities; track a) {
+                                    <li class="list-group-item rr-bg-primary border-secondary">
+                                        {{ a.order + 1 }}. {{ a.name }}
+                                    </li>
+                                }
+                            } @else {
+                                @for (a of userData.favoriteActivities; track a) {
+                                    <li class="list-group-item rr-bg-primary border-secondary">
+                                        {{ a.order + 1 }}. {{ a.name }}
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
+                                [disabled]="userDataModifiedFieldCount < 1 && !hasProfilePhotoChanged">
+                            <span class="flex-grow-1">Guardar cambios</span>
+                            <i class="bi bi-floppy"></i>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <button (click)="onChangePassword()" type="button"
+                                class="btn btn-secondary w-100 d-flex align-items-center justify-content-between">
+                            <span class="flex-grow-1">Cambiar contraseña</span>
+                            <i class="bi bi-shield-exclamation"></i>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-danger w-100 d-flex align-items-center justify-content-between"
+                                (click)="onClickDeleteAccount()">
+                            <span class="flex-grow-1">Eliminar cuenta</span>
+                            <i class="bi bi-x-octagon"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="d-flex flex-column justify-content-center w-100">
-            <input type="text" class="form-control rr-input" name="name" id="name-input"
-                   aria-describedby="nombre" formControlName="name">
-            @if (form.controls['name'].hasError('required')
-            && (form.controls['name'].touched || form.controls['name'].dirty)) {
-              <span class="error-text">Este campo es requerido.</span>
-            }
-            <input type="text" class="form-control rr-input mt-1" name="name" id="lastname-input"
-                   aria-describedby="nombre" formControlName="lastName">
-            @if (form.controls['lastName'].hasError('required')
-            && (form.controls['lastName'].touched || form.controls['lastName'].dirty)) {
-              <span class="error-text">Este campo es requerido.</span>
-            }
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="d-flex flex-column justify-content-center align-items-start mt-0 mt-md-2">
-          <h5 class="rr-dark-purple-text text-bold">Reputación: </h5>
-          @if (userData.reputationAsEventCreator) {
-            <h6 class="rr-dark-purple-text">
-              Como creador de eventos:
-              {{ participantReputationMessages[userData.reputationAsEventCreator] }}
-            </h6>
-          }
-          <h6 class="rr-dark-purple-text">
-            Como participante de eventos:
-            {{ participantReputationMessages[userData.reputationAsParticipant] }}
-          </h6>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="position-relative">
-          <h5 class="rr-dark-purple-text text-bold">Localidad</h5>
-          <textarea type="text" class="form-control rr-input" formControlName="locality" name="locality"
-                    id="locality-input" placeholder="Ej.: Provincia, departamento, localidad..."
-                    aria-describedby="localidad" [ngClass]="formattedNames.length > 0
-                    ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
-                    [class.is-invalid]="form.controls['locality'].invalid
-                    && (form.controls['locality'].touched || form.controls['locality'].dirty)"
-                    (blur)="onBlur()"></textarea>
-
-          <rr-search-results-list (onSelectedResult)="onClickSearchResult($event)"
-                                  [resultsList]="formattedNames"/>
-
-          @if (form.controls['locality'].touched || form.controls['locality'].dirty) {
-            <div class="invalid-feedback">
-              @if (form.controls['locality'].hasError('required')
-              && form.controls['locality'].value == "") {
-                <span class="error-text">Este campo es requerido.</span>
-              }
-              @if (selectedPlace == undefined) {
-                <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
-              }
-            </div>
-          }
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <h5 class="rr-dark-purple-text text-bold">Fecha de nacimiento</h5>
-        <input type="date" class="form-control rr-input" formControlName="birthdate" name="birthdate"
-               id="birthdate-input" aria-describedby="fecha de nacimiento"
-               [class.is-invalid]="form.controls['birthdate'].invalid
-               && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)">
-
-        @if (form.controls['birthdate'].invalid
-        && (form.controls['birthdate'].touched || form.controls['birthdate'].dirty)) {
-          <div class="invalid-feedback">
-            @if (form.controls['birthdate'].hasError('required')) {
-              <span class="error-text">Este campo es requerido.</span>
-            }
-            @if (form.controls['birthdate'].hasError('minimumAge')) {
-              <span class="error-text">Debe ser mayor de edad para registrarse.</span>
-            }
-          </div>
         }
-      </div>
-      <div class="col-12 col-md-6">
-        <h5 class="rr-dark-purple-text text-bold">Email</h5>
-        <span>{{userData.email}}</span>
-      </div>
-      <div class="col-12" (click)="onClickActivitiesContainer()"
-           (mouseover)="onEditableContentMouseOver(actsPencil)" (mouseout)="onEditableContentMouseOut(actsPencil)">
-        <div class="d-flex justify-content-between">
-          <h5 class="rr-dark-purple-text text-bold">Actividades favoritas</h5>
-          <div #actsPencil class="pe-1 ps-1 invisible">
-            <i class="bi bi-pencil-fill rounded-5 p-2 rr-dark-purple-text" style="font-size: 1.3rem"></i>
-          </div>
-        </div>
+    </div>
 
-        <ul class="list-group list-group-flush overflow-y-auto" style="max-height: 200px">
-          @if(userModifiedData != null && userModifiedData.favoriteActivities != null && userModifiedData.favoriteActivities.length > 0) {
-            @for (a of userModifiedData.favoriteActivities; track a) {
-              <li class="list-group-item rr-bg-primary border-secondary">
-                {{ a.order + 1 }}. {{ a.name }}
-              </li>
-            }
-          } @else {
-            @for (a of userData.favoriteActivities; track a) {
-              <li class="list-group-item rr-bg-primary border-secondary">
-                {{ a.order + 1 }}. {{ a.name }}
-              </li>
-            }
-          }
-        </ul>
-      </div>
-      <div class="col-12">
-        <button type="submit" class="btn rr-btn w-100 d-flex align-items-center justify-content-between"
-                [disabled]="userDataModifiedFieldCount < 1 && !hasProfilePhotoChanged">
-          <span class="flex-grow-1">Guardar cambios</span>
-          <i class="bi bi-floppy"></i>
-        </button>
-      </div>
-      <div class="col-12">
-        <button (click)="onChangePassword()" type="button"
-                class="btn btn-secondary w-100 d-flex align-items-center justify-content-between">
-          <span class="flex-grow-1">Cambiar contraseña</span>
-          <i class="bi bi-shield-exclamation"></i>
-        </button>
-      </div>
-      <div class="col-12">
-        <button class="btn btn-danger w-100 d-flex align-items-center justify-content-between"
-                (click)="onClickDeleteAccount()">
-          <span class="flex-grow-1">Eliminar cuenta</span>
-          <i class="bi bi-x-octagon"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-}
+    <rr-footer/>
+</div>
+
 
 <ng-template #deleteAccountConfirmation>
-  <h4 class="text-bold text-danger">¿Seguro quieres eliminar tu cuenta?</h4>
-  <form [formGroup]="deleteConfirmationForm" class="d-flex flex-column">
-    <label for="confirmation-input" class="rr-black-text form-label">Escribe "CONFIRMAR" (sin las comillas):</label>
-    <input type="text" id="confirmation-input" name="confirmation-input" class="form-control rr-input"
-           formControlName="confirmation"
-           [class.is-invalid]="deleteConfirmationForm.controls['confirmation'].invalid
-               && (deleteConfirmationForm.controls['confirmation'].touched
-               || deleteConfirmationForm.controls['confirmation'].dirty)">
+    <h4 class="text-bold text-danger">¿Seguro quieres eliminar tu cuenta?</h4>
+    <form [formGroup]="deleteConfirmationForm" class="d-flex flex-column">
+        <label for="confirmation-input" class="rr-black-text form-label">Escribe "CONFIRMAR" (sin las comillas):</label>
+        <input type="text" id="confirmation-input" name="confirmation-input" class="form-control rr-input"
+               formControlName="confirmation"
+               [class.is-invalid]="deleteConfirmationForm.controls['confirmation'].invalid
+           && (deleteConfirmationForm.controls['confirmation'].touched
+           || deleteConfirmationForm.controls['confirmation'].dirty)">
 
-    @if (deleteConfirmationForm.controls['confirmation'].invalid
-    && (deleteConfirmationForm.controls['confirmation'].touched
-      || deleteConfirmationForm.controls['confirmation'].dirty)) {
-      @if (deleteConfirmationForm.controls['confirmation'].hasError('required')) {
-        <span class="error-text">Este campo es requerido.</span>
-      }
-      @if (deleteConfirmationForm.controls['confirmation'].hasError('pattern')) {
-        <span class="error-text">Debe ingresar "CONFIRMAR" (sin las comillas).</span>
-      }
-    }
-
-    <label for="password-input" class="rr-black-text form-label">Contraseña</label>
-    <div class="input-group">
-      <input [type]="passwordIsHide ? 'password' : 'text'"
-             class="form-control rr-input border-end-0" formControlName="password" name="password"
-             id="password-input"
-             aria-describedby="contraseña" [class.is-invalid]="deleteConfirmationForm.controls['password'].invalid
-               && (deleteConfirmationForm.controls['password'].touched
-               || deleteConfirmationForm.controls['password'].dirty)">
-      <button (click)="togglePasswordVisibility()"
-              tabindex="-1"
-              class="rr-hide-password-btn rr-bg-primary rounded-end-3 pe-3"
-              type="button" [class.border-danger]="deleteConfirmationForm.controls['password'].invalid
-               && (deleteConfirmationForm.controls['password'].touched
-               || deleteConfirmationForm.controls['password'].dirty)">
-        @if (passwordIsHide) {
-          <i class="bi bi-eye-fill"></i>
-        } @else {
-          <i class="bi bi-eye-slash-fill"></i>
+        @if (deleteConfirmationForm.controls['confirmation'].invalid
+        && (deleteConfirmationForm.controls['confirmation'].touched
+            || deleteConfirmationForm.controls['confirmation'].dirty)) {
+            @if (deleteConfirmationForm.controls['confirmation'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+            }
+            @if (deleteConfirmationForm.controls['confirmation'].hasError('pattern')) {
+                <span class="error-text">Debe ingresar "CONFIRMAR" (sin las comillas).</span>
+            }
         }
-      </button>
-    </div>
-    @if (deleteConfirmationForm.controls['password'].invalid
-    && (deleteConfirmationForm.controls['password'].touched || deleteConfirmationForm.controls['password'].dirty)) {
-      @if (deleteConfirmationForm.controls['password'].hasError('required')) {
-        <span class="error-text">Este campo es requerido.</span>
-      }
-      @if (deleteConfirmationForm.controls['password'].hasError('minlength')) {
-        <span class="error-text">La contraseña debe contener como mínimo 5 caracteres.</span>
-      }
-    }
-  </form>
+
+        <label for="password-input" class="rr-black-text form-label">Contraseña</label>
+        <div class="input-group">
+            <input [type]="passwordIsHide ? 'password' : 'text'"
+                   class="form-control rr-input border-end-0" formControlName="password" name="password"
+                   id="password-input"
+                   aria-describedby="contraseña" [class.is-invalid]="deleteConfirmationForm.controls['password'].invalid
+           && (deleteConfirmationForm.controls['password'].touched
+           || deleteConfirmationForm.controls['password'].dirty)">
+            <button (click)="togglePasswordVisibility()"
+                    tabindex="-1"
+                    class="rr-hide-password-btn rr-bg-primary rounded-end-3 pe-3"
+                    type="button" [class.border-danger]="deleteConfirmationForm.controls['password'].invalid
+           && (deleteConfirmationForm.controls['password'].touched
+           || deleteConfirmationForm.controls['password'].dirty)">
+                @if (passwordIsHide) {
+                    <i class="bi bi-eye-fill"></i>
+                } @else {
+                    <i class="bi bi-eye-slash-fill"></i>
+                }
+            </button>
+        </div>
+        @if (deleteConfirmationForm.controls['password'].invalid
+        && (deleteConfirmationForm.controls['password'].touched || deleteConfirmationForm.controls['password'].dirty)) {
+            @if (deleteConfirmationForm.controls['password'].hasError('required')) {
+                <span class="error-text">Este campo es requerido.</span>
+            }
+            @if (deleteConfirmationForm.controls['password'].hasError('minlength')) {
+                <span class="error-text">La contraseña debe contener como mínimo 5 caracteres.</span>
+            }
+        }
+    </form>
 </ng-template>
-<rr-footer />

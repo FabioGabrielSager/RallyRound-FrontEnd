@@ -8,7 +8,8 @@ import {TermsAndConditionsModalComponent} from "../terms-and-conditions-modal/te
   standalone: true,
   imports: [],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrl: './footer.component.css',
+  host: { style: "margin-top: auto;" }
 })
 export class FooterComponent {
   private modalService: NgbModal = inject(NgbModal);
