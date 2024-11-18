@@ -34,12 +34,12 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
   private toastService: ToastService = inject(ToastService);
 
   private fb: FormBuilder = inject(FormBuilder);
-  form: FormGroup = this.fb.group({
-    activities: this.fb.array([
-      this.fb.group({
-        activity: ["", [Validators.required]]
-      })])
-  }, {validators: repeatedActivitiesValidator});
+  form: FormGroup = this.fb.group(
+  {
+    activities: this.fb.array([])
+  },
+  {validators: repeatedActivitiesValidator}
+  );
 
   private router: Router = inject(Router);
 
@@ -47,6 +47,31 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.authService.getParticipantRegistrationRequestActivities().length) {
+      this.authService.getParticipantRegistrationRequestActivities().forEach(
+          (activity) =>
+          {
+            this.activitiesFormArray.push(
+                this.fb.group(
+                    {
+                      activity: [activity.name, [Validators.required]]
+                    }
+                )
+            );
+          }
+      )
+    }
+
+    if (! this.activitiesFormArray.length) {
+      this.activitiesFormArray.push(
+          this.fb.group(
+              {
+                activity: ["", [Validators.required]]
+              }
+          )
+      );
+    }
+
     // Activities autosuggestion
     this.subs.add(
       combineLatest([this.activitiesFormArray.valueChanges,
@@ -88,12 +113,16 @@ export class FavoriteActivitiesComponent implements OnInit, OnDestroy {
 
   addActivity() {
     let lastAddedActivityControl =
-      this.activitiesFormArray.controls[this.activitiesFormArray.length - 1]
-        .get('activity');
-    if (!lastAddedActivityControl?.hasError('required')) {
-      this.activitiesFormArray.push(this.fb.group({
-        activity: ["", [Validators.required]]
-      }));
+      this.activitiesFormArray.controls[this.activitiesFormArray.length - 1].get('activity');
+
+    if (! lastAddedActivityControl?.hasError('required')) {
+      this.activitiesFormArray.push(
+        this.fb.group(
+          {
+            activity: ["", [Validators.required]]
+          }
+        )
+      );
     } else {
       lastAddedActivityControl?.markAsTouched();
     }

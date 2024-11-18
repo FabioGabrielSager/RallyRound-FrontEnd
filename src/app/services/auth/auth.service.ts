@@ -47,6 +47,10 @@ export class AuthService {
     this.participantRegistrationRequest.favoritesActivities = activities;
   }
 
+  getParticipantRegistrationRequestActivities() {
+    return this.participantRegistrationRequest.favoritesActivities;
+  }
+
   setHasAcceptedTermsAndConditions(value: boolean) {
     this.participantRegistrationRequest.hasAcceptedTermsAndConditions = value;
   }
