@@ -3,7 +3,7 @@
     <div class="col-12" [class.col-md-6]="isWindowWidthMD() && selectedEventId"
          [class.invisible]="!isWindowWidthMD() && selectedEventId">
       <div class="d-flex flex-column justify-content-center align-items-center mt-3"
-           [class.vh-100]="!eventsResumesPage.results">
+           [class.vh-90]="!eventsResumesPage.results">
         <div class="container-fluid rr-bg-primary"
              [ngClass]="{'position-sticky sticky-top' : eventsResumesPage.results}">
           <div [ngbCollapse]="isSearchFormCollapsed" #collapsedForm="ngbCollapse" (hidden)="onCollapsedFormHidden()">

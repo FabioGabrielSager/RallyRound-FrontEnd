@@ -291,3 +291,7 @@ h1 {
 .guest:active {
   transform: scale(0.95);
 }
+
+.vh-90 {
+  height: 90vh;
+}
