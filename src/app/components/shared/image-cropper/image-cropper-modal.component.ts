@@ -6,6 +6,7 @@ export type CropperModalResult = {
   blob: Blob;
   imageUrl: string;
 };
+
 @Component({
   selector: 'rr-image-cropper',
   standalone: true,

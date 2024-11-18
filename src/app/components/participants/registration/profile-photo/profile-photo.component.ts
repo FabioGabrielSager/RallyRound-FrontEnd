@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {DomSanitizer} from "@angular/platform-browser";
 import {NgClass} from "@angular/common";
@@ -22,7 +22,7 @@ import {ToastService} from "../../../../services/toast.service";
   templateUrl: './profile-photo.component.html',
   styleUrl: './profile-photo.component.css'
 })
-export class ProfilePhotoComponent implements OnDestroy {
+export class ProfilePhotoComponent implements  OnInit, OnDestroy {
   uploadedPhotoPreview: any;
   private uploadedPhoto: File | null = null;
   private authService: AuthService = inject(AuthService);
@@ -32,25 +32,45 @@ export class ProfilePhotoComponent implements OnDestroy {
   private sanitizer: DomSanitizer = inject(DomSanitizer);
   private toastService: ToastService = inject(ToastService);
 
+ngOnInit(): void {
+    if (this.authService.getParticipantRegistrationRequestPhoto()) {
+        this.uploadedPhoto = this.authService.getParticipantRegistrationRequestPhoto();
+
+        if (this.uploadedPhoto != null) {
+            this.uploadedPhotoPreview = URL.createObjectURL(this.uploadedPhoto);
+        }
+    }
+}
+
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
   capturePhoto(event: any) {
-     let modalRef: NgbModalRef = this.modalService.open(ImageCropperModalComponent,
-       {centered: true, size: "xl"});
+     let modalRef: NgbModalRef = this.modalService.open(
+       ImageCropperModalComponent,
+       {
+           centered: true,
+           size: "xl"
+       }
+     );
+
      modalRef.componentInstance.imageFile = event.target.files[0];
+
      this.subs.add(
        modalRef.componentInstance.croppedResult.subscribe(
          (value: CropperModalResult) => {
-           let sanitizedImageUrl = this.sanitizer.bypassSecurityTrustUrl(value.imageUrl);
+           let sanitizedImageUrl = this.sanitizer
+               .sanitize(SecurityContext.URL, value.imageUrl);
+
            this.uploadedPhotoPreview = sanitizedImageUrl;
+
            this.imageUrlToFile(value.imageUrl, "profilePhoto").then(
-             file => this.uploadedPhoto = file
-           ).catch(
+              file => this.uploadedPhoto = file
+           )
+           .catch(
              error => {
                this.toastService.show("Hubo un error al intentar cargar la foto.", "bg-danger");
-               console.error(error)
              }
            );
          }

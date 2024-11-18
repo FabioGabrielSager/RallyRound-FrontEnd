@@ -52,6 +52,7 @@ export class PersonalInfoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Form initialization
     const today = new Date();
+
     this.birthdateControlInitialValue = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
 
     let regRequest = this.authService.getParticipantRegistrationRequest();

@@ -39,6 +39,10 @@ export class AuthService {
     this.profilePhoto = photo;
   }
 
+  getParticipantRegistrationRequestPhoto() {
+    return this.profilePhoto;
+  }
+
   setParticipantRegistrationRequestActivities(activities: UserFavoriteActivity[]) {
     this.participantRegistrationRequest.favoritesActivities = activities;
   }
