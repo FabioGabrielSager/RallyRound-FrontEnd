@@ -1,11 +1,13 @@
 <div class="container overflow-y-hidden d-flex flex-column justify-content-center rr-black-text">
-  @if(termsAndConditions.content.length > 0) {
-    <div [innerHTML]="termsAndConditions.content" style="max-height: 80vh" class="overflow-y-auto"></div>
-    @if(showAcceptAndDenyButtons) {
-      <div class="d-flex column-gap-1 justify-content-end mb-3 mt-3">
-        <button class="btn btn-danger" (click)="onClickReject()">Rechazar</button>
-        <button class="btn rr-btn" (click)="onClickAccept()">Aceptar</button>
-      </div>
+    @if (termsAndConditions.content.length > 0) {
+        <div [innerHTML]="termsAndConditions.content" style="max-height: 70vh" class="overflow-y-auto"></div>
+
+        @if (showAcceptAndDenyButtons) {
+            <div class="d-flex column-gap-1 justify-content-end mb-3 mt-3">
+                <button class="btn btn-danger" (click)="onClickReject()">Rechazar</button>
+
+                <button class="btn rr-btn" (click)="onClickAccept()">Aceptar</button>
+            </div>
+        }
     }
-  }
 </div>
