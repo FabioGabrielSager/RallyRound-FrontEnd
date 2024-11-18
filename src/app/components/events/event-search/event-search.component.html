@@ -1,158 +1,169 @@
 <div class="container">
-  <div class="row">
-    <div class="col-12" [class.col-md-6]="isWindowWidthMD() && selectedEventId"
-         [class.invisible]="!isWindowWidthMD() && selectedEventId">
-      <div class="d-flex flex-column justify-content-center align-items-center mt-3"
-           [class.vh-90]="!eventsResumesPage.results">
-        <div class="container-fluid rr-bg-primary"
-             [ngClass]="{'position-sticky sticky-top' : eventsResumesPage.results}">
-          <div [ngbCollapse]="isSearchFormCollapsed" #collapsedForm="ngbCollapse" (hidden)="onCollapsedFormHidden()">
-            <div class="d-flex flex-column justify-content-center align-items-center">
-              <h1 class="text-bold rr-dark-purple-text mt-1">Buscar Evento.</h1>
-              <div class="container-fluid search-form-container mt-2">
-                <form [formGroup]="form" class="row row-gap-3" (ngSubmit)="onSubmitSearch()">
-                  <div class="col-12">
-                    <div class="position-relative">
-                      <input type="text" class="form-control rr-input"
-                             name="activity" id="activity-input" placeholder="actividad"
-                             formControlName="activity"
-                             (blur)="onBlurActivityInput()"
-                             [value]="selectedActivity"
-                             aria-describedby="actividad">
-                      <rr-search-results-list [resultsList]="suggestedActivities"
-                                              (onSelectedResult)="onClickActivitySearchResult($event)"/>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="position-relative">
-              <textarea type="text" class="form-control rr-input" name="location"
-                        id="location-input" placeholder="Ej.: Provincia, departamento, localidad..."
-                        formControlName="location" (blur)="onBlurLocationInput()"
-                        aria-describedby="Locación" [ngClass]="formattedNames.length > 0
-                        ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
-                        [class.is-invalid]="form.controls['location'].invalid
-                        && (form.controls['location'].touched || form.controls['location'].dirty)"></textarea>
-                      <rr-search-results-list [resultsList]="formattedNames"
-                                              (onSelectedResult)="onClickPlaceSearchResult($event)"/>
-                    </div>
-                    @if (form.controls['location'].value !== "" && selectedPlace == undefined) {
-                      <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
-                    }
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label text-bold rr-dark-purple-text me-2">Fechas</label>
-                    <i class="bi bi-info-circle-fill text-info-emphasis"
-                       placement="top"
-                       ngbTooltip="Indica el rango de fechas entre las que quieres ver eventos disponibles"></i>
-                    <div class="row row-cols-2">
-                      <div class="col">
-                        <label for="date-input-from" class="form-label">Desde</label>
-                        <input type="date" class="form-control rr-input" formControlName="dateFrom" name="dateFrom"
-                               id="date-input-from">
-                      </div>
-                      <div class="col">
-                        <label for="date-input-from" class="form-label">Hasta</label>
-                        <input type="date" class="form-control rr-input" formControlName="dateTo" name="dateTo"
-                               id="date-input-to" placeholder="Hasta">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <label class="form-label text-bold rr-dark-purple-text">Horarios de inicio</label>
-                    <div class="d-flex align-items-center flex-wrap row-gap-2 column-gap-2 overflow-y-auto"
-                         style="max-height: 3rem"
-                         [ngClass]="hours.length > 0 ? 'border rr-border-primary-color pt-2 pb-2 ps-1 pe-1 rounded-2 mb-1' : ''">
-                      @for (h of hours; track h; let i = $index) {
+    <div class="row">
+        <div class="col-12" [class.col-md-6]="isWindowWidthMD() && selectedEventId"
+             [class.invisible]="!isWindowWidthMD() && selectedEventId">
+            <div class="d-flex flex-column justify-content-center align-items-center mt-3"
+                 [class.vh-90]="!eventsResumesPage.results">
+                <div class="container-fluid rr-bg-primary"
+                     [ngClass]="{'position-sticky sticky-top' : eventsResumesPage.results}">
+                    <div [ngbCollapse]="isSearchFormCollapsed" #collapsedForm="ngbCollapse"
+                         (hidden)="onCollapsedFormHidden()">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <h1 class="text-bold rr-dark-purple-text mt-1">Buscar Evento.</h1>
+                            <div class="container-fluid search-form-container mt-2">
+                                <form [formGroup]="form" class="row row-gap-3" (ngSubmit)="onSubmitSearch()">
+                                    <div class="col-12">
+                                        <div class="position-relative">
+                                            <input type="text" class="form-control rr-input"
+                                                   name="activity" id="activity-input" placeholder="actividad"
+                                                   formControlName="activity"
+                                                   (blur)="onBlurActivityInput()"
+                                                   [value]="selectedActivity"
+                                                   aria-describedby="actividad">
+                                            <rr-search-results-list [resultsList]="suggestedActivities"
+                                                                    (onSelectedResult)="onClickActivitySearchResult($event)"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="position-relative">
+                                          <textarea type="text" class="form-control rr-input" name="location"
+                                                    id="location-input" placeholder="Ej.: Provincia, departamento, localidad..."
+                                                    formControlName="location" (blur)="onBlurLocationInput()"
+                                                    aria-describedby="Locación" [ngClass]="formattedNames.length > 0
+                                                    ? 'no-rounded-bottom-corners' : 'rounded-bottom-corners'" rows="2"
+                                                    [class.is-invalid]="form.controls['location'].invalid
+                                                    && (form.controls['location'].touched || form.controls['location'].dirty)"></textarea>
+                                            <rr-search-results-list [resultsList]="formattedNames"
+                                                                    (onSelectedResult)="onClickPlaceSearchResult($event)"/>
+                                        </div>
+                                        @if (form.controls['location'].value !== "" && selectedPlace == undefined) {
+                                            <span class="error-text">La localidad debe ser seleccionada desde la lista de sugerencias.</span>
+                                        }
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label text-bold rr-dark-purple-text me-2">Fechas</label>
+                                        <i class="bi bi-info-circle-fill text-info-emphasis"
+                                           placement="top"
+                                           ngbTooltip="Indica el rango de fechas entre las que quieres ver eventos disponibles"></i>
+                                        <div class="row row-cols-2">
+                                            <div class="col">
+                                                <label for="date-input-from" class="form-label">Desde</label>
+                                                <input type="date" class="form-control rr-input"
+                                                       formControlName="dateFrom" name="dateFrom"
+                                                       id="date-input-from">
+                                            </div>
+                                            <div class="col">
+                                                <label for="date-input-from" class="form-label">Hasta</label>
+                                                <input type="date" class="form-control rr-input"
+                                                       formControlName="dateTo" name="dateTo"
+                                                       id="date-input-to" placeholder="Hasta">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label text-bold rr-dark-purple-text">Horarios de
+                                            inicio</label>
+                                        <div class="d-flex align-items-center flex-wrap row-gap-2 column-gap-2 overflow-y-auto"
+                                             style="max-height: 3rem"
+                                             [ngClass]="hours.length > 0 ? 'border rr-border-primary-color pt-2 pb-2 ps-1 pe-1 rounded-2 mb-1' : ''">
+                                            @for (h of hours; track h; let i = $index) {
 
-                        <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2
-                        d-flex align-items-center"
-                             style="font-size: 0.85rem">
-                          <i class="bi bi-x-circle me-2" style="font-size: 1.5rem" (click)="onRemoveHour(i)"></i>
-                          <span>{{ h }}</span>
+                                                <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2
+                                                     d-flex align-items-center"
+                                                     style="font-size: 0.85rem">
+                                                    <i class="bi bi-x-circle me-2" style="font-size: 1.5rem"
+                                                       (click)="onRemoveHour(i)"></i>
+                                                    <span>{{ h }}</span>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        @if (!addingHour) {
+                                            <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2">
+                                                <span style="font-size: 1rem" (click)="toggleAddHourInput()">+</span>
+                                            </div>
+                                        } @else {
+                                            <input #hourInput class="form-control rr-input mt-2" type="time">
+                                            <div class="mt-2">
+                                                <button type="button" class="btn btn-danger me-2"
+                                                        (click)="toggleAddHourInput()">Cancelar
+                                                </button>
+                                                <button type="button" class="btn rr-btn"
+                                                        (click)="onAddNewHour(hourInput)">Añadir
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input rr-checkbox" type="checkbox"
+                                                   formControlName="onlyAvailableEvents"
+                                                   id="onlyAvailableEvents" checked>
+                                            <label class="form-check-label"
+                                                   for="onlyAvailableEvents" style="font-size: 0.85rem">Incluir solo
+                                                eventos con espacios libres</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="w-100 btn rr-btn">Buscar</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                      }
                     </div>
+                </div>
 
-                    @if (!addingHour) {
-                      <div class="d-inline-block border rr-border-primary-color rounded-5 pe-2 ps-2">
-                        <span style="font-size: 1rem" (click)="toggleAddHourInput()">+</span>
-                      </div>
-                    } @else {
-                      <input #hourInput class="form-control rr-input mt-2" type="time">
-                      <div class="mt-2">
-                        <button type="button" class="btn btn-danger me-2" (click)="toggleAddHourInput()">Cancelar
-                        </button>
-                        <button type="button" class="btn rr-btn" (click)="onAddNewHour(hourInput)">Añadir</button>
-                      </div>
+                <div class="col-12" (click)="toggleCollapsedForm(collapsedForm)">
+                    @if (eventsResumesPage.results) {
+                        <i class="bi"
+                           style="font-size: 1.8rem;"
+                           [ngClass]="isSearchFormCollapsed ? 'bi-caret-down' : 'bi-caret-up'"></i>
                     }
-                  </div>
-                  <div>
-                    <div class="form-check">
-                      <input class="form-check-input rr-checkbox" type="checkbox" formControlName="onlyAvailableEvents"
-                             id="onlyAvailableEvents" checked>
-                      <label class="form-check-label"
-                             for="onlyAvailableEvents" style="font-size: 0.85rem">Incluir solo eventos con espacios libres</label>
+                </div>
+
+            </div>
+            @if (eventsResumesPage.results) {
+                <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3"
+                     style="max-height: 80vh" [(ngbCollapse)]="!isSearchFormCollapsed" #resultsContainer>
+                    @for (e of eventsResumesPage.results; track e) {
+                        <div class="col-12 col-md-7 d-flex justify-content-center">
+                            <rr-event-resume-card class="w-100" [eventResume]="e"
+                                                  (onSeeEvent)="onViewEventClick($event)"/>
+                        </div>
+                    }
+                    <div class="col-12">
+                        <ngb-pagination class="d-flex justify-content-center" [pageSize]="eventsResumesPage.pageSize"
+                                        [collectionSize]="eventsResumesPage.totalElements"
+                                        [page]="actualPage" [directionLinks]="false">
+                            <ng-template ngbPaginationPages let-page let-pages="pages">
+                                @if (pages.length > 0) {
+                                    @for (p of pages; track p) {
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               [class.text-bold]="actualPage == p"
+                                               [style.background-color]="actualPage == p ? '#d9941c' : ''"
+                                               (click)="onSelectSpecificPage(p)">
+                                                {{ p }}
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ng-template>
+                        </ngb-pagination>
                     </div>
-                  </div>
-                  <div class="col-12">
-                    <button class="w-100 btn rr-btn">Buscar</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+                </div>
+            }
         </div>
-
-        <div class="col-12" (click)="toggleCollapsedForm(collapsedForm)">
-          @if (eventsResumesPage.results) {
-            <i class="bi"
-               style="font-size: 1.8rem;"
-               [ngClass]="isSearchFormCollapsed ? 'bi-caret-down' : 'bi-caret-up'"></i>
-          }
-        </div>
-
-      </div>
-      @if (eventsResumesPage.results) {
-        <div class="row row-gap-3 justify-content-center align-items-center pe-3 ps-3"
-             style="max-height: 80vh" [(ngbCollapse)]="!isSearchFormCollapsed" #resultsContainer>
-          @for (e of eventsResumesPage.results; track e) {
-            <div class="col-12 col-md-7 d-flex justify-content-center">
-              <rr-event-resume-card class="w-100" [eventResume]="e" (onSeeEvent)="onViewEventClick($event)"/>
-            </div>
-          }
-          <div class="col-12">
-            <ngb-pagination class="d-flex justify-content-center" [pageSize]="eventsResumesPage.pageSize"
-                            [collectionSize]="eventsResumesPage.totalElements"
-                            [page]="actualPage" [directionLinks]="false">
-              <ng-template ngbPaginationPages let-page let-pages="pages">
-                @if (pages.length > 0) {
-                  @for (p of pages; track p) {
-                    <li class="page-item">
-                      <a class="page-link"
-                         [class.text-bold]="actualPage == p"
-                         [style.background-color]="actualPage == p ? '#d9941c' : ''"
-                         (click)="onSelectSpecificPage(p)">
-                        {{ p }}
-                      </a>
-                    </li>
-                  }
-                }
-              </ng-template>
-            </ngb-pagination>
-          </div>
-        </div>
-      }
-    </div>
-    @if (selectedEventId) {
-      <div [class]="eventDetailsContainerClasses" style="background-color: var(--rr-primary);
+        @if (selectedEventId) {
+            <div [class]="eventDetailsContainerClasses" style="background-color: var(--rr-primary);
         z-index: 1021">
-        <button type="button" class="btn" (click)="onCloseEventDetailsView()">
-          <i class="bi bi-arrow-left" style="font-size: 1.5rem; font-weight: bold"></i>
-        </button>
-        <div class="overflow-y-auto" style="max-height: calc(80vh)">
-          <rr-event-details-component [eventId]="selectedEventId"/>
-        </div>
-      </div>
-    }
-  </div>
+                <button type="button" class="btn" (click)="onCloseEventDetailsView()">
+                    <i class="bi bi-arrow-left" style="font-size: 1.5rem; font-weight: bold"></i>
+                </button>
+                <div class="overflow-y-auto" style="max-height: calc(80vh)">
+                    <rr-event-details-component [eventId]="selectedEventId"/>
+                </div>
+            </div>
+        }
+    </div>
 </div>
