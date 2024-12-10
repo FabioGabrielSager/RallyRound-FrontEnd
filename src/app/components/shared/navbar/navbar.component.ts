@@ -33,6 +33,7 @@ export class NavBarItem {
 })
 export class NavbarComponent implements OnInit {
   private offcanvasService: NgbOffcanvas = inject(NgbOffcanvas);
+  @Input() brandLink: string = "/";
   @Input() showBrand: boolean = false;
   @Input() centerNavbar: boolean = false;
   @Input() floatingNavbar: boolean = false;

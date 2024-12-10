@@ -6,7 +6,7 @@
     <div class="container-fluid d-flex"
          [ngClass]="itemsJustification">
       @if (showBrand) {
-        <a class="navbar-brand" style="font-weight: bold" routerLink="/">RallyRound</a>
+        <a class="navbar-brand" style="font-weight: bold" [routerLink]="brandLink">RallyRound</a>
       }
 
       @if (collapse) {

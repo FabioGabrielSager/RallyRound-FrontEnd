@@ -4,6 +4,7 @@ import {HomeComponent} from "./components/shared/home/home.component";
 import {AuthGuard} from "./guards/auth/auth.guard";
 import {EventOutletComponent} from "./components/events/event-outlet/event-outlet.component";
 import {AdminOutletComponent} from "./components/admin/admin-outlet/admin-outlet.component";
+import {postLoginGuard} from "./guards/post-login.guard";
 
 export const routes: Routes = [
   {
@@ -35,7 +36,7 @@ export const routes: Routes = [
     loadChildren: () => import('./routes/event.routes')
       .then(r => r.EventRoutes)
   },
-  {path: 'login', component: LoginComponent},
-  {path: 'home', component: HomeComponent},
+  {path: 'login', component: LoginComponent, canActivate: [postLoginGuard]},
+  {path: 'home', component: HomeComponent, canActivate: [postLoginGuard]},
   {path: '', redirectTo: 'home', pathMatch: 'full'}
 ];

@@ -266,6 +266,8 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
           next: () => {
             this.toastService.show("Inscripción cancelada con éxito.",
               "bg-success");
+            history.replaceState(null, '', '/participant/home');
+
             this.router.navigate(['/events/', { outlets: { events: ['myevents']}}]);
           },
           error: err => {
@@ -292,6 +294,8 @@ export class EventDetailsComponent implements OnInit,OnDestroy {
           next: () => {
             this.toastService.show("Evento abandonado éxito.",
               "bg-success");
+            history.replaceState(null, '', '/participant/home');
+
             this.router.navigate(['/events/', { outlets: { events: ['myevents']}}]);
           },
           error: err => {

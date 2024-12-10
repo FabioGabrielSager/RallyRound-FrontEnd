@@ -7,7 +7,7 @@
             (click)="onClickSearchResult(index)">
         <div class="guest me-1">
           @if (participantResume.base64encodedProfileImage != null) {
-            <img [src]="'data:image/*;base64, ' + participantResume.base64encodedProfileImage" alt="foto-invitado">
+            <img width="48" [src]="'data:image/*;base64, ' + participantResume.base64encodedProfileImage" alt="foto-invitado">
           } @else {
             <div class="guest-name-container pe-1 ps-1">
             </div>

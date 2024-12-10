@@ -20,7 +20,7 @@ import {NavbarComponent} from "../navbar/navbar.component";
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnDestroy{
+export class LoginComponent implements OnDestroy {
   passwordIsHide: boolean = true;
   fb: FormBuilder = inject(FormBuilder);
   form: FormGroup = this.fb.group({
@@ -50,8 +50,13 @@ export class LoginComponent implements OnDestroy{
         next: (user: {username: string, roles: string[]}) => {
           // Redirects to user home
           if(user.roles.includes("PARTICIPANT")) {
+            history.replaceState(null, '', '/participant/home');
+
             this.router.navigate(["/participant/home", user.username]);
           } else if(user.roles.includes("ADMIN")) {
+            history.replaceState(null, '', '/admin/home');
+
+
             this.router.navigate(["/admin/home", user.username]);
           }
         },
